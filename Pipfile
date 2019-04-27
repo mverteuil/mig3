@@ -5,12 +5,15 @@ verify_ssl = true
 
 [dev-packages]
 pytest = "*"
+barbara = "*"
 
 [packages]
 django = "*"
 django-model-utils = "*"
 django-choices-enum = "*"
 django-hashid-field = "*"
+dj-database-url = "*"
+python-dotenv = "*"
 
 [requires]
 python_version = "3.7"
