@@ -8,6 +8,9 @@ pytest = "*"
 
 [packages]
 django = "*"
+django-model-utils = "*"
+django-choices-enum = "*"
+django-hashid-field = "*"
 
 [requires]
 python_version = "3.7"
