@@ -1,28 +1,46 @@
+from builds import models as builds
 from django.contrib import admin
 
 from . import models
 
 
+class TargetInline(admin.TabularInline):
+    model = models.Target
+    extra = 0
+
+
 @admin.register(models.Project)
 class ProjectAdmin(admin.ModelAdmin):
-    pass
+    inlines = [TargetInline]
 
 
-@admin.register(models.Target)
-class TargetAdmin(admin.ModelAdmin):
-    pass
+class TestInline(admin.StackedInline):
+    model = models.Test
+    extra = 0
 
 
 @admin.register(models.Module)
 class ModuleAdmin(admin.ModelAdmin):
-    pass
+    inlines = [TestInline]
 
 
-@admin.register(models.Test)
-class TestAdmin(admin.ModelAdmin):
-    pass
+class BuildInline(admin.TabularInline):
+    model = builds.Build
+    extra = 0
+    classes = ("collapse",)
+    fields = ("number", "target", "builder")
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 @admin.register(models.Version)
 class VersionAdmin(admin.ModelAdmin):
-    pass
+    inlines = [BuildInline]
+    readonly_fields = ("id", "owner")

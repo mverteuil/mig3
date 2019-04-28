@@ -15,6 +15,7 @@ django-hashid-field = "*"
 dj-database-url = "*"
 python-dotenv = "*"
 psycopg2-binary = "*"
+django-extensions = "*"
 
 [requires]
 python_version = "3.7"

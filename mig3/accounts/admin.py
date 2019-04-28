@@ -10,4 +10,10 @@ class BuilderAccountAdmin(admin.ModelAdmin):
 
 @admin.register(models.UserAccount)
 class UserAccountAdmin(admin.ModelAdmin):
-    pass
+    fieldsets = (
+        (None, {"fields": ("email", "name", "id")}),
+        ("Rank", {"fields": ("is_staff", "is_superuser")}),
+        ("Timestamps", {"classes": ("collapse",), "fields": ("created", "modified", "last_login")}),
+        ("Permissions", {"classes": ("collapse",), "fields": ("user_permissions", "groups")}),
+    )
+    readonly_fields = ("id", "email", "created", "modified", "last_login")

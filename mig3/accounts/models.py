@@ -53,7 +53,9 @@ class UserAccount(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
         ),
     )
     name = models.CharField("Name", max_length=254, blank=True)
-    is_staff = models.BooleanField(default=False, help_text="Designates whether the user can log into the admin site.")
+    is_staff = models.BooleanField(
+        "Staff status", default=False, help_text="Designates whether the user can log into the admin site."
+    )
     is_active = models.BooleanField(
         default=True,
         help_text=(
@@ -66,6 +68,9 @@ class UserAccount(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
     EMAIL_FIELD = USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
+    def __str__(self):
+        return f"{self.email}{'†' if self.is_staff else '￿'}{'*' if self.is_superuser else ''} ({self.id})"
+
     def clean(self):
         super().clean()
         self.email = self.__class__.objects.normalize_email(self.email)
@@ -77,5 +82,8 @@ class BuilderAccount(TimeStampedModel):
     id = HashidAutoField(primary_key=True, salt=settings.HASHID_SALTS["accounts.BuilderAccount"])
     name = models.CharField("Name", max_length=254, help_text="Suggestions: CircleCI, TravisCI, Jenkins, etc.")
     token = models.CharField(
-        "Bearer Token", max_length=40, default=secrets.token_hex, help_text="Used for builder request authentication."
+        "Bearer Token", max_length=64, default=secrets.token_hex, help_text="Used for builder request authentication."
     )
+
+    def __str__(self):
+        return f"{self.name} ({self.id})"

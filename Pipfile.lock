@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "283bc6cf4b83d2f9bcf7586ca1079379450d4217b633ec20695d47cc32ccad67"
+            "sha256": "51b711ffafbf1a9789d14fabfa71a00101038db1313641945327cf6176593285"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -35,6 +35,14 @@
         "django-choices-enum": {
             "git": "https://github.com/NewVadim/django-choices-enum.git",
             "ref": "b5578e049f705c7b47f0aa3d200889dd83302b87"
+        },
+        "django-extensions": {
+            "hashes": [
+                "sha256:109004f80b6f45ad1f56addaa59debca91d94aa0dc1cb19678b9364b4fe9b6f4",
+                "sha256:307766e5e6c1caffe76c5d99239d8115d14ae3f7cab2cd991fcffd763dad904b"
+            ],
+            "index": "pypi",
+            "version": "==2.1.6"
         },
         "django-hashid-field": {
             "hashes": [
@@ -106,6 +114,13 @@
                 "sha256:d747dd3d23d77ef44c6a3526e274af6efeb0a6f1afd5a69ba4d5be4098c8e141"
             ],
             "version": "==2019.1"
+        },
+        "six": {
+            "hashes": [
+                "sha256:3350809f0555b11f552448330d0b52d5f24c91a322ea4a15ef22629740f3761c",
+                "sha256:d16a0141ec1a18405cd4ce8b4613101da75da0e9a7aec5bdd4fa804d0e0eba73"
+            ],
+            "version": "==1.12.0"
         },
         "sqlparse": {
             "hashes": [

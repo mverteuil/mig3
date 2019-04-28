@@ -11,6 +11,9 @@ class Build(TimeStampedModel):
     version = models.ForeignKey("projects.Version", on_delete=models.CASCADE)
     number = models.CharField("Build Number", max_length=255, help_text="Execution ID of WorkFlow/Job/Build in Builder")
 
+    def __str__(self):
+        return f"{self.number}: {self.target.project.name} @ {self.target.name} on {self.builder.name} ({self.version.id[:8]})"
+
 
 class TestOutcome(TimeStampedModel):
     """Test outcome accepted because it moved the migration state forward."""
@@ -25,3 +28,6 @@ class TestOutcome(TimeStampedModel):
     build = models.ForeignKey("builds.Build", on_delete=models.CASCADE)
     test = models.ForeignKey("projects.Test", on_delete=models.CASCADE)
     result = models.IntegerField(choices=Results.choices())
+
+    def __str__(self):
+        return f"{self.test}: {dict(self.Results)[self.result].lower()} as of {self.build}"
