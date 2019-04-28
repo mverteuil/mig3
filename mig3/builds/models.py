@@ -1,12 +1,12 @@
 from django.db import models
-from django_choices_enum.base import ChoicesEnum
+from django_choices_enum import ChoicesEnum
 from model_utils.models import TimeStampedModel
 
 
 class Build(TimeStampedModel):
     """Attempt to move the migration state forward, submitted by a builder."""
 
-    builder = models.ForeignKey("accounts.Builder", on_delete=models.CASCADE)
+    builder = models.ForeignKey("accounts.BuilderAccount", on_delete=models.CASCADE)
     target = models.ForeignKey("projects.Target", on_delete=models.CASCADE)
     version = models.ForeignKey("projects.Version", on_delete=models.CASCADE)
     number = models.CharField("Build Number", max_length=255, help_text="Execution ID of WorkFlow/Job/Build in Builder")

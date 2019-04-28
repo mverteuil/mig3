@@ -10,9 +10,10 @@ from model_utils.models import TimeStampedModel
 class UserAccount(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
     """Authenticate and authorize users."""
 
-    id = HashidAutoField(primary_key=True, salt=settings.HASHID_SALTS["HASHID_SALT_ACCOUNTS_USER_ACCOUNT"])
+    id = HashidAutoField(primary_key=True, salt=settings.HASHID_SALTS["accounts.UserAccount"])
     email = models.EmailField(
         "Email Address",
+        unique=True,
         help_text=(
             "NOTE: You must use the email address associated with their git commits to correctly attach submissions "
             "to respective user accounts."
@@ -30,7 +31,7 @@ class UserAccount(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     EMAIL_FIELD = USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["email"]
+    REQUIRED_FIELDS = []
 
     def clean(self):
         super().clean()
@@ -40,7 +41,7 @@ class UserAccount(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
 class BuilderAccount(TimeStampedModel):
     """Authorize builders to submit job results"""
 
-    id = HashidAutoField(primary_key=True, salt=settings.HASHID_SALTS["HASHID_SALT_ACCOUNTS_BUILDER_ACCOUNT"])
+    id = HashidAutoField(primary_key=True, salt=settings.HASHID_SALTS["accounts.BuilderAccount"])
     name = models.CharField("Name", max_length=254, help_text="Suggestions: CircleCI, TravisCI, Jenkins, etc.")
     token = models.CharField(
         "Bearer Token", max_length=40, default=secrets.token_hex, help_text="Used for builder request authentication."

@@ -10,10 +10,11 @@ barbara = "*"
 [packages]
 django = "*"
 django-model-utils = "*"
-django-choices-enum = "*"
+django-choices-enum = {git = "https://github.com/NewVadim/django-choices-enum.git",ref = "0.3"}
 django-hashid-field = "*"
 dj-database-url = "*"
 python-dotenv = "*"
+psycopg2-binary = "*"
 
 [requires]
 python_version = "3.7"

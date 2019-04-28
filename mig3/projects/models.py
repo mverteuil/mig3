@@ -45,5 +45,7 @@ class Test(TimeStampedModel):
 class Version(TimeStampedModel):
     """Version of codebase for Project at Build time"""
 
-    id = models.CharField("Version Identifier", primary_key=True, help_text="Git commit SHA-hash as hexadecimal.")
+    id = models.CharField(
+        "Version Identifier", primary_key=True, max_length=63, help_text="Git commit SHA-hash as hexadecimal."
+    )
     owner = models.ForeignKey("accounts.UserAccount", on_delete=models.CASCADE)
