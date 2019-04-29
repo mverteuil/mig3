@@ -19,6 +19,7 @@ psycopg2-binary = "*"
 django-extensions = "*"
 djangorestframework = "*"
 drf-yasg = "*"
+gitpython = "*"
 
 [requires]
 python_version = "3.7"

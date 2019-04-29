@@ -16,4 +16,4 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-urlpatterns = [path("admin/", view=admin.site.urls), path("api/", include("mig3.api_urls", namespace="api"))]
+urlpatterns = [path("admin/", admin.site.urls), path("api/", include(("api.urls", "api")))]

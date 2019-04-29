@@ -70,6 +70,7 @@ INSTALLED_APPS: list = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
+    "drf_yasg",
     "rest_framework",
     "accounts",
     "builds",
@@ -189,7 +190,7 @@ AUTH_PASSWORD_VALIDATORS: list = [
 # Login URL route name
 # https://docs.djangoproject.com/en/2.2/ref/settings/#login-url
 
-LOGIN_URL: str = "login"
+LOGIN_URL: str = "admin:login"
 
 # Post-login redirect URL route name
 # https://docs.djangoproject.com/en/2.2/ref/settings/#login-redirect-url
