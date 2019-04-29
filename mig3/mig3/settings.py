@@ -281,8 +281,11 @@ HASHID_SALTS: dict = {
 # Django REST Framework
 # https://www.django-rest-framework.org/api-guide/
 
-REST_FRAMEWORK = {
+REST_FRAMEWORK: dict = {
+    # Authentication classes
+    # https://www.django-rest-framework.org/api-guide/settings/#default_authentication_classes
+    "DEFAULT_AUTHENTICATION_CLASSES": ("api.authentication.BearerAuthentication",),
     # Lock down permissions by default
     # https://www.django-rest-framework.org/api-guide/settings/#default_permission_classes
-    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAdminUser",)
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAdminUser",),
 }
