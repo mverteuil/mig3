@@ -16,6 +16,7 @@ dj-database-url = "*"
 python-dotenv = "*"
 psycopg2-binary = "*"
 django-extensions = "*"
+djangorestframework = "*"
 
 [requires]
 python_version = "3.7"

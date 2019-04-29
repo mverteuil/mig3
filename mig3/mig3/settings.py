@@ -70,6 +70,8 @@ INSTALLED_APPS: list = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
+    "rest_framework",
+    "api",
     "accounts",
     "builds",
     "projects",
@@ -266,11 +268,21 @@ STATICFILES_DIRS: list = []
 
 
 # Hash ID Field
-# https://github.com/nshafer/django-hashid-field
+# https://github.com/nshafer/django-hashid-field/
 
 HASHID_SALTS: dict = {
     "accounts.BuilderAccount": getenv("HASHID_SALT_ACCOUNTS_BUILDER_ACCOUNT", "abc123"),
     "accounts.UserAccount": getenv("HASHID_SALT_ACCOUNTS_USER_ACCOUNT", "abc123"),
     "projects.Project": getenv("HASHID_SALT_PROJECTS_PROJECT", "abc123"),
     "projects.Target": getenv("HASHID_SALT_PROJECTS_TARGET", "abc123"),
+}
+
+
+# Django REST Framework
+# https://www.django-rest-framework.org/api-guide/
+
+REST_FRAMEWORK = {
+    # Lock down permissions by default
+    # https://www.django-rest-framework.org/api-guide/settings/#default_permission_classes
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAdminUser",)
 }
