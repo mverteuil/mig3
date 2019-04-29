@@ -71,7 +71,6 @@ INSTALLED_APPS: list = [
     "django.contrib.staticfiles",
     "django_extensions",
     "rest_framework",
-    "api",
     "accounts",
     "builds",
     "projects",

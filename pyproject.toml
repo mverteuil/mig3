@@ -24,3 +24,4 @@ line_length = 120
 multi_line_output = 3
 use_parentheses = true
 verbose = true
+known_third_party = "dj_database_url,django,django_choices_enum,dotenv,hashid_field,model_utils,rest_framework"

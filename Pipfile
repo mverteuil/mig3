@@ -6,6 +6,7 @@ verify_ssl = true
 [dev-packages]
 pytest = "*"
 barbara = "*"
+isort = "*"
 
 [packages]
 django = "*"
@@ -17,6 +18,7 @@ python-dotenv = "*"
 psycopg2-binary = "*"
 django-extensions = "*"
 djangorestframework = "*"
+drf-yasg = "*"
 
 [requires]
 python_version = "3.7"
