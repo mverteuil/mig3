@@ -289,3 +289,13 @@ REST_FRAMEWORK: dict = {
     # https://www.django-rest-framework.org/api-guide/settings/#default_permission_classes
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAdminUser",),
 }
+
+
+# DRF-YASG
+# https://drf-yasg.readthedocs.io/en/stable/
+
+SWAGGER_SETTINGS: dict = {
+    # Bearer token only
+    # https://drf-yasg.readthedocs.io/en/stable/security.html?highlight=Bearer#security-definitions
+    "SECURITY_DEFINITIONS": {"Bearer": {"type": "apiKey", "name": "Authorization", "in": "header"}}
+}
