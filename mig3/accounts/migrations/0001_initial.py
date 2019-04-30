@@ -2,11 +2,12 @@
 
 import secrets
 
-import accounts.models
 import django.utils.timezone
 import hashid_field.field
 import model_utils.fields
 from django.db import migrations, models
+
+import accounts.models
 
 
 class Migration(migrations.Migration):

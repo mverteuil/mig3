@@ -1,5 +1,6 @@
-from builds import models as builds
 from django.contrib import admin
+
+from builds import models as builds
 
 from . import models
 
