@@ -1,6 +1,10 @@
 dist: xenial
 language: python
 sudo: false
+services:
+  - postgresql
+env:
+  - "DATABASE_URL=postgres://postgres:postgres@localhost:5432/postgres"
 python:
   - "3.7"
   - "3.7-dev"  # 3.7 development branch
@@ -9,4 +13,5 @@ python:
 install:
     - 'pip install pipenv'
     - 'pipenv install --dev'
+    - 'barb -z'
 script: 'python -m pytest'
