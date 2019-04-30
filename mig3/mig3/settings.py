@@ -288,6 +288,9 @@ REST_FRAMEWORK: dict = {
     # Lock down permissions by default
     # https://www.django-rest-framework.org/api-guide/settings/#default_permission_classes
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAdminUser",),
+    # Override Django request factory comptability default
+    # https://www.django-rest-framework.org/api-guide/testing/#setting-the-default-format
+    "TEST_REQUEST_DEFAULT_FORMAT": "json",
 }
 
 
