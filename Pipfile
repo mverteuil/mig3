@@ -4,24 +4,24 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-pytest = "*"
 barbara = "*"
 isort = "*"
-pytest-django = "*"
+pytest = "*"
 pytest-cov = "*"
+pytest-django = "*"
 
 [packages]
-django = "*"
-django-model-utils = "*"
-django-choices-enum = {git = "https://github.com/NewVadim/django-choices-enum.git",ref = "0.3"}
-django-hashid-field = "*"
 dj-database-url = "*"
-python-dotenv = "*"
-psycopg2-binary = "*"
+django = "*"
+django-choices-enum = {git = "https://github.com/NewVadim/django-choices-enum.git",ref = "0.3"}
 django-extensions = "*"
+django-hashid-field = "*"
+django-model-utils = "*"
 djangorestframework = "*"
 drf-yasg = "*"
 gitpython = "*"
+psycopg2-binary = "*"
+python-dotenv = "*"
 
 [requires]
 python_version = "3.7"
