@@ -7,9 +7,6 @@ env:
   - "DATABASE_URL=postgres://postgres:postgres@localhost:5432/postgres"
 python:
   - "3.7"
-  - "3.7-dev"  # 3.7 development branch
-  - "3.8-dev"  # 3.8 development branch
-  - "nightly"  # nightly build
 install:
     - 'pip install pipenv'
     - 'pipenv install --dev'
