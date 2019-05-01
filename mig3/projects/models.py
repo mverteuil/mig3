@@ -35,7 +35,7 @@ class Target(TimeStampedModel):
 
     @property
     def full_version(self) -> str:
-        return f"{self.python_version}{'+'+self.additional_details.strip() if self.additional_details else ''}"
+        return f"{self.python_version}{'+' + self.additional_details.strip() if self.additional_details else ''}"
 
     @property
     def python_version(self) -> str:
@@ -67,10 +67,8 @@ class Test(TimeStampedModel):
 class Version(TimeStampedModel):
     """Version of codebase for Project at Build time"""
 
-    id = models.CharField(
-        "Version Identifier", primary_key=True, max_length=63, help_text="Git commit SHA-hash as hexadecimal."
-    )
-    author = models.ForeignKey("accounts.UserAccount", on_delete=models.CASCADE)
+    hash = models.CharField("Commit Hash", max_length=63, help_text="Git commit hash as hexadecimal.")
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return f"{self.id[0:8]} by {self.author.email}"
