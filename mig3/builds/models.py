@@ -20,10 +20,10 @@ class TestOutcome(TimeStampedModel):
 
     class Results(int, ChoicesEnum):
         ERROR = (0, "Error")
-        FAIL = (1, "Failed")
-        PASS = (2, "Passed")
-        SKIP = (3, "Skipped")
-        XFAIL = (4, "XFailed")
+        FAILED = (1, "Failed")
+        PASSED = (2, "Passed")
+        SKIPPED = (3, "Skipped")
+        XFAILED = (4, "XFailed")
 
     build = models.ForeignKey("builds.Build", on_delete=models.CASCADE)
     test = models.ForeignKey("projects.Test", on_delete=models.CASCADE)

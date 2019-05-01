@@ -10,6 +10,3 @@ class BuildListView(CreateAPIView):
 
     serializer_class = BuildSerializer
     permission_classes = (IsBuilder,)
-
-    def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)

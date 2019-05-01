@@ -71,4 +71,4 @@ class Version(TimeStampedModel):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return f"{self.id[0:8]} by {self.author.email}"
+        return f"{self.hash[0:8]} by {self.author.email}"
