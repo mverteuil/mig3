@@ -49,23 +49,19 @@ class VersionField(serializers.Field):
 class TestOutcomeSerializer(serializers.Serializer):
     module = serializers.CharField(source="test__module__name")
     test = serializers.CharField(source="test__name")
-    outcome = TestResultField(source="result")
+    result = TestResultField()
 
 
 class BuildSerializer(serializers.Serializer):
     number = serializers.CharField()
     builder = serializers.HiddenField(default=CurrentBuilderAccount())
-    tests = TestOutcomeSerializer(many=True, write_only=True)
+    results = TestOutcomeSerializer(many=True, write_only=True)
     target = serializers.PrimaryKeyRelatedField(
         queryset=projects.Target.objects.all(), pk_field=HashidSerializerCharField(source_field="projects.Target.id")
     )
     version = VersionField()
 
     def create(self, validated_data):
-        tests = validated_data.pop("tests")
-        logger.debug(tests)
+        validated_data.pop("results")
         build = builds.Build.objects.create(**validated_data)
         return build
-
-    def save(self, **kwargs):
-        return super().save(**kwargs)

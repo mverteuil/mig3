@@ -12,7 +12,7 @@ class Build(TimeStampedModel):
     number = models.CharField("Build Number", max_length=255, help_text="Execution ID of WorkFlow/Job/Build in Builder")
 
     def __str__(self):
-        return f"{self.number}: {self.target.project.name} @ {self.target.name} on {self.builder.name} ({self.version.id[:8]})"
+        return f"{self.number}: {self.target.project.name} @ {self.target.name} on {self.builder.name} ({self.version.hash[:8]})"
 
 
 class TestOutcome(TimeStampedModel):
