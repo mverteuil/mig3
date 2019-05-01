@@ -70,7 +70,7 @@ class Version(TimeStampedModel):
     id = models.CharField(
         "Version Identifier", primary_key=True, max_length=63, help_text="Git commit SHA-hash as hexadecimal."
     )
-    owner = models.ForeignKey("accounts.UserAccount", on_delete=models.CASCADE)
+    author = models.ForeignKey("accounts.UserAccount", on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return f"{self.id[0:8]} by {self.owner.email}"
+        return f"{self.id[0:8]} by {self.author.email}"

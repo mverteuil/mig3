@@ -44,4 +44,4 @@ class BuildInline(admin.TabularInline):
 @admin.register(models.Version)
 class VersionAdmin(admin.ModelAdmin):
     inlines = [BuildInline]
-    readonly_fields = ("id", "owner")
+    readonly_fields = ("id", "author")

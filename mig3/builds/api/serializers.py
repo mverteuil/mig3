@@ -1,6 +1,11 @@
+import logging
+
 from rest_framework import serializers
 
+from builds import models as builds
 from projects import models as projects
+
+logger = logging.getLogger(__name__)
 
 
 class VersionSerializer(serializers.ModelSerializer):
@@ -8,7 +13,7 @@ class VersionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = projects.Version
-        fields = ("hash", "owner")
+        fields = ("hash", "author")
 
 
 class TestSerializer(serializers.Serializer):
@@ -24,3 +29,12 @@ class BuildSerializer(serializers.Serializer):
 
     def get_builder(self, obj):
         return self.context["request"].auth
+
+    def create(self, validated_data):
+        tests = validated_data.pop("tests")
+        logger.debug(tests)
+        build = builds.Build.objects.create(**validated_data)
+        return build
+
+    def save(self, **kwargs):
+        return super().save(**kwargs)
