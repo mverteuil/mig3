@@ -70,6 +70,7 @@ INSTALLED_APPS: list = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
+    "django_fsm",
     "drf_yasg",
     "rest_framework",
     "accounts",

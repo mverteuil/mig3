@@ -9,6 +9,8 @@ isort = "*"
 pytest = "*"
 pytest-cov = "*"
 pytest-django = "*"
+graphviz = "*"
+ipython = "*"
 
 [packages]
 dj-database-url = "*"
@@ -22,6 +24,7 @@ drf-yasg = "*"
 gitpython = "*"
 psycopg2-binary = "*"
 python-dotenv = "*"
+django-fsm = "*"
 
 [requires]
 python_version = "3.7"
