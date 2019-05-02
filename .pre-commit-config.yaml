@@ -24,3 +24,4 @@ repos:
     rev: 823138f418905a99fb7bbff8bb35b97f6dc9e5ab
     hooks:
       - id: bandit
+        args: ["-v", "-c", "bandit.yaml", "-r", "mig3"]
