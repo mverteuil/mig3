@@ -3,6 +3,9 @@ from django.db import models
 from django_choices_enum import ChoicesEnum
 from model_utils.models import TimeStampedModel
 
+from builds import models as builds
+from projects import models as projects
+
 
 class BuildManager(models.Manager):
     use_for_related_fields = True
@@ -14,7 +17,7 @@ class BuildManager(models.Manager):
         for test_result in results:
             module, _ = target.project.module_set.get_or_create(path=test_result["test__module__path"])
             test, _ = module.test_set.get_or_create(name=test_result["test__name"])
-            build.testoutcome_set.update_or_create(test=test, result=test_result["result"])
+            build.create_test_result(test, test_result["result"])
         return build
 
 
@@ -30,6 +33,18 @@ class Build(TimeStampedModel):
 
     def __str__(self):
         return f"{self.number}: {self.target.project.name} @ {self.target.name} on {self.builder.name} ({self.version.hash[:8]})"
+
+    def create_test_result(self, test: projects.Test, result: builds.models.TestOutcome.Results) -> builds.TestOutcome:
+        try:
+            outcome = test.testoutcome_set.filter(build__target=self.target).get_latest_by("id")
+            outcome.id = None
+            field_transition = getattr(outcome, f"set_{result.label.lower()}")
+            field_transition()
+            outcome.save()
+        except builds.TestOutcome.DoesNotExist:
+            outcome = self.test_outcome_set.create(test=test, result=result)
+        finally:
+            return outcome
 
 
 class TestOutcome(TimeStampedModel):
@@ -48,7 +63,7 @@ class TestOutcome(TimeStampedModel):
 
     build = models.ForeignKey("builds.Build", on_delete=models.CASCADE)
     test = models.ForeignKey("projects.Test", on_delete=models.CASCADE)
-    result = django_fsm.FSMIntegerField(choices=Results.choices(), default=Results.ERROR)
+    result = django_fsm.FSMIntegerField(protected=True, choices=Results.choices(), default=Results.ERROR)
 
     def __str__(self):
         return f"{self.test}: {self.Results(self.result).name.lower()} as of {self.build}"
