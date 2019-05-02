@@ -9,6 +9,7 @@ exclude = '''
   | \.mypy_cache
   | \.tox
   | \.venv
+  | (?!\d{4}_).*\.py
   | _build
   | buck-out
   | build
@@ -20,8 +21,12 @@ exclude = '''
 [tool.isort]
 force_grid_wrap = 0
 include_trailing_comma = true
+known_django = "django"
+known_pandas = "pandas,numpy"
+known_third_party = "dj_database_url,django_choices_enum,django_fsm,dotenv,drf_yasg,git,hashid_field,model_utils,rest_framework"
 line_length = 120
 multi_line_output = 3
+no_lines_before = "LOCALFOLDER"
+sections = "FUTURE,STDLIB,DJANGO,THIRDPARTY,PANDAS,FIRSTPARTY,LOCALFOLDER"
 use_parentheses = true
 verbose = true
-known_third_party = "dj_database_url,django,django_choices_enum,django_fsm,dotenv,drf_yasg,git,hashid_field,model_utils,rest_framework"

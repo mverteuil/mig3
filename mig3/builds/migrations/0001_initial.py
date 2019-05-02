@@ -2,15 +2,24 @@
 
 import django.db.models.deletion
 import django.utils.timezone
+from django.db import migrations, models
+
 import django_fsm
 import model_utils.fields
-from django.db import migrations, models
+from django_choices_enum import ChoicesEnum
 
 import builds.models
 
 
-class Migration(migrations.Migration):
+class Results(int, ChoicesEnum):
+    ERROR = (0, "Error")
+    FAILED = (1, "Failed")
+    PASSED = (2, "Passed")
+    SKIPPED = (3, "Skipped")
+    XFAILED = (4, "XFailed")
 
+
+class Migration(migrations.Migration):
     initial = True
 
     dependencies = [("projects", "0001_initial"), ("accounts", "0001_initial")]
@@ -70,7 +79,7 @@ class Migration(migrations.Migration):
                     "result",
                     django_fsm.FSMIntegerField(
                         choices=[(0, "Error"), (1, "Failed"), (2, "Passed"), (3, "Skipped"), (4, "XFailed")],
-                        default=builds.models.Results(0),
+                        default=Results(0),
                         protected=True,
                     ),
                 ),

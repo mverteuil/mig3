@@ -3,9 +3,10 @@
 import secrets
 
 import django.utils.timezone
+from django.db import migrations, models
+
 import hashid_field.field
 import model_utils.fields
-from django.db import migrations, models
 
 import accounts.models
 

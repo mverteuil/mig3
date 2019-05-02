@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
+from django.db import models
 
 import django_fsm
-from django.db import models
 from django_choices_enum import ChoicesEnum
 from model_utils.models import TimeStampedModel
 

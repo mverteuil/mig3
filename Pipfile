@@ -5,18 +5,18 @@ verify_ssl = true
 
 [dev-packages]
 barbara = "*"
+graphviz = "*"
 isort = "*"
 pytest = "*"
 pytest-cov = "*"
 pytest-django = "*"
-graphviz = "*"
-ipython = "*"
 
 [packages]
 dj-database-url = "*"
 django = "*"
 django-choices-enum = {git = "https://github.com/NewVadim/django-choices-enum.git",ref = "0.3"}
 django-extensions = "*"
+django-fsm = "*"
 django-hashid-field = "*"
 django-model-utils = "*"
 djangorestframework = "*"
@@ -24,7 +24,6 @@ drf-yasg = "*"
 gitpython = "*"
 psycopg2-binary = "*"
 python-dotenv = "*"
-django-fsm = "*"
 
 [requires]
 python_version = "3.7"
