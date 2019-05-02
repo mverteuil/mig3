@@ -53,7 +53,7 @@ repos:
         args:
           - -v
           - -c
-          - bandit.yaml
+          - bandit.yml
           - -r
           - mig3
   - repo: https://github.com/PyCQA/pydocstyle
