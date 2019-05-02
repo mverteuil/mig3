@@ -2,12 +2,19 @@ import logging
 
 from django.contrib.auth import get_user_model
 from hashid_field.rest import HashidSerializerCharField
-from rest_framework import serializers
+from rest_framework import serializers, status
+from rest_framework.exceptions import APIException
 
 from builds import models as builds
 from projects import models as projects
 
 logger = logging.getLogger(__name__)
+
+
+class Regression(APIException):
+    status_code = status.HTTP_409_CONFLICT
+    default_detail = "The build introduced a regression to your migration and is unacceptable."
+    default_code = "conflict"
 
 
 class CurrentBuilderAccount(object):
@@ -62,5 +69,7 @@ class BuildSerializer(serializers.Serializer):
     version = VersionField()
 
     def create(self, validated_data):
-        build = builds.Build.objects.create_build(**validated_data)
-        return build
+        try:
+            return builds.Build.objects.create_build(**validated_data)
+        except builds.Build.RegressionDetected as e:
+            raise Regression(str(e))
