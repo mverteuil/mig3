@@ -1,6 +1,7 @@
 import logging
 
 from django.contrib.auth import get_user_model
+
 from hashid_field.rest import HashidSerializerCharField
 from rest_framework import serializers, status
 from rest_framework.exceptions import APIException

@@ -1,7 +1,6 @@
 from rest_framework.generics import CreateAPIView
 
 from api.permissions import IsBuilder
-
 from .serializers import BuildSerializer
 
 

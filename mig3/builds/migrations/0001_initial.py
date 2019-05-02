@@ -2,9 +2,10 @@
 
 import django.db.models.deletion
 import django.utils.timezone
+from django.db import migrations, models
+
 import django_fsm
 import model_utils.fields
-from django.db import migrations, models
 
 import builds.models
 

@@ -2,10 +2,30 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.2.1
     hooks:
-      - id: trailing-whitespace
-      - id: end-of-file-fixer
       - id: check-added-large-files
+      - id: mixed-line-ending
+      - id: check-executables-have-shebangs
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: check-json
+      - id: check-builtin-literals
+      - id: debug-statements
+      - id: end-of-file-fixer
+      - id: fix-encoding-pragma
+        args: ["--remove"]
+      - id: trailing-whitespace
       - id: flake8
+  - repo: https://github.com/pre-commit/pygrep-hooks
+    rev: master
+    hooks:
+      - id: python-check-blanket-noqa
+      - id: python-check-mock-methods
+      - id: python-no-log-warn
+      - id: rst-backticks
+  - repo: https://github.com/Lucas-C/pre-commit-hooks-safety
+    rev: master
+    hooks:
+      - id: python-safety-dependencies-check
   - repo: https://github.com/asottile/seed-isort-config
     rev: v1.8.0
     hooks:
@@ -25,3 +45,11 @@ repos:
     hooks:
       - id: bandit
         args: ["-v", "-c", "bandit.yaml", "-r", "mig3"]
+#  - repo: https://github.com/PyCQA/pydocstyle
+#    rev: master
+#    hooks:
+#      - id: pydocstyle
+#  - repo: https://github.com/PyCQA/prospector
+#    rev: master
+#    hooks:
+#      - id: prospector

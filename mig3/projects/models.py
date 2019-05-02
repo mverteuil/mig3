@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+
 from hashid_field import HashidAutoField
 from model_utils.models import TimeStampedModel
 
