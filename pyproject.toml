@@ -9,6 +9,7 @@ exclude = '''
   | \.mypy_cache
   | \.tox
   | \.venv
+  | (?!\d{4}_).*\.py
   | _build
   | buck-out
   | build
