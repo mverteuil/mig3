@@ -47,7 +47,7 @@ class VersionField(serializers.Field):
 
 
 class TestOutcomeSerializer(serializers.Serializer):
-    module = serializers.CharField(source="test__module__name")
+    module = serializers.CharField(source="test__module__path")
     test = serializers.CharField(source="test__name")
     result = TestResultField()
 
@@ -62,6 +62,5 @@ class BuildSerializer(serializers.Serializer):
     version = VersionField()
 
     def create(self, validated_data):
-        validated_data.pop("results")
-        build = builds.Build.objects.create(**validated_data)
+        build = builds.Build.objects.create_build(**validated_data)
         return build
