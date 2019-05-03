@@ -54,8 +54,12 @@ repos:
           - -v
           - -c
           - bandit.yml
-          - -r
-          - mig3
+        exclude: >
+            (?x)^(
+                .*/migrations/.*\.py$|
+                .*/admin.*\.py$|
+                .*/tests.*\.py$
+            )$
   - repo: https://github.com/PyCQA/pydocstyle
     rev: 2549847f9efad225789f931e83dfe782418ca13e
     hooks:
