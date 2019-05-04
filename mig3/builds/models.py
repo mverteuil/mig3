@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Union
 
 from django.db import models
 
@@ -40,7 +40,7 @@ class TestOutcome(TimeStampedModel):
         pass
 
 
-SerializedResult = Dict[str, str, TestOutcome.Results]
+SerializedResult = Dict[str, Union[str, TestOutcome.Results]]
 SerializedResultsList = List[SerializedResult]
 
 
