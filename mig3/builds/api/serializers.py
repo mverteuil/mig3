@@ -1,5 +1,6 @@
 import logging
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 
 from hashid_field.rest import HashidSerializerCharField
@@ -54,7 +55,7 @@ class VersionField(serializers.Field):
     Will create a new inactive UserAccount for the author if the email has not been seen before.
     """
 
-    def _get_or_create_author(self, email: str) -> get_user_model():
+    def _get_or_create_author(self, email: str) -> settings.AUTH_USER_MODEL:
         UserAccount = get_user_model()
         try:
             return UserAccount.objects.get_by_natural_key(email)
