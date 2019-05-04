@@ -1,7 +1,6 @@
 version: 2
 cli:
-  server: https://app.fossa.com
-  fetcher: custom
+  fetcher: git
   project: https://github.com/mverteuil/mig3
 analyze:
   modules:
