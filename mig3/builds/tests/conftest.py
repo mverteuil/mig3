@@ -1,8 +1,20 @@
+import copy
+
 import pytest
 
 from accounts import models as accounts
 from builds import models as builds
 from projects import models as projects
+
+
+@pytest.fixture
+def better_test_results(test_results) -> builds.DeserializedResultList:
+    """Generate deserialized test result list with progression from base case."""
+    test_results = copy.deepcopy(test_results)
+    for result in test_results:
+        if result["result"] != builds.TestOutcome.Results.PASSED:
+            result["result"] = builds.TestOutcome.Results.PASSED
+    return test_results
 
 
 @pytest.fixture
@@ -20,7 +32,7 @@ def target(db) -> projects.Target:
 
 @pytest.fixture
 def test_results() -> builds.DeserializedResultList:
-    """Generate deserialized test result list."""
+    """Generate deserialized test result list base case."""
     return [
         {"module": "tests/test_example01.py", "test": "test_error", "result": builds.TestOutcome.Results.ERROR},
         {"module": "tests/test_example01.py", "test": "test_failed", "result": builds.TestOutcome.Results.FAILED},
@@ -40,3 +52,13 @@ def version(db) -> projects.Version:
     """Create a UserAccount and Version."""
     version_user = accounts.UserAccount.objects.create_user(email="author@example.com")
     return version_user.version_set.create(hash="a1" * 20)
+
+
+@pytest.fixture
+def worse_test_results(test_results) -> builds.DeserializedResultList:
+    """Generate deserialized test result list with regression from base case."""
+    test_results = copy.deepcopy(test_results)
+    for result in test_results:
+        if result["result"] != builds.TestOutcome.Results.FAILED:
+            result["result"] = builds.TestOutcome.Results.FAILED
+    return test_results

@@ -62,27 +62,26 @@ class TestOutcomeManager(models.Manager):
     use_for_related_fields = True
 
     @staticmethod
-    def _clone_previous_outcome_for_target(test: Test, target: Target) -> "TestOutcome":
-        previous_outcome = test.testoutcome_set.filter(build__target=target).latest("id")
-        outcome = previous_outcome
-        outcome.id = None
-        return outcome
+    def _clone_latest_outcome_for_target(test: Test, target: Target) -> "TestOutcome":
+        cloned_outcome = test.testoutcome_set.filter(build__target=target).latest("id")
+        cloned_outcome.id = None
+        return cloned_outcome
 
-    def _perform_result_transition(self, target: Target, test: Test, result: "TestOutcome.Results") -> "TestOutcome":
-        outcome = self._clone_previous_outcome_for_target(test, target)
-        perform_result_transition = getattr(outcome, f"set_{result.name.lower()}")
-        perform_result_transition()
-        outcome.save()
-        return outcome
+    def _perform_result_transition(self, test: Test, target: Target, result: "TestOutcome.Results") -> "TestOutcome":
+        test_outcome = self._clone_latest_outcome_for_target(test, target)
+        transition_method_name = f"set_{result.name.lower()}"
+        getattr(test_outcome, transition_method_name)()
+        test_outcome.save()
+        return test_outcome
 
     def create(self, build: Build, test: Test, result: "TestOutcome.Results") -> "TestOutcome":
         """Create validated test outcome."""
         try:
             return self._perform_result_transition(test, build.target, result)
         except TestOutcome.DoesNotExist:
-            return build.testoutcome_set.create(test=test, result=result)
-        except django_fsm.TransitionNotAllowed:
-            raise RegressionDetected(str(test), None, None)
+            return super().create(build=build, test=test, result=result)
+        except django_fsm.TransitionNotAllowed as err:
+            raise RegressionDetected(str(test), err.object.result, result)
 
 
 class TestOutcome(TimeStampedModel):
@@ -101,15 +100,32 @@ class TestOutcome(TimeStampedModel):
     test = models.ForeignKey("projects.Test", on_delete=models.CASCADE)
     result = django_fsm.FSMIntegerField(protected=True, choices=Results.choices(), default=Results.ERROR)
 
+    objects = TestOutcomeManager()
+
     def __str__(self):
         return f"{self.test}: {self.Results(self.result).name.lower()} as of {self.build}"
 
-    @django_fsm.transition("result", source=[Results.ERROR, Results.FAILED], target=Results.XFAILED)
-    def set_xfailed(self):
-        """Set result value to Results.XFAILED."""
+    @django_fsm.transition("result", source=[Results.ERROR], target=Results.ERROR)
+    def set_error(self):
+        """Set result value to Results.ERROR."""
         pass
 
-    @django_fsm.transition("result", source=Results, target=Results.PASSED)
+    @django_fsm.transition("result", source=[Results.FAILED], target=Results.FAILED)
+    def set_failed(self):
+        """Set result value to Results.FAILED."""
+        pass
+
+    @django_fsm.transition("result", source=list(Results), target=Results.PASSED)
     def set_passed(self):
         """Set result value to Results.PASSED."""
+        pass
+
+    @django_fsm.transition("result", source=[Results.SKIPPED], target=Results.SKIPPED)
+    def set_skipped(self):
+        """Set result value to Results.SKIPPED."""
+        pass
+
+    @django_fsm.transition("result", source=[Results.ERROR, Results.FAILED, Results.XFAILED], target=Results.XFAILED)
+    def set_xfailed(self):
+        """Set result value to Results.XFAILED."""
         pass
