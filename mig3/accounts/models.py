@@ -9,10 +9,11 @@ from model_utils.models import TimeStampedModel
 
 
 class UserAccountManager(BaseUserManager):
+    """Object Relation Mapper for UserAccounts."""
+
     use_in_migrations = True
 
-    def _create_user(self, email, password, **extra_fields):
-        """Create and save a user with the given email and password."""
+    def _create_user(self, email: str, password: str, **extra_fields: dict) -> "UserAccount":
         if not email:
             raise ValueError("Email is a required field.")
         email = self.normalize_email(email)
@@ -21,12 +22,14 @@ class UserAccountManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_user(self, email, password=None, **extra_fields):
+    def create_user(self, email: str, password: str = None, **extra_fields: dict) -> "UserAccount":
+        """Create and save a user with the given email and password."""
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
         return self._create_user(email, password, **extra_fields)
 
-    def create_superuser(self, email, password, **extra_fields):
+    def create_superuser(self, email: str, password: str, **extra_fields: dict) -> "UserAccount":
+        """Create and save a fully-privileged user with the given email and password."""
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
 
@@ -37,7 +40,8 @@ class UserAccountManager(BaseUserManager):
 
         return self._create_user(email, password, **extra_fields)
 
-    def get_by_natural_key(self, email):
+    def get_by_natural_key(self, email: str) -> "UserAccount":
+        """Retrieve UserAccount by email due to its uniqueness."""
         return super().get_by_natural_key(email)
 
 
@@ -73,12 +77,13 @@ class UserAccount(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
         return f"{self.email}{'†' if self.is_staff else '￿'}{'*' if self.is_superuser else ''} ({self.id})"
 
     def clean(self):
+        """Validate and transform values for saving."""
         super().clean()
         self.email = self.__class__.objects.normalize_email(self.email)
 
 
 class BuilderAccount(TimeStampedModel):
-    """Authorize builders to submit job results"""
+    """Authorize builders to submit job results."""
 
     id = HashidAutoField(primary_key=True, salt=settings.HASHID_SALTS["accounts.BuilderAccount"])
     name = models.CharField("Name", max_length=254, help_text="Suggestions: CircleCI, TravisCI, Jenkins, etc.")

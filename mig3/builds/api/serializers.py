@@ -19,7 +19,10 @@ class Regression(APIException):
 
 
 class CurrentBuilderAccount(object):
+    """Use the BuilderAccount value from the current request's details."""
+
     def set_context(self, serializer_field):
+        """Initialize value for callers."""
         self.builder_account = serializer_field.context["request"].auth
 
     def __call__(self):
@@ -27,40 +30,54 @@ class CurrentBuilderAccount(object):
 
 
 class TestResultField(serializers.Field):
+    """Consume submitted test result for a TestOutcome."""
+
     def get_attribute(self, instance):
+        """Return the object to deserialize."""
         return instance
 
     def to_internal_value(self, data):
+        """Deserialize result for storage."""
         return builds.TestOutcome.Results[data.upper()]
 
     def to_representation(self, value):
+        """Serialize result for representation."""
         return value
 
 
 class VersionField(serializers.Field):
-    def _get_or_create_author(self, email):
+    """Consume submitted version author details for a Build.
+
+    Will create a new inactive UserAccount for the author if the email has not been seen before.
+    """
+
+    def _get_or_create_author(self, email: str) -> get_user_model():
         UserAccount = get_user_model()
         try:
-            author = UserAccount.objects.get_by_natural_key(email)
+            return UserAccount.objects.get_by_natural_key(email)
         except UserAccount.DoesNotExist:
-            author = UserAccount.objects.create_user(email=email)
-        finally:
-            return author
+            return UserAccount.objects.create_user(email=email)
 
-    def to_internal_value(self, data):
+    def to_internal_value(self, data: dict) -> projects.Version:
+        """Deserialize version and author for storage."""
         return projects.Version.objects.create(hash=data["hash"], author=self._get_or_create_author(data["author"]))
 
-    def to_representation(self, value):
+    def to_representation(self, value) -> str:
+        """Serialize version for representation."""
         return str(value)
 
 
 class TestOutcomeSerializer(serializers.Serializer):
+    """Consume TestOutcomes submitted through the API."""
+
     module = serializers.CharField(source="test__module__path")
     test = serializers.CharField(source="test__name")
     result = TestResultField()
 
 
 class BuildSerializer(serializers.Serializer):
+    """Consume Builds submitted through the API."""
+
     number = serializers.CharField()
     builder = serializers.HiddenField(default=CurrentBuilderAccount())
     results = TestOutcomeSerializer(many=True, write_only=True)
@@ -69,7 +86,8 @@ class BuildSerializer(serializers.Serializer):
     )
     version = VersionField()
 
-    def create(self, validated_data):
+    def create(self, validated_data: dict) -> builds.Build:
+        """Create a new Build from API request."""
         try:
             return builds.Build.objects.create_build(**validated_data)
         except builds.Build.RegressionDetected as e:

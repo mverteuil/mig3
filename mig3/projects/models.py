@@ -6,7 +6,7 @@ from model_utils.models import TimeStampedModel
 
 
 class Project(TimeStampedModel):
-    """Project undergoing migration from a target to one or more other targets"""
+    """Project undergoing migration from a target to one or more other targets."""
 
     id = HashidAutoField(primary_key=True, salt=settings.HASHID_SALTS["projects.Project"])
     name = models.CharField("Project Name", max_length=255)
@@ -36,10 +36,12 @@ class Target(TimeStampedModel):
 
     @property
     def full_version(self) -> str:
+        """Concatenated python version and additional details as an identifier."""
         return f"{self.python_version}{'+' + self.additional_details.strip() if self.additional_details else ''}"
 
     @property
     def python_version(self) -> str:
+        """Concatenated python version."""
         return f"{self.python_major_version}.{self.python_minor_version}.{self.python_patch_version}"
 
 
@@ -56,7 +58,7 @@ class Module(TimeStampedModel):
 
 
 class Test(TimeStampedModel):
-    """Python test routine"""
+    """Py.test routine."""
 
     module = models.ForeignKey("projects.Module", on_delete=models.CASCADE)
     name = models.CharField("Test Name", max_length=511, help_text="Name of test routine.")
@@ -66,7 +68,7 @@ class Test(TimeStampedModel):
 
 
 class Version(TimeStampedModel):
-    """Version of codebase for Project at Build time"""
+    """Version of codebase for Project at Build time."""
 
     hash = models.CharField("Commit Hash", max_length=63, help_text="Git commit hash as hexadecimal.")
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
