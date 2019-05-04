@@ -1,0 +1,13 @@
+version: 2
+cli:
+  server: https://app.fossa.com
+  fetcher: custom
+  project: https://github.com/mverteuil/mig3
+analyze:
+  modules:
+    - name: https://github.com/mverteuil/mig3
+      type: pip
+      target: Pipfile
+      path:  Pipfile.lock
+      options:
+        strategy: pipenv
