@@ -1,0 +1,12 @@
+version: 2
+cli:
+  fetcher: git
+  project: https://github.com/mverteuil/mig3
+analyze:
+  modules:
+    - name: https://github.com/mverteuil/mig3
+      type: pip
+      target: .
+      path:  .
+      options:
+        strategy: pipenv

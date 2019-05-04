@@ -9,13 +9,12 @@ python:
   - "3.7"
 install:
   - "pip install pipenv==2018.11.26"
-  - "pipenv install --dev"
-  - "barb -z"
-before_script:
+  - "pipenv install"
   - "curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install.sh | sudo bash"
-  - "pip freeze > requirements.txt"
-  - "fossa init"
   - "fossa analyze"
+  - "pipenv install --dev"
+before_script:
+  - "barb -z"
 script:
   - "python -m pytest"
 after_success:
