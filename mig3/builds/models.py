@@ -4,6 +4,7 @@ import django_fsm
 from django_choices_enum import ChoicesEnum
 from model_utils.models import TimeStampedModel
 
+from accounts import models as accounts
 from projects import models as projects
 
 
@@ -11,6 +12,8 @@ class TestOutcome(TimeStampedModel):
     """Test outcome accepted because it moved the migration state forward."""
 
     class Results(int, ChoicesEnum):
+        """Enumerate possible test results."""
+
         ERROR = (0, "Error")
         FAILED = (1, "Failed")
         PASSED = (2, "Passed")
@@ -26,18 +29,30 @@ class TestOutcome(TimeStampedModel):
 
     @django_fsm.transition("result", source=[Results.ERROR, Results.FAILED], target=Results.XFAILED)
     def set_xfailed(self):
+        """Set result value to Results.XFAILED."""
         pass
 
     @django_fsm.transition("result", source=Results, target=Results.PASSED)
     def set_passed(self):
+        """Set result value to Results.PASSED."""
         pass
 
 
 class BuildManager(models.Manager):
+    """Manage Build objects."""
+
     use_for_related_fields = True
     use_in_migrations = True
 
-    def create_build(self, number, target, version, builder, results):
+    def create_build(
+        self,
+        number: str,
+        target: projects.Target,
+        version: projects.Version,
+        builder: accounts.BuilderAccount,
+        results: list,
+    ) -> "Build":
+        """Create a new Build with TestOutcomes."""
         build = self.model(number=number, target=target, version=version, builder=builder)
         build.save()
         for test_result in results:

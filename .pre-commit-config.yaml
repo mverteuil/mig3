@@ -72,5 +72,6 @@ repos:
         exclude: >
             (?x)^(
                 .*/migrations/.*\.py$|
-                .*/admin.*\.py$
+                .*/admin.*\.py$|
+                mig3/manage\.py$
             )$

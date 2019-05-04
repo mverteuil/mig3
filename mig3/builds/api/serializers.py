@@ -13,6 +13,8 @@ logger = logging.getLogger(__name__)
 
 
 class Regression(APIException):
+    """The build introduced a regression to your migration and is unacceptable."""
+
     status_code = status.HTTP_409_CONFLICT
     default_detail = "The build introduced a regression to your migration and is unacceptable."
     default_code = "conflict"
@@ -26,6 +28,7 @@ class CurrentBuilderAccount(object):
         self.builder_account = serializer_field.context["request"].auth
 
     def __call__(self):
+        """Produce value for callers."""
         return self.builder_account
 
 
