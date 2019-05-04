@@ -7,7 +7,7 @@ analyze:
   modules:
     - name: https://github.com/mverteuil/mig3
       type: pip
-      target: Pipfile
-      path:  Pipfile.lock
+      target: .
+      path:  .
       options:
         strategy: pipenv
