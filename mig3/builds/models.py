@@ -1,11 +1,13 @@
+from typing import Dict, List, Union
+
 from django.db import models
 
 import django_fsm
 from django_choices_enum import ChoicesEnum
 from model_utils.models import TimeStampedModel
 
-from accounts import models as accounts
-from projects import models as projects
+from accounts.models import BuilderAccount
+from projects.models import Target, Test, Version
 
 
 class TestOutcome(TimeStampedModel):
@@ -38,6 +40,10 @@ class TestOutcome(TimeStampedModel):
         pass
 
 
+SerializedResult = Dict[str, Union[str, TestOutcome.Results]]
+SerializedResultList = List[SerializedResult]
+
+
 class BuildManager(models.Manager):
     """Manage Build objects."""
 
@@ -45,12 +51,7 @@ class BuildManager(models.Manager):
     use_in_migrations = True
 
     def create_build(
-        self,
-        number: str,
-        target: projects.Target,
-        version: projects.Version,
-        builder: accounts.BuilderAccount,
-        results: list,
+        self, number: str, target: Target, version: Version, builder: BuilderAccount, results: SerializedResultList
     ) -> "Build":
         """Create a new Build with TestOutcomes."""
         build = self.model(number=number, target=target, version=version, builder=builder)
@@ -68,7 +69,7 @@ class Build(TimeStampedModel):
     class RegressionDetected(ValueError):
         """Attempted to introduce regression with build."""
 
-        def __init__(self, test, previous_result, current_result):
+        def __init__(self, test: str, previous_result: TestOutcome.Results, current_result: TestOutcome.Results):
             super().__init__(
                 f"The build attempted to introduce this regression to your migration: "
                 f"{test} ({TestOutcome.Results(previous_result).name} 👉 {TestOutcome.Results(current_result).name})"
@@ -84,7 +85,7 @@ class Build(TimeStampedModel):
     def __str__(self):
         return f"{self.number}: {self.target.project.name} @ {self.target.name} on {self.builder.name} ({self.version.hash[:8]})"
 
-    def create_test_outcome(self, test: projects.Test, result: TestOutcome.Results) -> TestOutcome:
+    def create_test_outcome(self, test: Test, result: TestOutcome.Results) -> TestOutcome:
         """Create validated test outcome."""
         try:
             previous_outcome = test.testoutcome_set.filter(build__target=self.target).latest("id")
