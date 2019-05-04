@@ -9,8 +9,8 @@ from model_utils.models import TimeStampedModel
 from accounts.models import BuilderAccount
 from projects.models import Module, Target, Test, Version
 
-SerializedResult = Dict[str, Union[str, "TestOutcome.Results"]]
-SerializedResultList = List[SerializedResult]
+DeserializedResult = Dict[str, Union[str, "TestOutcome.Results"]]
+DeserializedResultList = List[DeserializedResult]
 
 
 class RegressionDetected(ValueError):
@@ -30,7 +30,7 @@ class BuildManager(models.Manager):
     use_in_migrations = True
 
     def create_build(
-        self, number: str, target: Target, version: Version, builder: BuilderAccount, results: SerializedResultList
+        self, number: str, target: Target, version: Version, builder: BuilderAccount, results: DeserializedResultList
     ) -> "Build":
         """Create a new Build with TestOutcomes."""
         build = self.model(number=number, target=target, version=version, builder=builder)
