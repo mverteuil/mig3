@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AnonymousUser
+from django.db import models
 
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.exceptions import AuthenticationFailed
@@ -16,10 +17,11 @@ class BearerAuthentication(TokenAuthentication):
 
     """
 
-    keyword = "Bearer"
-    model = accounts.BuilderAccount
+    keyword: str = "Bearer"
+    model: models.Model = accounts.BuilderAccount
 
-    def authenticate_credentials(self, token):
+    def authenticate_credentials(self, token: str) -> (AnonymousUser, accounts.BuilderAccount):
+        """Find associated BuilderAccount for authentication token, if it exists."""
         model = self.get_model()
         try:
             builder = model.objects.get(token=token)
