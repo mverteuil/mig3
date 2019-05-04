@@ -17,36 +17,37 @@
 # Production Installation
 
 ```zsh
-$ git clone https://github.com/mverteuil/mig3.git .
-$ pipenv install --deploy
-$ pipenv run barb  # Or "barb-deploy -z" in advanced AWS configuration
-$ pipenv run python mig3/manage.py migrate
-$ pipenv run python mig3/manage.py createsuperuser --email <your@email.address>
-$ pip install gunicorn  # or preferred alternative
+git clone https://github.com/mverteuil/mig3.git .
+pipenv install --deploy
+pipenv run barb  # Or "barb-deploy -z" in advanced AWS configuration
+pipenv run python mig3/manage.py migrate
+pipenv run python mig3/manage.py createsuperuser --email <your@email.address>
+pip install gunicorn  # or preferred alternative
 ```
 
 # Development Requirements
 
+-   All production requirements
 -   Docker (optional, but helpful)
 -   Pre-Commit 1.15+
 
 # Development Installation
 
 ```zsh
-$ git clone https://github.com/mverteuil/mig3.git .
-$ pre-commit install
-$ pipenv install --dev
-$ pipenv shell
-$ barb -z
-$ docker-compose up --detach  # or without "--detach" in another terminal session
-$ python mig3/manage.py migrate
-$ python mig3/manage.py createsuperuser --email <your@email.address>
+git clone https://github.com/mverteuil/mig3.git .
+pre-commit install
+pipenv install --dev
+pipenv shell
+barb -z
+docker-compose up --detach  # or without "--detach" in another terminal session
+python mig3/manage.py migrate
+python mig3/manage.py createsuperuser --email <your@email.address>
 ```
 
 It's recommended that you validate your installation at this point by confirming that linters and tests are passing as expected:
 
 ```zsh
-$ py.test && pre-commit run --all-files && echo "VALIDATED\!" || echo "CHECK YOUR INSTALLATION"
+py.test && pre-commit run --all-files && echo "VALIDATED\!" || echo "CHECK YOUR INSTALLATION"
 ```
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmverteuil%2Fmig3.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmverteuil%2Fmig3?ref=badge_large)
