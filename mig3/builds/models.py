@@ -61,22 +61,28 @@ class TestOutcomeManager(models.Manager):
 
     use_for_related_fields = True
 
+    @staticmethod
+    def _clone_previous_outcome_for_target(test: Test, target: Target) -> "TestOutcome":
+        previous_outcome = test.testoutcome_set.filter(build__target=target).latest("id")
+        outcome = previous_outcome
+        outcome.id = None
+        return outcome
+
+    def _perform_result_transition(self, target: Target, test: Test, result: "TestOutcome.Results") -> "TestOutcome":
+        outcome = self._clone_previous_outcome_for_target(test, target)
+        perform_result_transition = getattr(outcome, f"set_{result.name.lower()}")
+        perform_result_transition()
+        outcome.save()
+        return outcome
+
     def create(self, build: Build, test: Test, result: "TestOutcome.Results") -> "TestOutcome":
         """Create validated test outcome."""
         try:
-            previous_outcome = test.testoutcome_set.filter(build__target=self.target).latest("id")
-            outcome = previous_outcome
-            outcome.id = None
-            try:
-                field_transition = getattr(outcome, f"set_{result.name.lower()}")
-                field_transition()
-            except django_fsm.TransitionNotAllowed:
-                raise RegressionDetected(str(test), previous_outcome.result, result)
-
-            outcome.save()
-            return outcome
+            return self._perform_result_transition(test, build.target, result)
         except TestOutcome.DoesNotExist:
             return build.testoutcome_set.create(test=test, result=result)
+        except django_fsm.TransitionNotAllowed:
+            raise RegressionDetected(str(test), None, None)
 
 
 class TestOutcome(TimeStampedModel):
