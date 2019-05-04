@@ -16,7 +16,7 @@
 
 # Production Installation
 
-```
+```zsh
 $ git clone https://github.com/mverteuil/mig3.git .
 $ pipenv install --deploy
 $ pipenv run barb  # Or "barb-deploy -z" in advanced AWS configuration
@@ -32,7 +32,7 @@ $ pip install gunicorn  # or preferred alternative
 
 # Development Installation
 
-```
+```zsh
 $ git clone https://github.com/mverteuil/mig3.git .
 $ pre-commit install
 $ pipenv install --dev
@@ -45,7 +45,7 @@ $ python mig3/manage.py createsuperuser --email <your@email.address>
 
 It's recommended that you validate your installation at this point by confirming that linters and tests are passing as expected:
 
-```
+```zsh
 $ py.test && pre-commit run --all-files && echo "VALIDATED\!" || echo "CHECK YOUR INSTALLATION"
 ```
 
