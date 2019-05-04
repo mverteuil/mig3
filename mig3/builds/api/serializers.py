@@ -73,8 +73,8 @@ class VersionField(serializers.Field):
 class TestOutcomeSerializer(serializers.Serializer):
     """Consume TestOutcomes submitted through the API."""
 
-    module = serializers.CharField(source="test__module__path")
-    test = serializers.CharField(source="test__name")
+    module = serializers.CharField()
+    test = serializers.CharField()
     result = TestResultField()
 
 
@@ -93,5 +93,5 @@ class BuildSerializer(serializers.Serializer):
         """Create a new Build from API request."""
         try:
             return builds.Build.objects.create_build(**validated_data)
-        except builds.Build.RegressionDetected as e:
+        except builds.RegressionDetected as e:
             raise Regression(str(e))
