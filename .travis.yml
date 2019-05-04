@@ -13,9 +13,10 @@ install:
   - "barb -z"
 before_script:
   - "curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install.sh | sudo bash"
-script:
+  - "pip freeze > requirements.txt"
   - "fossa init"
   - "fossa analyze"
+script:
   - "python -m pytest"
 after_success:
   - "pip install codacy-coverage==1.3.11"
