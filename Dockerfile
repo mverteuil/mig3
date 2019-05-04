@@ -9,9 +9,9 @@ ENV PYTHONUNBUFFERED 1
 WORKDIR /code
 
 # Install dependencies
-RUN pip install pipenv
+RUN pip install pipenv==2018.11.26
 COPY Pipfile Pipfile.lock /code/
-RUN pipenv install --system
+RUN pipenv install --system --dev
 
-# Copy Django project root
-COPY mig3/* /code/
+# Copy project root
+COPY . /code/
