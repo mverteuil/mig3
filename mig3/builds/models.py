@@ -41,7 +41,7 @@ class TestOutcome(TimeStampedModel):
 
 
 SerializedResult = Dict[str, Union[str, TestOutcome.Results]]
-SerializedResultsList = List[SerializedResult]
+SerializedResultList = List[SerializedResult]
 
 
 class BuildManager(models.Manager):
@@ -51,7 +51,7 @@ class BuildManager(models.Manager):
     use_in_migrations = True
 
     def create_build(
-        self, number: str, target: Target, version: Version, builder: BuilderAccount, results: SerializedResultsList
+        self, number: str, target: Target, version: Version, builder: BuilderAccount, results: SerializedResultList
     ) -> "Build":
         """Create a new Build with TestOutcomes."""
         build = self.model(number=number, target=target, version=version, builder=builder)
