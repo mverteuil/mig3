@@ -1,3 +1,5 @@
+languages:
+  - python
 component_depth: 2
 exclude:
   - .*/manage\.py
