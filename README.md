@@ -2,8 +2,6 @@
 
 # Detect regressions in your python3 migration!
 
-[![BCH compliance](https://bettercodehub.com/edge/badge/mverteuil/mig3?branch=master)](https://bettercodehub.com/)
-[![Codacy Quality Badge](https://api.codacy.com/project/badge/Grade/8fbaac0868ee4261915b7c48ba8ee881)](https://app.codacy.com/app/mverteuil/mig3?utm_source=github.com&utm_medium=referral&utm_content=mverteuil/mig3&utm_campaign=Badge_Grade_Dashboard)
 [![Codacy Coverage Badge](https://api.codacy.com/project/badge/Coverage/79079a3fa54e49d4b6cfee5f3451737e)](https://www.codacy.com/app/mverteuil/mig3?utm_source=github.com&utm_medium=referral&utm_content=mverteuil/mig3&utm_campaign=Badge_Coverage)
 [![Build Status](https://travis-ci.com/mverteuil/mig3.svg?branch=master)](https://travis-ci.com/mverteuil/mig3)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmverteuil%2Fmig3.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmverteuil%2Fmig3?ref=badge_shield)
