@@ -1,8 +1,10 @@
 from typing import Dict, List, Union
 
+from django.conf import settings
 from django.db import models
 
 import django_fsm
+import hashid_field
 from django_choices_enum import ChoicesEnum
 from model_utils.models import TimeStampedModel
 
@@ -45,6 +47,7 @@ class BuildManager(models.Manager):
 class Build(TimeStampedModel):
     """Attempt to move the migration state forward, submitted by a builder."""
 
+    id = hashid_field.HashidAutoField(primary_key=True, salt=settings.HASHID_SALTS["builds.Build"])
     builder = models.ForeignKey("accounts.BuilderAccount", on_delete=models.CASCADE)
     target = models.ForeignKey("projects.Target", on_delete=models.CASCADE)
     version = models.ForeignKey("projects.Version", on_delete=models.CASCADE)

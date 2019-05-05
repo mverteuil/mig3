@@ -3,7 +3,7 @@ import logging
 from django.conf import settings
 from django.contrib.auth import get_user_model
 
-from hashid_field.rest import HashidSerializerCharField
+from hashid_field import rest as hashid_field
 from rest_framework import serializers, status
 from rest_framework.exceptions import APIException
 
@@ -74,21 +74,25 @@ class VersionField(serializers.Field):
 class TestOutcomeSerializer(serializers.Serializer):
     """Consume TestOutcomes submitted through the API."""
 
-    module = serializers.CharField()
-    test = serializers.CharField()
+    module = serializers.CharField(source="test__module__path")
+    test = serializers.CharField(source="test__name")
     result = TestResultField()
 
 
 class BuildSerializer(serializers.Serializer):
     """Consume Builds submitted through the API."""
 
-    number = serializers.CharField()
-    builder = serializers.HiddenField(default=CurrentBuilderAccount())
-    results = TestOutcomeSerializer(many=True, write_only=True)
     target = serializers.PrimaryKeyRelatedField(
-        queryset=projects.Target.objects.all(), pk_field=HashidSerializerCharField(source_field="projects.Target.id")
+        queryset=projects.Target.objects.all(),
+        pk_field=hashid_field.HashidSerializerCharField(source_field="projects.Target.id"),
     )
+    number = serializers.CharField()
     version = VersionField()
+    builder = serializers.HiddenField(default=CurrentBuilderAccount())
+    results = TestOutcomeSerializer(many=True)
+
+    class Meta:  # noqa: D106
+        model = builds.Build
 
     def create(self, validated_data: dict) -> builds.Build:
         """Create a new Build from API request."""

@@ -1,11 +1,19 @@
-from rest_framework.generics import CreateAPIView
+from rest_framework import authentication, generics, permissions
 
 from api.permissions import IsBuilder
 from .serializers import BuildSerializer
 
 
-class BuildListView(CreateAPIView):
+class BuildDetailView(generics.RetrieveAPIView):
+    """Build details."""
+
+    authentication_classes = (authentication.SessionAuthentication,)
+    permission_classes = permissions.IsAuthenticated
+    serializer_class = BuildSerializer
+
+
+class BuildListView(generics.CreateAPIView):
     """Build listing."""
 
-    serializer_class = BuildSerializer
     permission_classes = (IsBuilder,)
+    serializer_class = BuildSerializer

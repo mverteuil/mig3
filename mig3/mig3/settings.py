@@ -274,6 +274,7 @@ STATICFILES_DIRS: list = []
 HASHID_SALTS: dict = {
     "accounts.BuilderAccount": getenv("HASHID_SALT_ACCOUNTS_BUILDER_ACCOUNT", "abc123"),
     "accounts.UserAccount": getenv("HASHID_SALT_ACCOUNTS_USER_ACCOUNT", "abc123"),
+    "builds.Build": getenv("HASHID_SALT_BUILDS_BUILD", "abc123"),
     "projects.Project": getenv("HASHID_SALT_PROJECTS_PROJECT", "abc123"),
     "projects.Target": getenv("HASHID_SALT_PROJECTS_TARGET", "abc123"),
 }
