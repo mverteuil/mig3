@@ -1,7 +1,0 @@
-languages:
-  - python
-component_depth: 2
-exclude:
-  - .*/manage\.py
-  - .*/mig3/settings\.py
-  - .*migrations.*\.py

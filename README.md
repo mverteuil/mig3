@@ -1,21 +1,22 @@
-![Mig3](https://repository-images.githubusercontent.com/183804036/f4e59c00-69bb-11e9-96c5-6188c6a6f664)
+# ![mig3](https://repository-images.githubusercontent.com/183804036/f4e59c00-69bb-11e9-96c5-6188c6a6f664)
+## *mig3*: Detect regressions in your python3 migration!
 
-# Detect regressions in your python3 migration!
-
-[![BCH compliance](https://bettercodehub.com/edge/badge/mverteuil/mig3?branch=master)](https://bettercodehub.com/)
-[![Codacy Quality Badge](https://api.codacy.com/project/badge/Grade/8fbaac0868ee4261915b7c48ba8ee881)](https://app.codacy.com/app/mverteuil/mig3?utm_source=github.com&utm_medium=referral&utm_content=mverteuil/mig3&utm_campaign=Badge_Grade_Dashboard)
 [![Codacy Coverage Badge](https://api.codacy.com/project/badge/Coverage/79079a3fa54e49d4b6cfee5f3451737e)](https://www.codacy.com/app/mverteuil/mig3?utm_source=github.com&utm_medium=referral&utm_content=mverteuil/mig3&utm_campaign=Badge_Coverage)
 [![Build Status](https://travis-ci.com/mverteuil/mig3.svg?branch=master)](https://travis-ci.com/mverteuil/mig3)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmverteuil%2Fmig3.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmverteuil%2Fmig3?ref=badge_shield)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/python/black)
 
-# Production Requirements
+## See Also
+
+-   [mig3-client](https://github.com/mverteuil/mig3-client): Submit your results to this service.
+
+## Production Requirements
 
 -   Python 3.7+
 -   Pipenv
 -   PostgreSQL 11+
 
-# Production Installation
+## Production Installation
 
 ```zsh
 git clone https://github.com/mverteuil/mig3.git .
@@ -26,13 +27,13 @@ pipenv run python mig3/manage.py createsuperuser --email <your@email.address>
 pip install gunicorn  # or preferred alternative
 ```
 
-# Development Requirements
+## Development Requirements
 
 -   All production requirements
 -   Docker (optional, but helpful)
 -   Pre-Commit 1.15+
 
-# Development Installation
+## Development Installation
 
 ```zsh
 git clone https://github.com/mverteuil/mig3.git .
