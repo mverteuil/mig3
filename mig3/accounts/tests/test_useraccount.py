@@ -41,7 +41,7 @@ def test_create_active_user(db):
     user = UserAccount.objects.create_user(**DEFAULT_PARAMETERS)
     parameters = DEFAULT_PARAMETERS.copy()
     password = parameters.pop("password")
-    assert ModelBackend().authenticate(None, username=user.email, password=password)
+    assert ModelBackend().authenticate(request=None, username=user.email, password=password)
 
 
 def test_create_inactive_user(db):
@@ -51,4 +51,4 @@ def test_create_inactive_user(db):
 
     user = UserAccount.objects.create_user(**parameters)
     password = parameters.pop("password")
-    assert not ModelBackend().authenticate(None, username=user.email, password=password)
+    assert not ModelBackend().authenticate(request=None, username=user.email, password=password)
