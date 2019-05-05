@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 from distutils.util import strtobool
+from pathlib import Path
 
 import dj_database_url
 import dotenv
@@ -28,9 +29,12 @@ getenv_int: callable = lambda k, default=None: int(getenv(k, default))
 dotenv.load_dotenv(dotenv.find_dotenv(), verbose=True)
 
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+# Build paths inside the project like this: BASE_DIR / "subdir" / "subdir"
 
-BASE_DIR: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR: Path = Path(__file__).resolve().parent.parent.parent
+BACKEND_DIR: Path = BASE_DIR / "mig3"
+FRONTEND_DIR: Path = BASE_DIR / "mig3-ui"
+TEMPLATES_DIR: Path = BACKEND_DIR / "templates"
 
 
 # Secret Key
@@ -73,6 +77,7 @@ INSTALLED_APPS: list = [
     "django_fsm",
     "drf_yasg",
     "rest_framework",
+    "webpack_loader",
     "accounts",
     "builds",
     "projects",
@@ -111,7 +116,7 @@ APPEND_SLASH: bool = True
 TEMPLATES: list = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": getenv_list("TEMPLATE_DIRS"),
+        "DIRS": getenv_list("TEMPLATE_DIRS") + [TEMPLATES_DIR],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -132,7 +137,7 @@ EMAIL_BACKEND: str = getenv("EMAIL_BACKEND", "django.core.mail.backends.filebase
 # Email File Path
 # https://docs.djangoproject.com/en/2.2/ref/settings/#email-file-path
 
-EMAIL_FILE_PATH: str = os.path.join(BASE_DIR, "..", "logs", "emails-sent")
+EMAIL_FILE_PATH: Path = BASE_DIR / "logs" / "emails-sent"
 
 
 # Default Sender (email address)
@@ -293,6 +298,24 @@ REST_FRAMEWORK: dict = {
     # Override Django request factory comptability default
     # https://www.django-rest-framework.org/api-guide/testing/#setting-the-default-format
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
+}
+
+
+# Django Webpack Loader
+# https://github.com/owais/django-webpack-loader#configuration
+
+WEBPACK_LOADER = {
+    "DEFAULT": {
+        # Cache
+        # https://github.com/owais/django-webpack-loader#cache
+        "CACHE": not DEBUG,
+        # Bundle Directory (must end with slash)
+        # https://github.com/owais/django-webpack-loader#bundle_dir_name
+        "BUNDLE_DIR_NAME": "/bundles/",
+        # Webpack Stats File
+        # https://github.com/owais/django-webpack-loader#stats_file
+        "STATS_FILE": FRONTEND_DIR / "webpack-stats.json",
+    }
 }
 
 
