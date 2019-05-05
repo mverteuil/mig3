@@ -18,6 +18,11 @@ repos:
       - id: flake8
         args:
           - --statistics
+  - repo: https://github.com/prettier/prettier
+    rev: master
+    hooks:
+      - id: prettier
+        exclude: "^.*(md|markdown|mdown|mkdn)$"
   - repo: https://github.com/pre-commit/pygrep-hooks
     rev: v1.3.0
     hooks:
@@ -55,11 +60,11 @@ repos:
           - -c
           - bandit.yml
         exclude: >
-            (?x)^(
-                .*/migrations/.*\.py$|
-                .*/admin.*\.py$|
-                .*/tests.*\.py$
-            )$
+          (?x)^(
+              .*/migrations/.*\.py$|
+              .*/admin.*\.py$|
+              .*/tests.*\.py$
+          )$
   - repo: https://github.com/PyCQA/pydocstyle
     rev: 2549847f9efad225789f931e83dfe782418ca13e
     hooks:
@@ -70,8 +75,8 @@ repos:
           - --add-ignore=D100,D104,D105
           - -e
         exclude: >
-            (?x)^(
-                .*/migrations/.*\.py$|
-                .*/admin.*\.py$|
-                mig3/manage\.py$
-            )$
+          (?x)^(
+              .*/migrations/.*\.py$|
+              .*/admin.*\.py$|
+              mig3/manage\.py$
+          )$
