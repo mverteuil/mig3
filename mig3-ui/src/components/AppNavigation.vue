@@ -7,7 +7,7 @@
           Projects
           <v-icon>phone</v-icon>
         </v-tab>
-        <v-tab href="admin/">
+        <v-tab href="/admin/">
           Admin
           <v-icon>phone</v-icon>
         </v-tab>
