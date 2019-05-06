@@ -34,6 +34,7 @@ dotenv.load_dotenv(dotenv.find_dotenv(), verbose=True)
 BASE_DIR: Path = Path(__file__).resolve().parent.parent.parent
 BACKEND_DIR: Path = BASE_DIR / "mig3"
 FRONTEND_DIR: Path = BASE_DIR / "mig3-ui"
+FRONTEND_DIST_DIR: Path = FRONTEND_DIR / "dist"
 TEMPLATES_DIR: Path = BACKEND_DIR / "templates"
 
 
@@ -314,7 +315,7 @@ WEBPACK_LOADER = {
         "BUNDLE_DIR_NAME": "/bundles/",
         # Webpack Stats File
         # https://github.com/owais/django-webpack-loader#stats_file
-        "STATS_FILE": FRONTEND_DIR / "webpack-stats.json",
+        "STATS_FILE": FRONTEND_DIST_DIR / "webpack-stats.json",
     }
 }
 
