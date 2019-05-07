@@ -46,7 +46,7 @@ export default {
 
 <style lang="stylus" scoped>
 .icon-text
-  @extend vertical-middle
+  //@extend vertical-middle
   padding-left 1em
 
 .vertical-middle
