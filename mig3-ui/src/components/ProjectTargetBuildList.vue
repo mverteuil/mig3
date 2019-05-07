@@ -1,55 +1,66 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="builds"
-    class="elevation-1"
-    item-key="id"
-  >
-    <template v-slot:headers="props">
-      <th width="100">
-        <v-icon color="green">mdi-shield-check</v-icon>
-      </th>
-      <th :key="header.text" align="left" v-for="header in props.headers">
-        {{ header.text }}
-      </th>
-    </template>
-    <template v-slot:items="props">
-      <router-link
-        :style="{ cursor: 'pointer' }"
-        :to="{ name: 'builds', params: { buildId: props.item.id } }"
-        tag="tr"
-      >
-        <td align="center">
+  <v-container>
+    <v-flex>
+      <span class="display-4 font-weight-black text-capitalize">{{
+        projectName
+      }}</span>
+      <span class="display-4 font-weight-thin">{{ targetName }}</span>
+      <span class="display-2 text-uppercase">builds</span>
+    </v-flex>
+    <v-data-table
+      :headers="headers"
+      :items="builds"
+      class="elevation-1"
+      header-key="text"
+      item-key="id"
+    >
+      <template v-slot:headers="props">
+        <th width="100">
           <v-icon color="green">mdi-shield-check</v-icon>
-        </td>
-        <td>{{ props.items.id }}</td>
-        <td>{{ props.items.number }}</td>
-        <td>{{ props.items.builder["name"] }}</td>
-        <td>{{ props.items.version["sha"] }}</td>
-        <td>{{ props.items.version["author"]["email"] }}</td>
-        <td>{{ props.items.total }}</td>
-        <td>{{ props.items.passed }}</td>
-        <td>{{ props.items.xfailed }}</td>
-        <td>{{ props.items.failed }}</td>
-        <td>{{ props.items.error }}</td>
-        <td>{{ props.items.skipped }}</td>
-      </router-link>
-    </template>
-  </v-data-table>
+        </th>
+        <th :key="header.text" align="left" v-for="header in props.headers">
+          {{ header.text }}
+        </th>
+      </template>
+      <template v-slot:items="props">
+        <router-link
+          :style="{ cursor: 'pointer' }"
+          :to="{ name: 'builds', params: { buildId: props.item.id } }"
+          tag="tr"
+        >
+          <td align="center">
+            <v-icon color="green">mdi-shield-check</v-icon>
+          </td>
+          <td class="flow">
+            {{ props.item.number }}
+            <br />
+            <span class="font-weight-light">{{ props.item.id }}</span>
+          </td>
+          <td>{{ props.item.builder.name }}</td>
+          <td>{{ props.item.version.sha }}</td>
+          <td>{{ props.item.version.author.email }}</td>
+          <td>{{ props.item.total }}</td>
+          <td>{{ props.item.passed }}</td>
+          <td>{{ props.item.xfailed }}</td>
+          <td>{{ props.item.failed }}</td>
+          <td>{{ props.item.error }}</td>
+          <td>{{ props.item.skipped }}</td>
+        </router-link>
+      </template>
+    </v-data-table>
+  </v-container>
 </template>
 <script>
 export default {
-  name: "TargetList",
+  name: "ProjectTargetBuildList",
   data() {
     return {
+      projectName: "barbara",
+      targetName: "python3.8",
       headers: [
         {
           text: "ID",
           value: "id"
-        },
-        {
-          text: "Number",
-          value: "number"
         },
         {
           text: "Builder",
@@ -115,4 +126,3 @@ export default {
   }
 };
 </script>
-<style scoped></style>

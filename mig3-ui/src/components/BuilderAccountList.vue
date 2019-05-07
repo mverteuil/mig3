@@ -64,14 +64,3 @@ export default {
   })
 };
 </script>
-<style lang="stylus" scoped>
-.vertical-middle
-  vertical-align middle
-
-.icon-text
-  @extend .vertical-middle
-  padding-left 1em
-
-.space-evenly
-  justify-content: space-evenly
-</style>

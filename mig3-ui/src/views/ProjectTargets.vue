@@ -1,5 +1,5 @@
 <template>
-  <project-target-list v-if="$route.params.targetId" />
+  <project-target-list v-if="!$route.params.targetId" />
   <router-view v-else />
 </template>
 <script>

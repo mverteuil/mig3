@@ -1,14 +1,9 @@
 <template>
   <v-container>
     <v-flex>
-      <span class="display-4 font-weight-black">{{
-        projects[$route.params.userAccountId].name
+      <span class="display-4 font-weight-black text-capitalize">{{
+        projectName
       }}</span>
-      <span
-        class="display-4 font-weight-black text-capitalize"
-        style="margin-bottom:-.7em;"
-        >{{ projectName }}</span
-      >
       <span class="display-4 font-weight-thin">targets</span>
       <v-icon x-large>mdi-github-circle</v-icon>
     </v-flex>
@@ -20,4 +15,3 @@ export default {
   name: "UserAccountDetail"
 };
 </script>
-<style scoped></style>

@@ -1,11 +1,9 @@
 <template>
   <v-container>
     <v-flex>
-      <span
-        class="display-4 font-weight-black text-capitalize"
-        style="margin-bottom:-.7em;"
-        >{{ projectName }}</span
-      >
+      <span class="display-4 font-weight-black text-capitalize">{{
+        projectName
+      }}</span>
       <span class="display-4 font-weight-thin">targets</span>
     </v-flex>
     <v-data-table
@@ -82,4 +80,3 @@ export default {
   }
 };
 </script>
-<style scoped></style>
