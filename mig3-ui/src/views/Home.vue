@@ -1,7 +1,13 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-  </div>
+  <v-container>
+    <project-list></project-list>
+  </v-container>
 </template>
 
-<script></script>
+<script>
+import ProjectList from "@/components/ProjectList";
+
+export default {
+  components: { ProjectList }
+};
+</script>

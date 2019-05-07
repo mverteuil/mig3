@@ -4,12 +4,13 @@ from rest_framework import serializers
 from .. import models as projects
 
 
-class TargetSerializer(serializers.Serializer):
+class TargetSerializer(serializers.ModelSerializer):
     """API representation for configuration targets."""
 
     id = hashid_field.HashidSerializerCharField(source_field="projects.Target.id")
 
     class Meta:  # noqa: D106
+        model = projects.Target
         fields = [
             "id",
             "name",
@@ -17,6 +18,8 @@ class TargetSerializer(serializers.Serializer):
             "python_minor_version",
             "python_patch_version",
             "additional_details",
+            "full_version",
+            "python_version",
         ]
 
 
