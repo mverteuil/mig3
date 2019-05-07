@@ -1,7 +1,5 @@
 <template>
-  <v-container>
-    <project-list></project-list>
-  </v-container>
+  <project-list></project-list>
 </template>
 
 <script>

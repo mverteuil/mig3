@@ -14,6 +14,14 @@ export default new Router({
       component: Home
     },
     {
+      path: "/builders/:id?",
+      name: "builders",
+      component: () =>
+        import(
+          /* webpackChunkName: "builderaccounts" */ "@/views/BuilderAccounts.vue"
+        )
+    },
+    {
       path: "/targets/:id",
       name: "targets",
       component: () =>

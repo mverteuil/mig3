@@ -10,7 +10,6 @@
         style="margin-bottom:-.7em;"
         >{{ projectName }}</span
       ><span class="display-4 font-weight-thin">targets</span>
-      <v-icon x-large>mdi-github-circle</v-icon>
     </v-flex>
     <target-list />
   </v-container>
@@ -24,15 +23,15 @@ export default {
   components: { TargetList },
   data: () => ({
     projects: {
-      "0": {
+      qL70nKe: {
         name: "Barbara",
         repository_url: "https://github.com/mverteuil/barbara"
       },
-      "1": {
+      E0lrPbR: {
         name: "mig3-client",
         repository_url: "https://github.com/mverteuil/mig3-client"
       },
-      "2": {
+      vJ7v5lA: {
         name: "mig3",
         repository_url: "https://github.com/mverteuil/mig3"
       }

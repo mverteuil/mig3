@@ -1,25 +1,34 @@
 <template>
   <v-layout tag="v-container" grid-list-lg column>
     <v-flex
-      ><span
-        class="display-4 font-weight-black text-capitalize"
-        style="margin-bottom:-.7em;"
-        >Projects</span
-      >
+      ><span class="display-4 font-weight-black text-capitalize">Projects</span>
       <v-layout>
         <v-flex v-for="project in projects" :key="project.id" xs4>
           <v-card dark :to="{ name: 'projects', params: { id: project.id } }">
-            <v-card-actions>
-              <v-spacer />
-              <v-btn :href="project.repository_url" icon>
-                <v-icon>mdi-github-circle</v-icon>
-              </v-btn>
+            <v-sheet color="red darken-2">
+              <v-card-title>
+                <v-flex>
+                  <v-avatar left small color="red">
+                    <span class="white--text headline text-uppercase">{{
+                      project.name.substr(0, 1)
+                    }}</span>
+                  </v-avatar>
+                  <span class="headline icon-text">{{
+                    project.name
+                  }}</span></v-flex
+                >
+              </v-card-title>
+            </v-sheet>
+            <v-card-actions
+              class="align-content-space-between justify-between-ns flex"
+            >
+              <v-icon class="vertical-middle">mdi-bullseye-arrow </v-icon>
+              <span class="icon-text">2</span>
+              <v-icon class="vertical-middle">mdi-folder </v-icon>
+              <span class="icon-text">10</span>
+              <v-icon class="vertical-middle">mdi-test-tube </v-icon>
+              <span class="icon-text">60</span>
             </v-card-actions>
-            <v-card-title
-              ><span class="headline text-uppercase font-weight-medium">{{
-                project.name
-              }}</span>
-            </v-card-title>
           </v-card>
         </v-flex>
       </v-layout>
@@ -33,18 +42,18 @@ export default {
   data: () => ({
     projects: [
       {
-        id: "0",
+        id: "qL70nKe",
         name: "Barbara",
         repository_url: "https://github.com/mverteuil/barbara",
         to: "projects/0/"
       },
       {
-        id: "1",
+        id: "E0lrPbR",
         name: "mig3-client",
         repository_url: "https://github.com/mverteuil/mig3-client"
       },
       {
-        id: "2",
+        id: "vJ7v5lA",
         name: "mig3",
         repository_url: "https://github.com/mverteuil/mig3"
       }
@@ -53,4 +62,11 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style lang="stylus" scoped>
+.vertical-middle
+  vertical-align middle
+
+.icon-text
+  @extend .vertical-middle
+  padding-left 1em
+</style>
