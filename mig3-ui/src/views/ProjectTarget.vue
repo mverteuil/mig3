@@ -1,5 +1,5 @@
 <template>
-  <project-target-build-list v-if="$route.params.buildId === undefined" />
+  <project-target-build-list v-if="!$route.params.buildId" />
   <router-view v-else />
 </template>
 <script>
