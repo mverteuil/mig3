@@ -74,8 +74,8 @@ class VersionField(serializers.Field):
 class TestOutcomeSerializer(serializers.Serializer):
     """Consume TestOutcomes submitted through the API."""
 
-    module = serializers.CharField(source="test__module__path")
-    test = serializers.CharField(source="test__name")
+    module = serializers.CharField()
+    test = serializers.CharField()
     result = TestResultField()
 
 
@@ -89,7 +89,7 @@ class BuildSerializer(serializers.Serializer):
     number = serializers.CharField()
     version = VersionField()
     builder = serializers.HiddenField(default=CurrentBuilderAccount())
-    results = TestOutcomeSerializer(many=True)
+    results = TestOutcomeSerializer(many=True, write_only=True)
 
     class Meta:  # noqa: D106
         model = builds.Build

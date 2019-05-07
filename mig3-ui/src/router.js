@@ -14,16 +14,16 @@ export default new Router({
       component: Home
     },
     {
-      path: "/targets/:id?",
+      path: "/targets/:id",
       name: "targets",
       component: () =>
-        import(/* webpackChunkName: "project" */ "./views/Target.vue")
+        import(/* webpackChunkName: "target" */ "@/views/Target.vue")
     },
     {
       path: "/projects/:id?",
       name: "projects",
       component: () =>
-        import(/* webpackChunkName: "project" */ "./views/Project.vue")
+        import(/* webpackChunkName: "project" */ "@/views/Project.vue")
     }
   ]
 });
