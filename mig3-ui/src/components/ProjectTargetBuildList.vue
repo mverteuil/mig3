@@ -1,25 +1,32 @@
 <template>
-  <v-data-table :items="builds" item-key="name" class="elevation-1">
+  <v-data-table
+    :headers="headers"
+    :items="builds"
+    class="elevation-1"
+    item-key="id"
+  >
     <template v-slot:headers="props">
-      <th width="100"><v-icon color="green">mdi-shield-check</v-icon></th>
-      <th align="left" v-for="header in props.headers" :key="header.text">
+      <th width="100">
+        <v-icon color="green">mdi-shield-check</v-icon>
+      </th>
+      <th :key="header.text" align="left" v-for="header in props.headers">
         {{ header.text }}
       </th>
     </template>
     <template v-slot:items="props">
       <router-link
-        tag="tr"
         :style="{ cursor: 'pointer' }"
         :to="{ name: 'builds', params: { buildId: props.item.id } }"
+        tag="tr"
       >
         <td align="center">
           <v-icon color="green">mdi-shield-check</v-icon>
         </td>
         <td>{{ props.items.id }}</td>
         <td>{{ props.items.number }}</td>
-        <td>{{ props.items.builder.name }}</td>
-        <td>{{ props.items.version.sha }}</td>
-        <td>{{ props.items.version.author.email }}</td>
+        <td>{{ props.items.builder["name"] }}</td>
+        <td>{{ props.items.version["sha"] }}</td>
+        <td>{{ props.items.version["author"]["email"] }}</td>
         <td>{{ props.items.total }}</td>
         <td>{{ props.items.passed }}</td>
         <td>{{ props.items.xfailed }}</td>
@@ -30,24 +37,56 @@
     </template>
   </v-data-table>
 </template>
-
 <script>
 export default {
   name: "TargetList",
   data() {
     return {
       headers: [
-        { text: "ID", value: "id" },
-        { text: "Number", value: "number" },
-        { text: "Builder", value: "builder" },
-        { text: "Version", value: "version" },
-        { text: "Author", value: "author" },
-        { text: "Total", value: "total" },
-        { text: "Passed", value: "passed" },
-        { text: "XFailed", value: "xfailed" },
-        { text: "Failed", value: "failed" },
-        { text: "Error", value: "error" },
-        { text: "Skipped", value: "skipped" }
+        {
+          text: "ID",
+          value: "id"
+        },
+        {
+          text: "Number",
+          value: "number"
+        },
+        {
+          text: "Builder",
+          value: "builder"
+        },
+        {
+          text: "Version",
+          value: "version"
+        },
+        {
+          text: "Author",
+          value: "author"
+        },
+        {
+          text: "Total",
+          value: "total"
+        },
+        {
+          text: "Passed",
+          value: "passed"
+        },
+        {
+          text: "XFailed",
+          value: "xfailed"
+        },
+        {
+          text: "Failed",
+          value: "failed"
+        },
+        {
+          text: "Error",
+          value: "error"
+        },
+        {
+          text: "Skipped",
+          value: "skipped"
+        }
       ],
       builds: [
         {
@@ -76,5 +115,4 @@ export default {
   }
 };
 </script>
-
 <style scoped></style>

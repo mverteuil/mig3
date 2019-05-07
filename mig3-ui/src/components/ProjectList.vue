@@ -1,30 +1,28 @@
 <template>
   <v-layout
-    tag="v-container"
-    grid-list-lg
     column
+    grid-list-lg
+    tag="v-container"
     v-if="!$route.params.projectId"
   >
-    <v-flex
-      ><span class="display-4 font-weight-black text-capitalize">Projects</span>
+    <v-flex>
+      <span class="display-4 font-weight-black text-capitalize">Projects</span>
       <v-layout>
-        <v-flex v-for="project in projects" :key="project.id" xs4>
+        <v-flex :key="project.id" v-for="project in projects" xs4>
           <v-card
-            dark
             :to="{ name: 'project', params: { projectId: project.id } }"
+            dark
           >
             <v-sheet color="red darken-2">
               <v-card-title>
                 <v-flex>
-                  <v-avatar left small color="red">
+                  <v-avatar color="red" left small>
                     <span class="white--text headline text-uppercase">{{
                       project.name.substr(0, 1)
                     }}</span>
                   </v-avatar>
-                  <span class="headline icon-text">{{
-                    project.name
-                  }}</span></v-flex
-                >
+                  <span class="headline icon-text">{{ project.name }}</span>
+                </v-flex>
               </v-card-title>
             </v-sheet>
             <v-card-actions class="space-evenly">
@@ -48,7 +46,6 @@
   </v-layout>
   <router-view v-else />
 </template>
-
 <script>
 export default {
   name: "ProjectList",
@@ -74,7 +71,6 @@ export default {
   })
 };
 </script>
-
 <style lang="stylus" scoped>
 .vertical-middle
   vertical-align middle

@@ -6,7 +6,6 @@
     </v-content>
   </v-app>
 </template>
-
 <script>
 import AppNavigation from "@/components/AppNavigation";
 
@@ -15,5 +14,4 @@ export default {
   components: { AppNavigation }
 };
 </script>
-
 <style></style>

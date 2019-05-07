@@ -1,25 +1,23 @@
 <template>
-  <v-layout tag="v-container" grid-list-lg column>
-    <v-flex
-      ><span class="display-4 font-weight-black text-capitalize">Users</span>
+  <v-layout column grid-list-lg tag="v-container">
+    <v-flex>
+      <span class="display-4 font-weight-black text-capitalize">Users</span>
       <v-layout>
-        <v-flex v-for="user in users" :key="user.email" xs4>
+        <v-flex :key="user.email" v-for="user in users" xs4>
           <v-card
-            dark
             :to="{ name: 'users', params: { userAccountId: user.id } }"
+            dark
           >
             <v-sheet color="red darken-4">
               <v-card-title>
                 <v-flex>
-                  <v-avatar left small color="red">
+                  <v-avatar color="red" left small>
                     <span class="white--text headline text-uppercase">{{
                       user.name.substr(0, 1)
                     }}</span>
                   </v-avatar>
-                  <span class="headline icon-text">{{
-                    user.name
-                  }}</span></v-flex
-                >
+                  <span class="headline icon-text">{{ user.name }}</span>
+                </v-flex>
               </v-card-title>
             </v-sheet>
             <v-card-actions class="space-evenly">
@@ -40,7 +38,6 @@
     </v-flex>
   </v-layout>
 </template>
-
 <script>
 export default {
   name: "UserAccountList",
@@ -68,7 +65,6 @@ export default {
   })
 };
 </script>
-
 <style lang="stylus" scoped>
 .vertical-middle
   vertical-align middle

@@ -50,19 +50,11 @@ export default new Router({
                 )
             },
             {
-              path: ":targetId/builds",
+              path: ":targetId/builds/:buildId?",
               name: "builds",
               component: () =>
                 import(
-                  /* webpackChunkName: "projecttargetbuilds" */ "@/views/ProjectTarget.vue"
-                )
-            },
-            {
-              path: ":targetId/builds/:buildId",
-              name: "build",
-              component: () =>
-                import(
-                  /* webpackChunkName: "projecttargetbuild" */ "@/views/ProjectTargetBuild.vue"
+                  /* webpackChunkName: "projecttargetbuilds" */ "@/views/ProjectTargetBuilds.vue"
                 )
             }
           ]

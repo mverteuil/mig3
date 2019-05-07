@@ -1,6 +1,6 @@
 <template>
-  <v-navigation-drawer dark width="260" app permanent>
-    <v-layout class="fill-height" tag="v-list" column>
+  <v-navigation-drawer app dark permanent width="260">
+    <v-layout class="fill-height" column tag="v-list">
       <v-list-tile :to="{ name: 'home' }" xs4>
         <v-list-tile-action></v-list-tile-action>
         <v-list-tile-title class="title font-weight-black"
@@ -9,10 +9,10 @@
         </v-list-tile-title>
       </v-list-tile>
       <v-list-tile
-        v-for="link in links"
-        v-bind:key="link.name"
-        :to="link.route ? link.route : null"
         :href="link.href ? link.href : '#'"
+        :to="link.route ? link.route : null"
+        v-bind:key="link.name"
+        v-for="link in links"
       >
         <v-list-tile-action>
           <v-icon color="red">{{ link.icon }}</v-icon>
@@ -26,7 +26,6 @@
     </v-layout>
   </v-navigation-drawer>
 </template>
-
 <script>
 export default {
   name: "AppNavigation",
@@ -60,5 +59,4 @@ export default {
   })
 };
 </script>
-
 <style scoped></style>

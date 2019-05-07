@@ -1,26 +1,13 @@
 <template>
-  <v-container>
-    <v-flex>
-      <span class="display-4 font-weight-black">{{
-        projects[$route.params.projectId].name
-      }}</span>
-
-      <span
-        class="display-4 font-weight-black text-capitalize"
-        style="margin-bottom:-.7em;"
-        >{{ projectName }}</span
-      ><span class="display-4 font-weight-thin">targets</span>
-    </v-flex>
-    <target-list />
-  </v-container>
+  <project-target-list v-if="$route.params.targetId === undefined" />
+  <router-view v-else />
 </template>
-
 <script>
-import TargetList from "@/components/TargetList";
+import ProjectTargetList from "../components/ProjectTargetList";
 
 export default {
   name: "Project",
-  components: { TargetList },
+  components: { ProjectTargetList },
   data: () => ({
     projects: {
       qL70nKe: {
@@ -39,5 +26,4 @@ export default {
   })
 };
 </script>
-
 <style scoped></style>

@@ -2,7 +2,7 @@
   <v-container>
     <v-flex>
       <span class="display-4 font-weight-black">{{
-        projects[$route.params.builderAccountId].name
+        projects[$route.params.userAccountId].name
       }}</span>
       <span
         class="display-4 font-weight-black text-capitalize"
@@ -17,7 +17,7 @@
 </template>
 <script>
 export default {
-  name: "BuilderAccountDetail"
+  name: "ProjectTargetBuildDetail"
 };
 </script>
 <style scoped></style>
