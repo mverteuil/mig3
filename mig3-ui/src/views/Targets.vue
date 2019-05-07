@@ -1,12 +1,11 @@
 <template>
   <v-layout tag="v-container" column>
-    <span
-      class="display-3 font-weight-black text-capitalize"
-      style="margin-bottom:-.7em;"
-      >{{ projectName }}</span
-    >
-    <v-flex>
-      <span class="display-4 font-weight-thin">{{
+    <v-flex
+      ><span
+        class="display-4 font-weight-black text-capitalize"
+        style="margin-bottom:-.7em;"
+        >{{ projectName }}</span
+      >><span class="display-4 font-weight-thin">{{
         targets[$route.params.id].name
       }}</span>
       <v-icon x-large>mdi-bullseye-arrow</v-icon>

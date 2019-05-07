@@ -17,27 +17,8 @@
 </template>
 
 <script>
-import TargetList from "@/components/TargetList";
-
 export default {
-  name: "ProjectDetail",
-  components: { TargetList },
-  data: () => ({
-    projects: {
-      "0": {
-        name: "Barbara",
-        repository_url: "https://github.com/mverteuil/barbara"
-      },
-      "1": {
-        name: "mig3-client",
-        repository_url: "https://github.com/mverteuil/mig3-client"
-      },
-      "2": {
-        name: "mig3",
-        repository_url: "https://github.com/mverteuil/mig3"
-      }
-    }
-  })
+  name: "UserAccountDetail"
 };
 </script>
 

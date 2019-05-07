@@ -17,13 +17,21 @@ export default new Router({
       path: "/targets/:id",
       name: "targets",
       component: () =>
-        import(/* webpackChunkName: "target" */ "@/views/Target.vue")
+        import(/* webpackChunkName: "targets" */ "@/views/Targets.vue")
     },
     {
       path: "/projects/:id?",
       name: "projects",
       component: () =>
-        import(/* webpackChunkName: "project" */ "@/views/Project.vue")
+        import(/* webpackChunkName: "projects" */ "@/views/Projects.vue")
+    },
+    {
+      path: "/users/:id?",
+      name: "users",
+      component: () =>
+        import(
+          /* webpackChunkName: "useraccounts" */ "@/views/UserAccounts.vue"
+        )
     }
   ]
 });
