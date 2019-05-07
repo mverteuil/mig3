@@ -10,7 +10,7 @@
       <router-link
         tag="tr"
         :style="{ cursor: 'pointer' }"
-        :to="{ name: 'builds', params: { id: props.item.id } }"
+        :to="{ name: 'builds', params: { buildId: props.item.id } }"
       >
         <td align="center">
           <v-icon color="green">mdi-shield-check</v-icon>

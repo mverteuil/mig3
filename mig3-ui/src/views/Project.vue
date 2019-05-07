@@ -2,7 +2,7 @@
   <v-container>
     <v-flex>
       <span class="display-4 font-weight-black">{{
-        projects[$route.params.id].name
+        projects[$route.params.projectId].name
       }}</span>
 
       <span
@@ -19,7 +19,7 @@
 import TargetList from "@/components/TargetList";
 
 export default {
-  name: "ProjectDetail",
+  name: "Project",
   components: { TargetList },
   data: () => ({
     projects: {

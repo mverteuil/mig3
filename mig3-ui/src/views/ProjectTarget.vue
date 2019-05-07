@@ -5,8 +5,8 @@
         class="display-4 font-weight-black text-capitalize"
         style="margin-bottom:-.7em;"
         >{{ projectName }}</span
-      >><span class="display-4 font-weight-thin">{{
-        targets[$route.params.id].name
+      ><span class="display-4 font-weight-thin">{{
+        targets[$route.params.targetId].name
       }}</span>
       <v-icon x-large>mdi-bullseye-arrow</v-icon>
     </v-flex>

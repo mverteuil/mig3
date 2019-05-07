@@ -2,10 +2,11 @@
   <v-navigation-drawer dark width="260" app permanent>
     <v-layout class="fill-height" tag="v-list" column>
       <v-list-tile :to="{ name: 'home' }" xs4>
-        <v-list-tile-action> </v-list-tile-action>
+        <v-list-tile-action></v-list-tile-action>
         <v-list-tile-title class="title font-weight-black"
-          >MIG3 <v-icon>mdi-shield-airplane</v-icon></v-list-tile-title
-        >
+          >MIG3
+          <v-icon>mdi-shield-airplane</v-icon>
+        </v-list-tile-title>
       </v-list-tile>
       <v-list-tile
         v-for="link in links"
@@ -35,19 +36,19 @@ export default {
         icon: "mdi-code-braces",
         name: "Projects",
         href: null,
-        route: "/projects"
+        route: { name: "projects" }
       },
       {
         icon: "mdi-account-box-multiple",
         name: "User Accounts",
         href: null,
-        route: "/users"
+        route: { name: "userAccounts" }
       },
       {
         icon: "mdi-application-export",
         name: "Builder Registration",
         href: null,
-        route: "/builders"
+        route: { name: "builderAccounts" }
       },
       {
         icon: "mdi-chef-hat",

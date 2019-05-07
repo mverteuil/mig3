@@ -4,7 +4,10 @@
       ><span class="display-4 font-weight-black text-capitalize">Users</span>
       <v-layout>
         <v-flex v-for="user in users" :key="user.email" xs4>
-          <v-card dark :to="{ name: 'users', params: { id: user.id } }">
+          <v-card
+            dark
+            :to="{ name: 'users', params: { userAccountId: user.id } }"
+          >
             <v-sheet color="red darken-4">
               <v-card-title>
                 <v-flex>
@@ -19,17 +22,17 @@
                 >
               </v-card-title>
             </v-sheet>
-            <v-card-actions>
-              <v-flex>
+            <v-card-actions class="space-evenly">
+              <div>
                 <v-icon class="mdi-at vertical-middle">mdi-at</v-icon>
                 <span class="icon-text">{{ user.email }}</span>
-              </v-flex>
-              <v-flex>
+              </div>
+              <div>
                 <v-icon class="mdi-at vertical-middle"
-                  >mdi-upload-network</v-icon
-                >
+                  >mdi-upload-network
+                </v-icon>
                 <span class="icon-text">{{ user.builds }}</span>
-              </v-flex>
+              </div>
             </v-card-actions>
           </v-card>
         </v-flex>
@@ -73,4 +76,7 @@ export default {
 .icon-text
   @extend .vertical-middle
   padding-left 1em
+
+.space-evenly
+  justify-content: space-evenly
 </style>

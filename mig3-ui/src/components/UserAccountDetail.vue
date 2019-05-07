@@ -2,7 +2,7 @@
   <v-container>
     <v-flex>
       <span class="display-4 font-weight-black">{{
-        projects[$route.params.id].name
+        projects[$route.params.userAccountId].name
       }}</span>
 
       <span

@@ -15,7 +15,10 @@
       <router-link
         tag="tr"
         :style="{ cursor: 'pointer' }"
-        :to="{ name: 'targets', params: { id: props.item.id } }"
+        :to="{
+          name: 'targets',
+          params: { projectId: projectId, targetId: props.item.id }
+        }"
       >
         <td align="center">
           <v-icon>mdi-bullseye-arrow</v-icon>
@@ -36,6 +39,7 @@ export default {
   name: "TargetList",
   data() {
     return {
+      projectId: "qL70nKe",
       headers: [
         { text: "Target Name", value: "name" },
         { text: "Python Version", value: "python_version" },

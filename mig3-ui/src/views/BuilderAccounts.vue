@@ -1,5 +1,5 @@
 <template>
-  <builder-account-detail v-if="$route.params.id" />
+  <builder-account-detail v-if="$route.params.builderAccountId" />
   <builder-account-list v-else />
 </template>
 

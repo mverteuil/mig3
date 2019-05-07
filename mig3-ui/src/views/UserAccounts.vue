@@ -1,5 +1,5 @@
 <template>
-  <user-account-detail v-if="$route.params.id" />
+  <user-account-detail v-if="$route.params.userAccountId" />
   <user-account-list v-else />
 </template>
 

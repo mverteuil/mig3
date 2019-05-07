@@ -4,7 +4,13 @@
       ><span class="display-4 font-weight-black text-capitalize">Builders</span>
       <v-layout>
         <v-flex v-for="builder in builders" :key="builder.email" xs4>
-          <v-card dark :to="{ name: 'builders', params: { id: builder.id } }">
+          <v-card
+            dark
+            :to="{
+              name: 'builderAccounts',
+              params: { builderAccountId: builder.id }
+            }"
+          >
             <v-sheet color="indigo darken-4">
               <v-card-title>
                 <v-flex>
@@ -19,19 +25,19 @@
                 >
               </v-card-title>
             </v-sheet>
-            <v-card-actions>
-              <v-flex>
+            <v-card-actions class="space-evenly">
+              <div>
                 <v-icon class="vertical-middle" color="green"
                   >mdi-shield-check</v-icon
                 >
                 <span class="icon-text">{{ builder.successes }}</span>
-              </v-flex>
-              <v-flex>
+              </div>
+              <div>
                 <v-icon class="mdi-at vertical-middle"
                   >mdi-upload-network</v-icon
                 >
                 <span class="icon-text">{{ builder.builds }}</span>
-              </v-flex>
+              </div>
             </v-card-actions>
           </v-card>
         </v-flex>
@@ -69,4 +75,7 @@ export default {
 .icon-text
   @extend .vertical-middle
   padding-left 1em
+
+.space-evenly
+  justify-content: space-evenly
 </style>
