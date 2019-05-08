@@ -1,8 +1,3 @@
-import logging
-
-from django.conf import settings
-from django.contrib.auth import get_user_model
-
 from hashid_field import rest as hashid_field
 from rest_framework import serializers, status
 from rest_framework.exceptions import APIException
@@ -11,8 +6,6 @@ from accounts.api import serializers as account_serializers
 from projects import models as projects
 from projects.api import serializers as project_serializers
 from .. import models as builds
-
-logger = logging.getLogger(__name__)
 
 
 class Regression(APIException):
@@ -52,28 +45,6 @@ class TestResultField(serializers.Field):
     def to_representation(self, value: int):
         """Convert integer value to result label."""
         return builds.TestOutcome.Results(value).name
-
-
-class VersionField(serializers.Field):
-    """Consume version author details for a Build submitted through the API.
-
-    Will create a new inactive UserAccount for the author if the email has not been seen before.
-    """
-
-    def _get_or_create_author(self, email: str) -> settings.AUTH_USER_MODEL:
-        UserAccount = get_user_model()
-        try:
-            return UserAccount.objects.get_by_natural_key(email)
-        except UserAccount.DoesNotExist:
-            return UserAccount.objects.create_user(email=email)
-
-    def to_internal_value(self, data: dict) -> projects.Version:
-        """Deserialize version and author for storage."""
-        return projects.Version.objects.create(hash=data["hash"], author=self._get_or_create_author(data["author"]))
-
-    def to_representation(self, value) -> str:
-        """Serialize version for representation."""
-        return str(value)
 
 
 class ModuleTestOutcomeListSerializer(serializers.ListSerializer):
@@ -118,7 +89,7 @@ class BuildWriteSerializer(serializers.Serializer):
         pk_field=hashid_field.HashidSerializerCharField(source_field="projects.Target.id"),
     )
     number = serializers.CharField()
-    version = VersionField()
+    version = project_serializers.VersionWriteSerializer()
     builder = serializers.HiddenField(default=CurrentBuilderAccount())
     results = TestOutcomeWriteSerializer(many=True, write_only=True)
 
@@ -143,7 +114,7 @@ class BuildSummarySerializer(serializers.ModelSerializer):
         queryset=projects.Target.objects.all(),
         pk_field=hashid_field.HashidSerializerCharField(source_field="projects.Target.id"),
     )
-    version = VersionField()
+    version = project_serializers.VersionReadSerializer()
     builder = account_serializers.BuilderAccountSerializer()
 
     class Meta:  # noqa: D106
@@ -155,7 +126,7 @@ class BuildReadSerializer(BuildSummarySerializer):
     """API representation for CI builds."""
 
     target = project_serializers.TargetSummarySerializer()
-    version = project_serializers.VersionSerializer()
+    version = project_serializers.VersionReadSerializer()
     builder = account_serializers.BuilderAccountSerializer()
     modules = ModuleOutcomeSerializer(many=True)
 

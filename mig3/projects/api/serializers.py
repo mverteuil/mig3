@@ -6,7 +6,7 @@ from builds import models as builds
 from .. import models as projects
 
 
-class VersionSerializer(serializers.ModelSerializer):
+class VersionReadSerializer(serializers.ModelSerializer):
     """API representation for repository versions."""
 
     author = accounts_serializers.UserAccountSerializer()
@@ -14,6 +14,21 @@ class VersionSerializer(serializers.ModelSerializer):
     class Meta:  # noqa: D106
         model = projects.Version
         fields = ("hash", "author")
+
+
+class VersionWriteSerializer(serializers.Serializer):
+    """Consume version author details for a Build submitted through the API.
+
+    Will create a new inactive UserAccount for the author if the email has not been seen before.
+    """
+
+    hash = serializers.CharField()
+    author = accounts_serializers.UserAccountField()
+
+    def to_internal_value(self, data: dict) -> projects.Version:
+        """Deserialize version and author for storage."""
+        data = super().to_internal_value(data)
+        return projects.Version.objects.create(hash=data["hash"], author=data["author"])
 
 
 class TargetSummarySerializer(serializers.ModelSerializer):
