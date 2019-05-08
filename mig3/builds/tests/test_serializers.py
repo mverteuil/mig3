@@ -30,7 +30,7 @@ def test_build_read_serializer(build):
     assert serializer.data is not None
 
 
-def test_build_write_serializer_create(django_db_reset_sequences, serialized_build, builder_account, target):
+def test_build_write_serializer_create(builder_account, django_db_reset_sequences, serialized_build, target):
     """Should produce Build with incoming serialized build request data."""
     context = {"request": mock.Mock(name="request", auth=builder_account)}
     serializer = serializers.BuildWriteSerializer(data=serialized_build, context=context)
@@ -39,7 +39,7 @@ def test_build_write_serializer_create(django_db_reset_sequences, serialized_bui
 
 
 def test_build_write_serializer_create_with_duplicate(
-    build, serialized_build, builder_account, target, django_db_reset_sequences
+    build, builder_account, django_db_reset_sequences, serialized_build, target
 ):
     """Should refuse duplicate builds."""
     assert build.number == serialized_build["number"]
@@ -51,7 +51,7 @@ def test_build_write_serializer_create_with_duplicate(
 
 
 def test_build_write_serializer_create_with_regression(
-    django_db_reset_sequences, serialized_build, serialized_build_regression, builder_account, target
+    builder_account, django_db_reset_sequences, serialized_build, serialized_build_regression, target
 ):
     """Should refuse to create regressive builds."""
     context = {"request": mock.Mock(name="request", auth=builder_account)}
@@ -65,7 +65,7 @@ def test_build_write_serializer_create_with_regression(
         assert regression_serializer.save()
 
 
-def test_build_write_serializer_update(django_db_reset_sequences, build, serialized_build, builder_account, target):
+def test_build_write_serializer_update(build, builder_account, django_db_reset_sequences, serialized_build, target):
     """Should refuse update operations on Builds."""
     context = {"request": mock.Mock(name="request", auth=builder_account)}
     serializer = serializers.BuildWriteSerializer(data=serialized_build, instance=build, context=context)

@@ -6,6 +6,7 @@ from rest_framework import authentication, generics, permissions, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from api.authentication import BearerAuthentication
 from api.permissions import IsBuilder
 from api.serializers import EmptySerializer, ErrorSerializer
 from .. import models as builds
@@ -35,6 +36,7 @@ class BuildDetailView(generics.RetrieveAPIView):
 class BuildListView(generics.CreateAPIView):
     """Build listing."""
 
+    authentication_classes = (BearerAuthentication,)
     permission_classes = (IsBuilder,)
     serializer_class = serializers.BuildWriteSerializer
 

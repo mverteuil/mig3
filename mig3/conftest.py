@@ -14,6 +14,13 @@ def api_client():
 
 
 @pytest.fixture
+def bearer_authentication(api_client, builder_account):
+    """Create a test client and BuilderAccount authenticated by bearer token."""
+    api_client.credentials(HTTP_AUTHORIZATION=f"Bearer {builder_account.token}")
+    return api_client, builder_account
+
+
+@pytest.fixture
 def builder_account(db) -> accounts.BuilderAccount:
     """Create a BuilderAccount."""
     return accounts.BuilderAccount.objects.create(name="Test CI Service")
