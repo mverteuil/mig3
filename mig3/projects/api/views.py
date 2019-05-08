@@ -10,7 +10,17 @@ class ProjectListView(generics.ListAPIView):
     authentication_classes = (authentication.SessionAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
     queryset = projects.Project.objects.all()
-    serializer_class = serializers.ProjectSerializer
+    serializer_class = serializers.ProjectSummarySerializer
+
+
+class ProjectTargetListView(generics.ListAPIView):
+    """List Project Targets."""
+
+    authentication_classes = (authentication.SessionAuthentication,)
+    lookup_field = "project"
+    permission_classes = (permissions.IsAuthenticated,)
+    queryset = projects.Target.objects.all()
+    serializer_class = serializers.TargetSummarySerializer
 
 
 class TargetDetailView(generics.RetrieveAPIView):

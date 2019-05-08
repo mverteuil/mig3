@@ -2,6 +2,7 @@ from typing import Dict, List, Union
 
 from django.conf import settings
 from django.db import models
+from django.db.models import QuerySet
 
 import django_fsm
 import hashid_field
@@ -55,8 +56,21 @@ class Build(TimeStampedModel):
 
     objects = BuildManager()
 
+    class Meta:  # noqa: D106
+        constraints = (
+            models.UniqueConstraint(fields=["number", "target"], name="unique_number_per_target"),
+            models.UniqueConstraint(fields=["version", "target"], name="unique_version_per_target"),
+        )
+
     def __str__(self):
         return f"{self.number}: {self.target.project.name} @ {self.target.name} on {self.builder.name} ({self.version.hash[:8]})"
+
+    @property
+    def modules(self) -> QuerySet:
+        """Modules which were tested during this build."""
+        return Module.objects.filter(
+            pk__in=self.testoutcome_set.order_by("test__module__path").distinct().values_list("pk")
+        )
 
 
 class TestOutcomeManager(models.Manager):

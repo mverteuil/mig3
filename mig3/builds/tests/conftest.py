@@ -8,6 +8,12 @@ from projects import models as projects
 
 
 @pytest.fixture
+def another_version(version) -> projects.Version:
+    """Create a second Version from the original Version's author."""
+    return version.author.version_set.create(hash="b2" * 20)
+
+
+@pytest.fixture
 def better_test_results(test_results) -> builds.DeserializedResultList:
     """Generate deserialized test result list with progression from base case."""
     test_results = copy.deepcopy(test_results)
