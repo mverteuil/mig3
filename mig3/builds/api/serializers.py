@@ -8,12 +8,20 @@ from projects.api import serializers as project_serializers
 from .. import models as builds
 
 
+class Duplicate(APIException):
+    """The build has already been accepted and is now immutable."""
+
+    status_code = status.HTTP_400_BAD_REQUEST
+    default_detail = "The build has already been accepted and is now immutable."
+    default_code = "duplicate"
+
+
 class Regression(APIException):
     """The build introduced a regression to your migration and is unacceptable."""
 
     status_code = status.HTTP_409_CONFLICT
     default_detail = "The build introduced a regression to your migration and is unacceptable."
-    default_code = "conflict"
+    default_code = "regression"
 
 
 class CurrentBuilderAccount(object):
@@ -74,7 +82,7 @@ class TestOutcomeWriteSerializer(serializers.Serializer):
     result = TestResultField()
 
 
-class ModuleOutcomeSerializer(serializers.Serializer):
+class ModuleSerializer(serializers.Serializer):
     """API representation for python test modules."""
 
     path = serializers.CharField()
@@ -102,6 +110,8 @@ class BuildWriteSerializer(serializers.Serializer):
             return builds.Build.objects.create_build(**validated_data)
         except builds.RegressionDetected as e:
             raise Regression(str(e))
+        except builds.Duplicate:
+            raise Duplicate()
 
 
 class BuildSummarySerializer(serializers.ModelSerializer):
@@ -128,7 +138,7 @@ class BuildReadSerializer(BuildSummarySerializer):
     target = project_serializers.TargetSummarySerializer()
     version = project_serializers.VersionReadSerializer()
     builder = account_serializers.BuilderAccountSerializer()
-    modules = ModuleOutcomeSerializer(many=True)
+    modules = ModuleSerializer(many=True)
 
     class Meta(BuildSummarySerializer.Meta):  # noqa: D106
         fields = BuildSummarySerializer.Meta.fields + ("modules",)

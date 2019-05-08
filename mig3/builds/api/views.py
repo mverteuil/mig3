@@ -1,8 +1,13 @@
+from django.utils.decorators import method_decorator
+
+from drf_yasg.openapi import Response as ResponseSchema
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import authentication, generics, permissions, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from api.permissions import IsBuilder
+from api.serializers import EmptySerializer, ErrorSerializer
 from .. import models as builds
 from . import serializers as serializers
 
@@ -17,6 +22,16 @@ class BuildDetailView(generics.RetrieveAPIView):
     serializer_class = serializers.BuildReadSerializer
 
 
+@method_decorator(
+    name="post",
+    decorator=swagger_auto_schema(
+        responses={
+            status.HTTP_201_CREATED: ResponseSchema(description="Build accepted.", schema=EmptySerializer),
+            status.HTTP_400_BAD_REQUEST: ResponseSchema(description="Duplicate detected.", schema=ErrorSerializer),
+            status.HTTP_409_CONFLICT: ResponseSchema(description="Regression detected.", schema=ErrorSerializer),
+        }
+    ),
+)
 class BuildListView(generics.CreateAPIView):
     """Build listing."""
 
