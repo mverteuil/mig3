@@ -1,0 +1,111 @@
+{
+  "version": {
+    "author": "onceuponajooks@gmail.com",
+    "hash": "04d04ac04d62bb2952311c4e616ee96799e08592"
+  },
+  "results": [
+    {
+      "module": "tests/test_cli.py",
+      "test": "test_no_build_number",
+      "result": "passed"
+    },
+    {
+      "module": "tests/test_cli.py",
+      "test": "test_no_target_configuration",
+      "result": "passed"
+    },
+    {
+      "module": "tests/test_cli.py",
+      "test": "test_no_endpoint",
+      "result": "passed"
+    },
+    {
+      "module": "tests/test_cli.py",
+      "test": "test_no_token",
+      "result": "passed"
+    },
+    {
+      "module": "tests/test_cli.py",
+      "test": "test_no_report",
+      "result": "passed"
+    },
+    {
+      "module": "tests/test_cli.py",
+      "test": "test_invalid_report",
+      "result": "passed"
+    },
+    {
+      "module": "tests/test_cli.py",
+      "test": "test_happy_path",
+      "result": "passed"
+    },
+    {
+      "module": "tests/test_cli.py",
+      "test": "test_valid_report_with_regression",
+      "result": "passed"
+    },
+    {
+      "module": "tests/test_cli.py",
+      "test": "test_valid_report_with_bad_endpoint",
+      "result": "passed"
+    },
+    {
+      "module": "tests/test_cli.py",
+      "test": "test_valid_report_with_dry_run",
+      "result": "passed"
+    },
+    {
+      "module": "tests/test_conversion.py",
+      "test": "test_simple_report",
+      "result": "passed"
+    },
+    {
+      "module": "tests/test_conversion.py",
+      "test": "test_basic_convert",
+      "result": "passed"
+    },
+    {
+      "module": "tests/test_conversion.py",
+      "test": "test_convert_module_name",
+      "result": "passed"
+    },
+    {
+      "module": "tests/test_conversion.py",
+      "test": "test_convert_test_name",
+      "result": "passed"
+    },
+    {
+      "module": "tests/test_conversion.py",
+      "test": "test_convert_result",
+      "result": "passed"
+    },
+    {
+      "module": "tests/test_submission_builder.py",
+      "test": "test_minimum_viable_submission",
+      "result": "passed"
+    },
+    {
+      "module": "tests/test_submission_builder.py",
+      "test": "test_configuration_id",
+      "result": "passed"
+    },
+    {
+      "module": "tests/test_submission_builder.py",
+      "test": "test_build_number",
+      "result": "passed"
+    },
+    {
+      "module": "tests/test_submission_builder.py",
+      "test": "test_tests",
+      "result": "passed"
+    },
+    {
+      "module": "tests/test_submission_builder.py",
+      "test": "test_version_details",
+      "result": "passed"
+    }
+  ],
+  "target": "qL70nKe",
+  "number": "1",
+  "mig3_client": "0.5.7"
+}

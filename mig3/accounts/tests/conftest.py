@@ -29,4 +29,4 @@ def user_account(db) -> settings.AUTH_USER_MODEL:
 def session_authentication(api_client, user_account):
     """Create a test client and UserAccount authenticated by session."""
     api_client.login(username=user_account.email, password="password")
-    return (api_client, user_account)
+    return api_client, user_account

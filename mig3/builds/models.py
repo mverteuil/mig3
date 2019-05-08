@@ -53,11 +53,11 @@ class BuildManager(models.Manager):
             build = self.model(number=number, target=target, version=version, builder=builder)
             build.save()
         except IntegrityError:
-            raise Duplicate(str(build))
+            raise Duplicate((number, version.hash))
         else:
             for result in results:
                 module, _ = Module.objects.get_or_create(path=result["module"], project=target.project)
-                test, _ = Test.objects.get_or_create(name=result["test"], module=module)
+                test, _ = module.test_set.get_or_create(name=result["test"])
                 build.testoutcome_set.create(test=test, result=result["result"])
             return build
 

@@ -116,7 +116,7 @@ class BuildWriteSerializer(serializers.Serializer):
 
     def update(self, instance, validated_data):
         """Invalid operation."""
-        raise MethodNotAllowed
+        raise MethodNotAllowed("update")
 
 
 class BuildSummarySerializer(ReadOnlySerializer, serializers.ModelSerializer):

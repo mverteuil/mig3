@@ -1,4 +1,5 @@
 import copy
+import json
 
 import pytest
 
@@ -24,9 +25,30 @@ def better_test_results(test_results) -> builds.DeserializedResultList:
 
 
 @pytest.fixture
+def build(db, target, version, builder_account, test_results) -> builds.Build:
+    """Create a fully populated Build.
+
+    Includes: Project, Target, BuilderAccount, Modules, Tests, TestOutcomes
+    """
+    return builds.Build.objects.create_build("1", target, version, builder_account, test_results)
+
+
+@pytest.fixture
 def builder_account(db) -> accounts.BuilderAccount:
-    """Create a BuilderAccount fixture."""
+    """Create a BuilderAccount."""
     return accounts.BuilderAccount.objects.create(name="Test CI Service")
+
+
+@pytest.fixture
+def serialized_build(shared_datadir):
+    """Provide serialized incoming build request data."""
+    return json.load(open(shared_datadir / "serialized_build.json"))
+
+
+@pytest.fixture
+def serialized_build_regression(shared_datadir):
+    """Provide serialized incoming build request data."""
+    return json.load(open(shared_datadir / "serialized_build_regression.json"))
 
 
 @pytest.fixture
