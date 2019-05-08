@@ -84,10 +84,8 @@ class Build(TimeStampedModel):
 
     @property
     def modules(self) -> QuerySet:
-        """Modules which were tested during this build."""
-        return Module.objects.filter(
-            pk__in=self.testoutcome_set.order_by("test__module__path").distinct().values_list("pk")
-        )
+        """Modules under test during this build."""
+        return Module.objects.filter(pk__in=self.testoutcome_set.values_list("test__module__id").distinct())
 
 
 class TestOutcomeManager(models.Manager):

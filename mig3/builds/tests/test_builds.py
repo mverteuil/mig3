@@ -45,3 +45,10 @@ def test_unique_for_number_and_target(target, version, another_version, builder_
     builds.Build.objects.create_build("0", target, version, builder_account, test_results)
     with pytest.raises(IntegrityError):
         builds.Build.objects.create_build("0", target, another_version, builder_account, test_results)
+
+
+def test_modules(db, target, version, builder_account, test_results):
+    """Should produce the equivalent modules to the project's module_set."""
+    build = builds.Build.objects.create_build("0", target, version, builder_account, test_results)
+    assert build.modules is not None
+    assert set(build.modules) == set(target.project.module_set.all())
