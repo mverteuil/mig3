@@ -1,8 +1,9 @@
 from hashid_field import rest as hashid_field
 from rest_framework import serializers, status
-from rest_framework.exceptions import APIException
+from rest_framework.exceptions import APIException, MethodNotAllowed
 
 from accounts.api import serializers as account_serializers
+from api.serializers import ReadOnlySerializer
 from projects import models as projects
 from projects.api import serializers as project_serializers
 from .. import models as builds
@@ -29,11 +30,11 @@ class CurrentBuilderAccount(object):
 
     def set_context(self, serializer_field):
         """Initialize value for callers."""
-        self.builder_account = serializer_field.context["request"].auth
+        self._builder_account = serializer_field.context["request"].auth
 
     def __call__(self):
         """Produce value for callers."""
-        return self.builder_account
+        return self._builder_account
 
 
 class TestResultField(serializers.Field):
@@ -64,7 +65,7 @@ class ModuleTestOutcomeListSerializer(serializers.ListSerializer):
         return super().to_representation(module_outcomes)
 
 
-class TestOutcomeReadSerializer(serializers.Serializer):
+class TestOutcomeReadSerializer(ReadOnlySerializer):
     """API representation for test results."""
 
     name = serializers.CharField(source="test.name")
@@ -82,7 +83,7 @@ class TestOutcomeWriteSerializer(serializers.Serializer):
     result = TestResultField()
 
 
-class ModuleSerializer(serializers.Serializer):
+class ModuleSerializer(ReadOnlySerializer):
     """API representation for python test modules."""
 
     path = serializers.CharField()
@@ -113,8 +114,12 @@ class BuildWriteSerializer(serializers.Serializer):
         except builds.Duplicate:
             raise Duplicate()
 
+    def update(self, instance, validated_data):
+        """Invalid operation."""
+        raise MethodNotAllowed
 
-class BuildSummarySerializer(serializers.ModelSerializer):
+
+class BuildSummarySerializer(ReadOnlySerializer, serializers.ModelSerializer):
     """Summary API representation for CI builds."""
 
     id = hashid_field.HashidSerializerCharField(source_field="builds.Build.id")
