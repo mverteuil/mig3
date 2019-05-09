@@ -1,77 +1,53 @@
 <template>
   <v-container column>
-    <v-flex>
-      <router-link
-        :to="{ name: 'project', params: { projectId: 'qL70nKe' } }"
-        class="flat-link"
-      >
-        <span class="display-4 font-weight-black text-capitalize">{{
-          projectName
-        }}</span>
+    <v-layout align-baseline>
+      <router-link :to="{ name: 'project', params: { projectId: project.id } }" class="flat-link">
+        <span class="display-4 font-weight-black text-capitalize">{{ project.name }}</span>
       </router-link>
-      <router-link
-        :to="{ name: 'target', params: { projectId: 'qL70nKe' } }"
-        class="flat-link"
-      >
-        <span class="display-4 font-weight-thin">{{ targetName }}</span>
+      <router-link :to="{ name: 'target', params: { targetId: target.id } }" class="flat-link">
+        <span class="display-4 font-weight-thin">{{ target.name }}</span>
       </router-link>
-      <span class="display-2 text-uppercase">build {{ number }}</span>
-    </v-flex>
-    <v-layout tag="v-container" row>
-      <v-flex>
+      <v-flex class="display-2 text-uppercase">build {{ number }}</v-flex>
+    </v-layout>
+    <v-layout column-xs tag="v-container">
+      <v-flex md6 xs12>
         <v-container class="title">Test Modules</v-container>
-        <v-flex xs12 lg5>
-          <v-expansion-panel>
-            <v-expansion-panel-content>
-              <template v-slot:actions>
-                <v-icon color="primary">$vuetify.icons.expand</v-icon>
-              </template>
-              <template v-slot:header>
-                <div>Item</div>
-              </template>
-              <v-card>
-                <v-card-text class="grey lighten-3"
-                  >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat.
-                </v-card-text>
-              </v-card>
-            </v-expansion-panel-content>
-            <v-expansion-panel-content>
-              <template v-slot:actions>
-                <v-icon color="teal">done</v-icon>
-              </template>
-              <template v-slot:header>
-                <div>Item</div>
-              </template>
-              <v-card>
-                <v-card-text class="grey lighten-3"
-                  >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat.
-                </v-card-text>
-              </v-card>
-            </v-expansion-panel-content>
-            <v-expansion-panel-content>
-              <template v-slot:actions>
-                <v-icon color="error">error</v-icon>
-              </template>
-              <template v-slot:header>
-                <div>Item</div>
-              </template>
-              <v-card>
-                <v-card-text class="grey lighten-3"
-                  >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat.
-                </v-card-text>
-              </v-card>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-        </v-flex>
+        <v-expansion-panel>
+          <v-expansion-panel-content v-bind:key="module.path" v-for="module in modules">
+            <template v-slot:actions>
+              <v-icon color="primary">$vuetify.icons.expand</v-icon>
+            </template>
+            <template v-slot:header>
+              <div>{{ module.path }}</div>
+            </template>
+            <v-card>
+              <v-card-text class="grey lighten-3">
+                <v-list>
+                  <v-list-tile v-bind:key="test.name" v-for="test in module.tests">
+                    {{ test.name }}: {{ test.result }}
+                  </v-list-tile>
+                </v-list>
+              </v-card-text>
+            </v-card>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-flex>
+      <v-flex md6 xs12>
+        <v-container class="title">Build Details</v-container>
+        <v-card dark>
+          <v-sheet color="red darken-2 elevation-5">
+            <v-card-text class="white--text headline text-uppercase">{{ version.hash.substr(0, 8) }}</v-card-text>
+          </v-sheet>
+          <v-card-title class="text-uppercase text-lg-right">Commit Hash</v-card-title>
+        </v-card>
+        <v-card dark>
+          <v-sheet color="red darken-2 elevation-5">
+            <v-card-text class="white--text headline">{{ version.author.email }}</v-card-text>
+          </v-sheet>
+          <v-card-title>
+            <span class="text-uppercase">Author</span>
+          </v-card-title>
+        </v-card>
       </v-flex>
     </v-layout>
   </v-container>
@@ -80,128 +56,135 @@
 export default {
   name: "ProjectTargetBuildDetail",
   data: () => ({
-    "id": "qL70nKe",
-    "url": "http://localhost:8000/api/builds/qL70nKe/",
-    "target": {
-        "id": "qL70nKe",
-        "url": "http://localhost:8000/api/targets/qL70nKe/",
-        "name": "python3.8",
-        "python_major_version": 3,
-        "python_minor_version": 8,
-        "python_patch_version": 0,
-        "additional_details": "",
-        "full_version": "3.8.0",
-        "python_version": "3.8.0"
+    id: "qL70nKe",
+    url: "http://localhost:8000/api/builds/qL70nKe/",
+    target: {
+      id: "qL70nKe",
+      url: "http://localhost:8000/api/targets/qL70nKe/",
+      name: "python3.8",
+      python_major_version: 3,
+      python_minor_version: 8,
+      python_patch_version: 0,
+      additional_details: "",
+      full_version: "3.8.0",
+      python_version: "3.8.0"
     },
-    "number": "1",
-    "version": {
-        "hash": "04d04ac04d62bb2952311c4e616ee96799e08592",
-        "author": {
-            "id": "E0lrPbR",
-            "email": "mverteuil@github.com",
-            "name": ""
-        }
+    number: "1",
+    version: {
+      hash: "04d04ac04d62bb2952311c4e616ee96799e08592",
+      author: {
+        id: "E0lrPbR",
+        email: "onceuponajooks@gmail.com",
+        name: ""
+      }
     },
-    "builder": {
-        "id": "qL70nKe",
-        "name": "Travis-CI"
+    builder: {
+      id: "qL70nKe",
+      name: "Travis-CI"
     },
-    "modules": [
-        {
-            "path": "tests/test_cli.py",
-            "tests": [
-                {
-                    "name": "test_valid_report_with_dry_run",
-                    "result": "PASSED"
-                },
-                {
-                    "name": "test_valid_report_with_bad_endpoint",
-                    "result": "PASSED"
-                },
-                {
-                    "name": "test_valid_report_with_regression",
-                    "result": "PASSED"
-                },
-                {
-                    "name": "test_happy_path",
-                    "result": "PASSED"
-                },
-                {
-                    "name": "test_invalid_report",
-                    "result": "PASSED"
-                },
-                {
-                    "name": "test_no_report",
-                    "result": "PASSED"
-                },
-                {
-                    "name": "test_no_token",
-                    "result": "PASSED"
-                },
-                {
-                    "name": "test_no_endpoint",
-                    "result": "PASSED"
-                },
-                {
-                    "name": "test_no_target_configuration",
-                    "result": "PASSED"
-                },
-                {
-                    "name": "test_no_build_number",
-                    "result": "PASSED"
-                }
-            ]
-        },
-        {
-            "path": "tests/test_conversion.py",
-            "tests": [
-                {
-                    "name": "test_convert_result",
-                    "result": "PASSED"
-                },
-                {
-                    "name": "test_convert_test_name",
-                    "result": "PASSED"
-                },
-                {
-                    "name": "test_convert_module_name",
-                    "result": "PASSED"
-                },
-                {
-                    "name": "test_basic_convert",
-                    "result": "PASSED"
-                },
-                {
-                    "name": "test_simple_report",
-                    "result": "PASSED"
-                }
-            ]
-        },
-        {
-            "path": "tests/test_submission_builder.py",
-            "tests": [
-                {
-                    "name": "test_version_details",
-                    "result": "PASSED"
-                },
-                {
-                    "name": "test_tests",
-                    "result": "PASSED"
-                },
-                {
-                    "name": "test_build_number",
-                    "result": "PASSED"
-                },
-                {
-                    "name": "test_configuration_id",
-                    "result": "PASSED"
-                },
-                {
-                    "name": "test_minimum_viable_submission",
-                    "result": "PASSED"
-                }
-            ]
-        }
-    ]
+    modules: [
+      {
+        path: "tests/test_cli.py",
+        tests: [
+          {
+            name: "test_valid_report_with_dry_run",
+            result: "PASSED"
+          },
+          {
+            name: "test_valid_report_with_bad_endpoint",
+            result: "PASSED"
+          },
+          {
+            name: "test_valid_report_with_regression",
+            result: "PASSED"
+          },
+          {
+            name: "test_happy_path",
+            result: "PASSED"
+          },
+          {
+            name: "test_invalid_report",
+            result: "PASSED"
+          },
+          {
+            name: "test_no_report",
+            result: "PASSED"
+          },
+          {
+            name: "test_no_token",
+            result: "PASSED"
+          },
+          {
+            name: "test_no_endpoint",
+            result: "PASSED"
+          },
+          {
+            name: "test_no_target_configuration",
+            result: "PASSED"
+          },
+          {
+            name: "test_no_build_number",
+            result: "PASSED"
+          }
+        ]
+      },
+      {
+        path: "tests/test_conversion.py",
+        tests: [
+          {
+            name: "test_convert_result",
+            result: "PASSED"
+          },
+          {
+            name: "test_convert_test_name",
+            result: "PASSED"
+          },
+          {
+            name: "test_convert_module_name",
+            result: "PASSED"
+          },
+          {
+            name: "test_basic_convert",
+            result: "PASSED"
+          },
+          {
+            name: "test_simple_report",
+            result: "PASSED"
+          }
+        ]
+      },
+      {
+        path: "tests/test_submission_builder.py",
+        tests: [
+          {
+            name: "test_version_details",
+            result: "PASSED"
+          },
+          {
+            name: "test_tests",
+            result: "PASSED"
+          },
+          {
+            name: "test_build_number",
+            result: "PASSED"
+          },
+          {
+            name: "test_configuration_id",
+            result: "PASSED"
+          },
+          {
+            name: "test_minimum_viable_submission",
+            result: "PASSED"
+          }
+        ]
+      }
+    ],
+    project: {
+      id: "qL70nKe",
+      name: "mig3",
+      url: "http://localhost:8000/api/projects/qL70nKe/",
+      repo_url: "https://github.com/mverteuil/mig3.git"
+    }
+  })
 };
 </script>

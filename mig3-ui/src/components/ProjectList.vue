@@ -1,25 +1,15 @@
 <template>
-  <v-layout
-    column
-    grid-list-lg
-    tag="v-container"
-    v-if="!$route.params.projectId"
-  >
+  <v-layout column grid-list-lg tag="v-container" v-if="!$route.params.projectId">
     <v-flex>
       <span class="display-4 font-weight-black text-capitalize">Projects</span>
       <v-layout>
         <v-flex :key="project.id" v-for="project in projects" xs4>
-          <v-card
-            :to="{ name: 'project', params: { projectId: project.id } }"
-            dark
-          >
+          <v-card :to="{ name: 'project', params: { projectId: project.id } }" dark>
             <v-sheet color="red darken-2">
               <v-card-title>
                 <v-flex>
                   <v-avatar color="red" left small>
-                    <span class="white--text headline text-uppercase">{{
-                      project.name.substr(0, 1)
-                    }}</span>
+                    <span class="white--text headline text-uppercase">{{ project.name.substr(0, 1) }}</span>
                   </v-avatar>
                   <span class="headline icon-text">{{ project.name }}</span>
                 </v-flex>

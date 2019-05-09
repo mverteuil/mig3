@@ -1,17 +1,10 @@
 <template>
   <v-container>
     <v-flex>
-      <span class="display-4 font-weight-black text-capitalize">{{
-        projectName
-      }}</span>
+      <span class="display-4 font-weight-black text-capitalize">{{ projectName }}</span>
       <span class="display-4 font-weight-thin">targets</span>
     </v-flex>
-    <v-data-table
-      :headers="headers"
-      :items="targets"
-      class="elevation-1"
-      item-key="name"
-    >
+    <v-data-table :headers="headers" :items="targets" class="elevation-1" item-key="name">
       <template v-slot:headers="props">
         <th width="100">
           <v-icon>mdi-bullseye-arrow</v-icon>

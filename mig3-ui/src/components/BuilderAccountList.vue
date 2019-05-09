@@ -15,9 +15,7 @@
               <v-card-title>
                 <v-flex>
                   <v-avatar color="indigo" left small>
-                    <span class="white--text headline">{{
-                      builder.name.substr(0, 1)
-                    }}</span>
+                    <span class="white--text headline">{{ builder.name.substr(0, 1) }}</span>
                   </v-avatar>
                   <span class="headline icon-text">{{ builder.name }}</span>
                 </v-flex>
@@ -25,15 +23,11 @@
             </v-sheet>
             <v-card-actions class="space-evenly">
               <div>
-                <v-icon class="vertical-middle" color="green"
-                  >mdi-shield-check
-                </v-icon>
+                <v-icon class="vertical-middle" color="green">mdi-shield-check</v-icon>
                 <span class="icon-text">{{ builder.successes }}</span>
               </div>
               <div>
-                <v-icon class="mdi-at vertical-middle"
-                  >mdi-upload-network
-                </v-icon>
+                <v-icon class="mdi-at vertical-middle">mdi-upload-network</v-icon>
                 <span class="icon-text">{{ builder.builds }}</span>
               </div>
             </v-card-actions>

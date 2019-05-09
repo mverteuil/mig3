@@ -140,10 +140,11 @@ class BuildSummarySerializer(ReadOnlySerializer, serializers.ModelSerializer):
 class BuildReadSerializer(BuildSummarySerializer):
     """API representation for CI builds."""
 
+    project = project_serializers.ProjectSummarySerializer(source="target.project")
     target = project_serializers.TargetSummarySerializer()
     version = project_serializers.VersionReadSerializer()
     builder = account_serializers.BuilderAccountSerializer()
     modules = ModuleSerializer(many=True)
 
     class Meta(BuildSummarySerializer.Meta):  # noqa: D106
-        fields = BuildSummarySerializer.Meta.fields + ("modules",)
+        fields = BuildSummarySerializer.Meta.fields + ("modules", "project")

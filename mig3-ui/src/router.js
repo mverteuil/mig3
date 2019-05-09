@@ -16,46 +16,32 @@ export default new Router({
     {
       path: "/builder-accounts/:builderAccountId?",
       name: "builderAccounts",
-      component: () =>
-        import(
-          /* webpackChunkName: "builderaccounts" */ "@/views/BuilderAccounts.vue"
-        )
+      component: () => import(/* webpackChunkName: "builderaccounts" */ "@/views/BuilderAccounts.vue")
     },
     {
       path: "/projects",
       name: "projects",
-      component: () =>
-        import(/* webpackChunkName: "projects" */ "@/views/Projects.vue"),
+      component: () => import(/* webpackChunkName: "projects" */ "@/views/Projects.vue"),
       children: [
         {
           path: ":projectId",
           name: "project",
-          component: () =>
-            import(/* webpackChunkName: "project" */ "@/views/Project.vue")
+          component: () => import(/* webpackChunkName: "project" */ "@/views/Project.vue")
         },
         {
           path: ":projectId/targets",
           name: "targets",
-          component: () =>
-            import(
-              /* webpackChunkName: "projecttargets" */ "@/views/ProjectTargets.vue"
-            ),
+          component: () => import(/* webpackChunkName: "projecttargets" */ "@/views/ProjectTargets.vue"),
           children: [
             {
               path: ":targetId",
               name: "target",
-              component: () =>
-                import(
-                  /* webpackChunkName: "projecttarget" */ "@/views/ProjectTarget.vue"
-                )
+              component: () => import(/* webpackChunkName: "projecttarget" */ "@/views/ProjectTarget.vue")
             },
             {
               path: ":targetId/builds/:buildId?",
               name: "builds",
-              component: () =>
-                import(
-                  /* webpackChunkName: "projecttargetbuilds" */ "@/views/ProjectTargetBuilds.vue"
-                )
+              component: () => import(/* webpackChunkName: "projecttargetbuilds" */ "@/views/ProjectTargetBuilds.vue")
             }
           ]
         }
@@ -64,10 +50,7 @@ export default new Router({
     {
       path: "/user-accounts/:userAccountId?",
       name: "userAccounts",
-      component: () =>
-        import(
-          /* webpackChunkName: "useraccounts" */ "@/views/UserAccounts.vue"
-        )
+      component: () => import(/* webpackChunkName: "useraccounts" */ "@/views/UserAccounts.vue")
     }
   ]
 });
