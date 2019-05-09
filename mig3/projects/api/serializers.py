@@ -16,7 +16,7 @@ class VersionReadSerializer(serializers.ModelSerializer):
         fields = ("hash", "author")
 
 
-class VersionWriteSerializer(serializers.Serializer):
+class VersionWriteSerializer(serializers.ModelSerializer):
     """Consume version author details for a Build submitted through the API.
 
     Will create a new inactive UserAccount for the author if the email has not been seen before.
@@ -25,10 +25,21 @@ class VersionWriteSerializer(serializers.Serializer):
     hash = serializers.CharField()
     author = accounts_serializers.UserAccountField()
 
+    class Meta:  # noqa: D106
+        model = projects.Version
+        fields = ("hash", "author")
+
     def to_internal_value(self, data: dict) -> projects.Version:
-        """Deserialize version and author for storage."""
+        """Store version and author."""
         data = super().to_internal_value(data)
         return projects.Version.objects.create(hash=data["hash"], author=data["author"])
+
+    def save(self, **kwargs):
+        """Create version."""
+        if isinstance(self.validated_data, projects.Version):
+            return self.validated_data
+        else:
+            super().save(**kwargs)
 
 
 class TargetSummarySerializer(serializers.ModelSerializer):
