@@ -108,6 +108,7 @@ class BuildWriteSerializer(serializers.Serializer):
     def create(self, validated_data: dict) -> builds.Build:
         """Create a new Build from API request."""
         try:
+            validated_data["version"] = projects.Version.objects.create(**validated_data.pop("version"))
             return builds.Build.objects.create_build(**validated_data)
         except builds.RegressionDetected as e:
             raise Regression(str(e))

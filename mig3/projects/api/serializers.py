@@ -29,18 +29,6 @@ class VersionWriteSerializer(serializers.ModelSerializer):
         model = projects.Version
         fields = ("hash", "author")
 
-    def to_internal_value(self, data: dict) -> projects.Version:
-        """Store version and author."""
-        data = super().to_internal_value(data)
-        return projects.Version.objects.create(hash=data["hash"], author=data["author"])
-
-    def save(self, **kwargs):
-        """Create version."""
-        if isinstance(self.validated_data, projects.Version):
-            return self.validated_data
-        else:
-            super().save(**kwargs)
-
 
 class TargetSummarySerializer(serializers.ModelSerializer):
     """Summary API representation for configuration targets."""
