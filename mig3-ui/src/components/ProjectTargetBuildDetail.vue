@@ -15,16 +15,23 @@
         <v-expansion-panel>
           <v-expansion-panel-content v-bind:key="module.path" v-for="module in modules">
             <template v-slot:actions>
-              <v-icon color="primary">$vuetify.icons.expand</v-icon>
+              <v-layout align-center>
+                <v-avatar class="green align-center darken-3 white--text" size="25">10</v-avatar>
+                <v-spacer />
+                <v-icon color="primary">$vuetify.icons.expand</v-icon>
+              </v-layout>
             </template>
             <template v-slot:header>
-              <div>{{ module.path }}</div>
+              <v-layout align-center
+                ><v-icon class="pr-2">mdi-folder</v-icon><span>{{ module.path }}</span></v-layout
+              >
             </template>
             <v-card>
               <v-card-text class="grey lighten-3">
                 <v-list>
                   <v-list-tile v-bind:key="test.name" v-for="test in module.tests">
-                    {{ test.name }}: {{ test.result }}
+                    <code>{{ test.name }}</code
+                    >: {{ test.result }}
                   </v-list-tile>
                 </v-list>
               </v-card-text>
@@ -32,13 +39,13 @@
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-flex>
-      <v-flex md6 xs12>
+      <v-flex gridlist-xs offset-md1 md4 xs12>
         <v-container class="title">Build Details</v-container>
-        <v-card dark>
+        <v-card dark dense>
           <v-sheet color="red darken-2 elevation-5">
             <v-card-text class="white--text headline text-uppercase">{{ version.hash.substr(0, 8) }}</v-card-text>
           </v-sheet>
-          <v-card-title class="text-uppercase text-lg-right">Commit Hash</v-card-title>
+          <v-card-title class="text-uppercase body-2">Commit Hash</v-card-title>
         </v-card>
         <v-card dark>
           <v-sheet color="red darken-2 elevation-5">
@@ -185,6 +192,14 @@ export default {
       url: "http://localhost:8000/api/projects/qL70nKe/",
       repo_url: "https://github.com/mverteuil/mig3.git"
     }
-  })
+  }),
+  methods: {
+    getResultIcon(result) {
+      switch (result) {
+        case "PASSED":
+          return "checked-";
+      }
+    }
+  }
 };
 </script>
