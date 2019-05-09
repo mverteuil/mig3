@@ -3,19 +3,17 @@ from itertools import product, repeat
 import django_fsm
 import pytest
 
-from builds.models import TestOutcome
-
-Results = TestOutcome.Results
+from builds.models import TestOutcome, TestResult
 
 # All values can transition to themselves
-VALID_TRANSITIONS = set(zip(Results, Results))
-# All values can transition to Results.PASSED
-VALID_TRANSITIONS = VALID_TRANSITIONS.union(zip(Results, repeat(Results.PASSED)))
-# Results.ERROR and Results.FAILED can transition to Results.XFAILED
-VALID_TRANSITIONS = VALID_TRANSITIONS.union(zip([Results.ERROR, Results.FAILED], repeat(Results.XFAILED)))
+VALID_TRANSITIONS = set(zip(TestResult, TestResult))
+# All values can transition to TestResult.PASSED
+VALID_TRANSITIONS = VALID_TRANSITIONS.union(zip(TestResult, repeat(TestResult.PASSED)))
+# TestResult.ERROR and TestResult.FAILED can transition to TestResult.XFAILED
+VALID_TRANSITIONS = VALID_TRANSITIONS.union(zip([TestResult.ERROR, TestResult.FAILED], repeat(TestResult.XFAILED)))
 
 # Any combination that isn't valid is therefore invalid
-INVALID_TRANSITIONS = set(product(Results, Results)) - VALID_TRANSITIONS
+INVALID_TRANSITIONS = set(product(TestResult, TestResult)) - VALID_TRANSITIONS
 
 
 @pytest.mark.parametrize(["initial_value", "target_value"], VALID_TRANSITIONS)

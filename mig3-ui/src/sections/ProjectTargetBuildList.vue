@@ -25,7 +25,7 @@
             <span class="font-weight-light">{{ props.item.id }}</span>
           </td>
           <td>{{ props.item.builder.name }}</td>
-          <td>{{ props.item.version.sha }}</td>
+          <td>{{ props.item.version.hash }}</td>
           <td>{{ props.item.version.author.email }}</td>
           <td>{{ props.item.total }}</td>
           <td>{{ props.item.passed }}</td>
@@ -43,76 +43,43 @@ import BreadcrumbTitle from "@/components/BreadcrumbTitle";
 export default {
   name: "ProjectTargetBuildList",
   components: { BreadcrumbTitle },
-  data() {
-    return {
-      projectName: "barbara",
-      targetName: "python3.8",
-      headers: [
-        {
-          text: "ID",
-          value: "id"
+  data: () => ({
+    headers: [],
+    id: "qL70nKe",
+    url: "http://localhost:8000/api/targets/qL70nKe/",
+    name: "python3.8",
+    python_major_version: 3,
+    python_minor_version: 8,
+    python_patch_version: 0,
+    additional_details: "",
+    full_version: "3.8.0",
+    python_version: "3.8.0",
+    builds: [
+      {
+        id: "qL70nKe",
+        url: "http://localhost:8000/api/builds/qL70nKe/",
+        target: "qL70nKe",
+        number: "1",
+        version: {
+          hash: "04d04ac04d62bb2952311c4e616ee96799e08592",
+          author: {
+            id: "E0lrPbR",
+            email: "onceuponajooks@gmail.com",
+            name: ""
+          }
         },
-        {
-          text: "Builder",
-          value: "builder"
-        },
-        {
-          text: "Version",
-          value: "version"
-        },
-        {
-          text: "Author",
-          value: "author"
-        },
-        {
-          text: "Total",
-          value: "total"
-        },
-        {
-          text: "Passed",
-          value: "passed"
-        },
-        {
-          text: "XFailed",
-          value: "xfailed"
-        },
-        {
-          text: "Failed",
-          value: "failed"
-        },
-        {
-          text: "Error",
-          value: "error"
-        },
-        {
-          text: "Skipped",
-          value: "skipped"
-        }
-      ],
-      builds: [
-        {
+        builder: {
           id: "qL70nKe",
-          number: "1",
-          builder: {
-            id: "qL70nKe",
-            name: "Travis CI"
-          },
-          version: {
-            sha: "a1a1a1a1",
-            author: {
-              id: "qL70nKe",
-              email: "mverteuil@github.com"
-            }
-          },
-          total: 100,
-          passed: 50,
-          failed: 10,
-          error: 10,
-          xfailed: 10,
-          skipped: 10
+          name: "Travis-CI"
         }
-      ]
-    };
-  }
+      }
+    ],
+    project: {
+      id: "qL70nKe",
+      name: "mig3",
+      url: "http://localhost:8000/api/projects/qL70nKe/",
+      repo_url: "https://github.com/mverteuil/mig3.git"
+    }
+  })
 };
 </script>

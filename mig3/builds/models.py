@@ -2,18 +2,28 @@ from typing import Dict, List, Union
 
 from django.conf import settings
 from django.db import IntegrityError, models
-from django.db.models import QuerySet
 
 import django_fsm
 import hashid_field
+from attr import dataclass
 from django_choices_enum import ChoicesEnum
 from model_utils.models import TimeStampedModel
 
 from accounts.models import BuilderAccount
 from projects.models import Module, Target, Test, Version
 
-DeserializedResult = Dict[str, Union[str, "TestOutcome.Results"]]
+DeserializedResult = Dict[str, Union[str, "TestResult"]]
 DeserializedResultList = List[DeserializedResult]
+
+
+class TestResult(int, ChoicesEnum):
+    """Enumerate possible test testResult."""
+
+    ERROR = (0, "Error")
+    FAILED = (1, "Failed")
+    PASSED = (2, "Passed")
+    SKIPPED = (3, "Skipped")
+    XFAILED = (4, "XFailed")
 
 
 class Duplicate(IntegrityError):
@@ -23,11 +33,22 @@ class Duplicate(IntegrityError):
 class RegressionDetected(ValueError):
     """Attempted to introduce TestOutcome regression."""
 
-    def __init__(self, test: str, previous_result: "TestOutcome.Results", current_result: "TestOutcome.Results"):
+    def __init__(self, test: str, previous_result: "TestResult", current_result: "TestResult"):
         super().__init__(
             f"The build attempted to introduce this regression to your migration: "
-            f"{test} ({TestOutcome.Results(previous_result).name} 👉 {TestOutcome.Results(current_result).name})"
+            f"{test} ({TestResult(previous_result).name} 👉 {TestResult(current_result).name})"
         )
+
+
+@dataclass
+class OutcomeSummary:
+    """Summary of test outcome result counts."""
+
+    error: int
+    failed: int
+    passed: int
+    skipped: int
+    xfailed: int
 
 
 class BuildManager(models.Manager):
@@ -80,12 +101,21 @@ class Build(TimeStampedModel):
         )
 
     def __str__(self):
-        return f"{self.number}: {self.target.project.name} @ {self.target.name} on {self.builder.name} ({self.version.hash[:8]})"
+        return (
+            f"{self.number}: {self.target.project.name} @ "
+            f"{self.target.name} on {self.builder.name} ({self.version.hash[:8]})"
+        )
 
     @property
-    def modules(self) -> QuerySet:
+    def modules(self) -> models.QuerySet:
         """Modules under test during this build."""
         return Module.objects.filter(pk__in=self.testoutcome_set.values_list("test__module__id").distinct())
+
+    @property
+    def outcome_summary(self) -> OutcomeSummary:
+        """Aggregate counts for each TestResult value in related TestOutcomes."""
+        aggregates = {result.name.lower(): models.Count("pk", models.Q(result=result.value)) for result in TestResult}
+        return OutcomeSummary(**self.testoutcome_set.aggregate(**aggregates))
 
 
 class TestOutcomeManager(models.Manager):
@@ -99,14 +129,14 @@ class TestOutcomeManager(models.Manager):
         cloned_outcome.id = None
         return cloned_outcome
 
-    def _perform_result_transition(self, test: Test, target: Target, result: "TestOutcome.Results") -> "TestOutcome":
+    def _perform_result_transition(self, test: Test, target: Target, result: TestResult) -> "TestOutcome":
         test_outcome = self._clone_latest_outcome_for_target(test, target)
         transition_method_name = f"set_{result.name.lower()}"
         getattr(test_outcome, transition_method_name)()
         test_outcome.save()
         return test_outcome
 
-    def create(self, build: Build, test: Test, result: "TestOutcome.Results") -> "TestOutcome":
+    def create(self, build: Build, test: Test, result: TestResult) -> "TestOutcome":
         """Create validated test outcome.
 
         Raises
@@ -124,47 +154,40 @@ class TestOutcomeManager(models.Manager):
 
 
 class TestOutcome(TimeStampedModel):
-    """Test outcome accepted because it moved the migration state forward."""
-
-    class Results(int, ChoicesEnum):
-        """Enumerate possible test results."""
-
-        ERROR = (0, "Error")
-        FAILED = (1, "Failed")
-        PASSED = (2, "Passed")
-        SKIPPED = (3, "Skipped")
-        XFAILED = (4, "XFailed")
+    """Test outcome for which the result moves the migration state forward, was equivalent, or is new."""
 
     build = models.ForeignKey("builds.Build", on_delete=models.CASCADE)
     test = models.ForeignKey("projects.Test", on_delete=models.CASCADE)
-    result = django_fsm.FSMIntegerField(protected=True, choices=Results.choices(), default=Results.ERROR)
+    result = django_fsm.FSMIntegerField(protected=True, choices=TestResult.choices(), default=TestResult.ERROR)
 
     objects = TestOutcomeManager()
 
     def __str__(self):
-        return f"{self.test}: {self.Results(self.result).name.lower()} as of {self.build}"
+        return f"{self.test}: {TestResult(self.result).name.lower()} as of {self.build}"
 
-    @django_fsm.transition("result", source=[Results.ERROR], target=Results.ERROR)
+    @django_fsm.transition("result", source=[TestResult.ERROR], target=TestResult.ERROR)
     def set_error(self):
-        """Set result value to Results.ERROR."""
+        """Set result value to TestResult.ERROR."""
         pass
 
-    @django_fsm.transition("result", source=[Results.FAILED], target=Results.FAILED)
+    @django_fsm.transition("result", source=[TestResult.FAILED], target=TestResult.FAILED)
     def set_failed(self):
-        """Set result value to Results.FAILED."""
+        """Set result value to TestResult.FAILED."""
         pass
 
-    @django_fsm.transition("result", source=list(Results), target=Results.PASSED)
+    @django_fsm.transition("result", source=list(TestResult), target=TestResult.PASSED)
     def set_passed(self):
-        """Set result value to Results.PASSED."""
+        """Set result value to TestResult.PASSED."""
         pass
 
-    @django_fsm.transition("result", source=[Results.SKIPPED], target=Results.SKIPPED)
+    @django_fsm.transition("result", source=[TestResult.SKIPPED], target=TestResult.SKIPPED)
     def set_skipped(self):
-        """Set result value to Results.SKIPPED."""
+        """Set result value to TestResult.SKIPPED."""
         pass
 
-    @django_fsm.transition("result", source=[Results.ERROR, Results.FAILED, Results.XFAILED], target=Results.XFAILED)
+    @django_fsm.transition(
+        "result", source=[TestResult.ERROR, TestResult.FAILED, TestResult.XFAILED], target=TestResult.XFAILED
+    )
     def set_xfailed(self):
-        """Set result value to Results.XFAILED."""
+        """Set result value to TestResult.XFAILED."""
         pass

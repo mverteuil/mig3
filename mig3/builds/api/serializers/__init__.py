@@ -38,6 +38,25 @@ class CurrentBuilderAccount(object):
         return self._builder_account
 
 
+class ModuleTestOutcomeListSerializer(serializers.ListSerializer):
+    """API representation of test results grouped by module."""
+
+    def to_representation(self, data):
+        """Filter queryset by root serializer Build instance and parent serializer Module instance."""
+        module_outcomes = self.root.instance.testoutcome_set.filter(test__module=data)
+        return super().to_representation(module_outcomes)
+
+
+class ResultCountsSerializer(ReadOnlySerializer):
+    """Summarize result counts for each test result type."""
+
+    error = serializers.IntegerField()
+    failed = serializers.IntegerField()
+    passed = serializers.IntegerField()
+    skipped = serializers.IntegerField()
+    xfailed = serializers.IntegerField()
+
+
 class TestResultField(serializers.Field):
     """Serialize TestOutcome.Result values."""
 
@@ -50,20 +69,11 @@ class TestResultField(serializers.Field):
 
     def to_internal_value(self, data: str):
         """Deserialize result for storage."""
-        return builds.TestOutcome.Results[data.upper()]
+        return builds.TestResult[data.upper()]
 
     def to_representation(self, value: int):
         """Convert integer value to result label."""
-        return builds.TestOutcome.Results(value).name
-
-
-class ModuleTestOutcomeListSerializer(serializers.ListSerializer):
-    """API representation of test results grouped by module."""
-
-    def to_representation(self, data):
-        """Filter queryset by root serializer Build instance and parent serializer Module instance."""
-        module_outcomes = self.root.instance.testoutcome_set.filter(test__module=data)
-        return super().to_representation(module_outcomes)
+        return builds.TestResult(value).name
 
 
 class TestOutcomeReadSerializer(ReadOnlySerializer):
@@ -76,12 +86,16 @@ class TestOutcomeReadSerializer(ReadOnlySerializer):
         list_serializer_class = ModuleTestOutcomeListSerializer
 
 
-class TestOutcomeWriteSerializer(serializers.Serializer):
+class TestOutcomeWriteSerializer(serializers.ModelSerializer):
     """Consume TestOutcomes submitted through the API."""
 
     module = serializers.CharField()
     test = serializers.CharField()
     result = TestResultField()
+
+    class Meta:  # noqa: D106
+        model = builds.TestOutcome
+        fields = ("module", "test", "result")
 
 
 class ModuleSerializer(ReadOnlySerializer):
@@ -129,6 +143,7 @@ class BuildReadSerializer(BuildSummarySerializer):
     version = project_common_serializers.VersionReadSerializer()
     builder = account_serializers.BuilderAccountSerializer()
     modules = ModuleSerializer(many=True)
+    outcome_summary = ResultCountsSerializer()
 
     class Meta(BuildSummarySerializer.Meta):  # noqa: D106
-        fields = BuildSummarySerializer.Meta.fields + ("modules", "project")
+        fields = BuildSummarySerializer.Meta.fields + ("modules", "project", "outcome_summary")

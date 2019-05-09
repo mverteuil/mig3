@@ -3,6 +3,7 @@ from django.db import IntegrityError
 import pytest
 
 from builds import models as builds
+from builds.models import TestResult
 
 
 def test_manager_create(target, version, builder_account, test_results):
@@ -47,10 +48,16 @@ def test_unique_for_number_and_target(target, version, another_version, builder_
         builds.Build.objects.create_build("1", target, another_version, builder_account, test_results)
 
 
-def test_modules(db, target, version, builder_account, test_results):
+def test_modules(build):
     """Should produce the equivalent modules to the project's module_set."""
-    assert target.project.name
-    assert version.author
-    build = builds.Build.objects.create_build("1", target, version, builder_account, test_results)
     assert build.modules is not None
-    assert set(build.modules) == set(target.project.module_set.all())
+    assert set(build.modules) == set(build.target.project.module_set.all())
+
+
+@pytest.mark.parametrize("result", TestResult)
+def test_outcome_summary(build, result):
+    """Should produce outcome summary with accurate result counts."""
+    assert build.outcome_summary is not None
+    expected_outcome_count = getattr(build.outcome_summary, result.name.lower())
+    actual_outcome_count = builds.TestOutcome.objects.filter(result=result).count()
+    assert actual_outcome_count == expected_outcome_count

@@ -19,8 +19,8 @@ def better_test_results(test_results) -> builds.DeserializedResultList:
     """Generate deserialized test result list with progression from base case."""
     test_results = copy.deepcopy(test_results)
     for result in test_results:
-        if result["result"] != builds.TestOutcome.Results.PASSED:
-            result["result"] = builds.TestOutcome.Results.PASSED
+        if result["result"] != builds.TestResult.PASSED:
+            result["result"] = builds.TestResult.PASSED
     return test_results
 
 
@@ -62,16 +62,16 @@ def target(db) -> projects.Target:
 def test_results() -> builds.DeserializedResultList:
     """Generate deserialized test result list base case."""
     return [
-        {"module": "tests/test_example01.py", "test": "test_error", "result": builds.TestOutcome.Results.ERROR},
-        {"module": "tests/test_example01.py", "test": "test_failed", "result": builds.TestOutcome.Results.FAILED},
-        {"module": "tests/test_example01.py", "test": "test_passed", "result": builds.TestOutcome.Results.PASSED},
-        {"module": "tests/test_example01.py", "test": "test_skipped", "result": builds.TestOutcome.Results.SKIPPED},
-        {"module": "tests/test_example01.py", "test": "test_xfailed", "result": builds.TestOutcome.Results.XFAILED},
-        {"module": "tests/test_example02.py", "test": "test_error", "result": builds.TestOutcome.Results.ERROR},
-        {"module": "tests/test_example02.py", "test": "test_failed", "result": builds.TestOutcome.Results.FAILED},
-        {"module": "tests/test_example02.py", "test": "test_passed", "result": builds.TestOutcome.Results.PASSED},
-        {"module": "tests/test_example02.py", "test": "test_skipped", "result": builds.TestOutcome.Results.SKIPPED},
-        {"module": "tests/test_example02.py", "test": "test_xfailed", "result": builds.TestOutcome.Results.XFAILED},
+        {"module": "tests/test_example01.py", "test": "test_error", "result": builds.TestResult.ERROR},
+        {"module": "tests/test_example01.py", "test": "test_failed", "result": builds.TestResult.FAILED},
+        {"module": "tests/test_example01.py", "test": "test_passed", "result": builds.TestResult.PASSED},
+        {"module": "tests/test_example01.py", "test": "test_skipped", "result": builds.TestResult.SKIPPED},
+        {"module": "tests/test_example01.py", "test": "test_xfailed", "result": builds.TestResult.XFAILED},
+        {"module": "tests/test_example02.py", "test": "test_error", "result": builds.TestResult.ERROR},
+        {"module": "tests/test_example02.py", "test": "test_failed", "result": builds.TestResult.FAILED},
+        {"module": "tests/test_example02.py", "test": "test_passed", "result": builds.TestResult.PASSED},
+        {"module": "tests/test_example02.py", "test": "test_skipped", "result": builds.TestResult.SKIPPED},
+        {"module": "tests/test_example02.py", "test": "test_xfailed", "result": builds.TestResult.XFAILED},
     ]
 
 
@@ -87,6 +87,6 @@ def worse_test_results(test_results) -> builds.DeserializedResultList:
     """Generate deserialized test result list with regression from base case."""
     test_results = copy.deepcopy(test_results)
     for result in test_results:
-        if result["result"] != builds.TestOutcome.Results.FAILED:
-            result["result"] = builds.TestOutcome.Results.FAILED
+        if result["result"] != builds.TestResult.FAILED:
+            result["result"] = builds.TestResult.FAILED
     return test_results
