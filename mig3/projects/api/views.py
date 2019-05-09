@@ -13,8 +13,8 @@ class ProjectListView(generics.ListAPIView):
     serializer_class = serializers.ProjectSummarySerializer
 
 
-class ProjectDetailView(generics.ListAPIView):
-    """List Project Targets."""
+class ProjectDetailView(generics.RetrieveAPIView):
+    """Retrieve Project Details."""
 
     authentication_classes = (authentication.SessionAuthentication,)
     lookup_url_kwarg = "project_id"

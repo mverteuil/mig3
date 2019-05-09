@@ -16,7 +16,7 @@ INVALID_HTTP_METHODS = ("delete", "patch", "put", "post")
     ),
 )
 @pytest.mark.parametrize("view_method", INVALID_HTTP_METHODS)
-def test_object_immutability(project, target, session_authentication, view_name, view_kwargs, view_method):
+def test_object_immutability(project, session_authentication, target, view_name, view_kwargs, view_method):
     """Should refuse invalid object operations with session authentication."""
     api_client, _ = session_authentication
     url = reverse(view_name, kwargs=view_kwargs)
@@ -32,7 +32,7 @@ def test_object_immutability(project, target, session_authentication, view_name,
         ("api:target_build_list", {"target_id": "qL70nKe"}),
     ),
 )
-def test_view_with_session(project, target, session_authentication, view_name, view_kwargs):
+def test_view_with_session(project, django_db_reset_sequences, session_authentication, target, view_name, view_kwargs):
     """Should accept authenticated requests."""
     api_client, _ = session_authentication
     url = reverse(view_name, kwargs=view_kwargs)
@@ -48,7 +48,7 @@ def test_view_with_session(project, target, session_authentication, view_name, v
         ("api:target_build_list", {"target_id": "qL70nKe"}),
     ),
 )
-def test_view_without_session(project, target, client, view_name, view_kwargs):
+def test_view_without_session(client, django_db_reset_sequences, project, target, view_name, view_kwargs):
     """Should refuse unauthenticated requests."""
     url = reverse(view_name, kwargs=view_kwargs)
     response = client.get(url)
