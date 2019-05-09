@@ -80,27 +80,128 @@
 export default {
   name: "ProjectTargetBuildDetail",
   data: () => ({
-    projectName: "barbara",
-    targetName: "python3.8",
-    id: "qL70nKe",
-    number: "1",
-    builder: {
-      id: "qL70nKe",
-      name: "Travis CI"
+    "id": "qL70nKe",
+    "url": "http://localhost:8000/api/builds/qL70nKe/",
+    "target": {
+        "id": "qL70nKe",
+        "url": "http://localhost:8000/api/targets/qL70nKe/",
+        "name": "python3.8",
+        "python_major_version": 3,
+        "python_minor_version": 8,
+        "python_patch_version": 0,
+        "additional_details": "",
+        "full_version": "3.8.0",
+        "python_version": "3.8.0"
     },
-    version: {
-      sha: "a1a1a1a1",
-      author: {
-        id: "qL70nKe",
-        email: "mverteuil@github.com"
-      }
+    "number": "1",
+    "version": {
+        "hash": "04d04ac04d62bb2952311c4e616ee96799e08592",
+        "author": {
+            "id": "E0lrPbR",
+            "email": "mverteuil@github.com",
+            "name": ""
+        }
     },
-    total: 100,
-    passed: 50,
-    failed: 10,
-    error: 10,
-    xfailed: 10,
-    skipped: 10
-  })
+    "builder": {
+        "id": "qL70nKe",
+        "name": "Travis-CI"
+    },
+    "modules": [
+        {
+            "path": "tests/test_cli.py",
+            "tests": [
+                {
+                    "name": "test_valid_report_with_dry_run",
+                    "result": "PASSED"
+                },
+                {
+                    "name": "test_valid_report_with_bad_endpoint",
+                    "result": "PASSED"
+                },
+                {
+                    "name": "test_valid_report_with_regression",
+                    "result": "PASSED"
+                },
+                {
+                    "name": "test_happy_path",
+                    "result": "PASSED"
+                },
+                {
+                    "name": "test_invalid_report",
+                    "result": "PASSED"
+                },
+                {
+                    "name": "test_no_report",
+                    "result": "PASSED"
+                },
+                {
+                    "name": "test_no_token",
+                    "result": "PASSED"
+                },
+                {
+                    "name": "test_no_endpoint",
+                    "result": "PASSED"
+                },
+                {
+                    "name": "test_no_target_configuration",
+                    "result": "PASSED"
+                },
+                {
+                    "name": "test_no_build_number",
+                    "result": "PASSED"
+                }
+            ]
+        },
+        {
+            "path": "tests/test_conversion.py",
+            "tests": [
+                {
+                    "name": "test_convert_result",
+                    "result": "PASSED"
+                },
+                {
+                    "name": "test_convert_test_name",
+                    "result": "PASSED"
+                },
+                {
+                    "name": "test_convert_module_name",
+                    "result": "PASSED"
+                },
+                {
+                    "name": "test_basic_convert",
+                    "result": "PASSED"
+                },
+                {
+                    "name": "test_simple_report",
+                    "result": "PASSED"
+                }
+            ]
+        },
+        {
+            "path": "tests/test_submission_builder.py",
+            "tests": [
+                {
+                    "name": "test_version_details",
+                    "result": "PASSED"
+                },
+                {
+                    "name": "test_tests",
+                    "result": "PASSED"
+                },
+                {
+                    "name": "test_build_number",
+                    "result": "PASSED"
+                },
+                {
+                    "name": "test_configuration_id",
+                    "result": "PASSED"
+                },
+                {
+                    "name": "test_minimum_viable_submission",
+                    "result": "PASSED"
+                }
+            ]
+        }
+    ]
 };
 </script>
