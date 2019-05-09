@@ -5,8 +5,9 @@ from rest_framework.exceptions import APIException, MethodNotAllowed
 from accounts.api import serializers as account_serializers
 from api.serializers import ReadOnlySerializer
 from projects import models as projects
-from projects.api import serializers as project_serializers
-from .. import models as builds
+from projects.api.serializers import common as project_common_serializers
+from ... import models as builds
+from .common import BuildSummarySerializer
 
 
 class Duplicate(APIException):
@@ -98,7 +99,7 @@ class BuildWriteSerializer(serializers.Serializer):
         pk_field=hashid_field.HashidSerializerCharField(source_field="projects.Target.id"),
     )
     number = serializers.CharField()
-    version = project_serializers.VersionWriteSerializer()
+    version = project_common_serializers.VersionWriteSerializer()
     builder = serializers.HiddenField(default=CurrentBuilderAccount())
     results = TestOutcomeWriteSerializer(many=True, write_only=True)
 
@@ -120,30 +121,12 @@ class BuildWriteSerializer(serializers.Serializer):
         raise MethodNotAllowed("update")
 
 
-class BuildSummarySerializer(ReadOnlySerializer, serializers.ModelSerializer):
-    """Summary API representation for CI builds."""
-
-    id = hashid_field.HashidSerializerCharField(source_field="builds.Build.id")
-    url = serializers.HyperlinkedIdentityField(view_name="api:build_detail", lookup_url_kwarg="build_id")
-    number = serializers.CharField()
-    target = serializers.PrimaryKeyRelatedField(
-        queryset=projects.Target.objects.all(),
-        pk_field=hashid_field.HashidSerializerCharField(source_field="projects.Target.id"),
-    )
-    version = project_serializers.VersionReadSerializer()
-    builder = account_serializers.BuilderAccountSerializer()
-
-    class Meta:  # noqa: D106
-        model = builds.Build
-        fields = ("id", "url", "target", "number", "version", "builder")
-
-
 class BuildReadSerializer(BuildSummarySerializer):
     """API representation for CI builds."""
 
-    project = project_serializers.ProjectSummarySerializer(source="target.project")
-    target = project_serializers.TargetSummarySerializer()
-    version = project_serializers.VersionReadSerializer()
+    project = project_common_serializers.ProjectSummarySerializer(source="target.project")
+    target = project_common_serializers.TargetSummarySerializer()
+    version = project_common_serializers.VersionReadSerializer()
     builder = account_serializers.BuilderAccountSerializer()
     modules = ModuleSerializer(many=True)
 

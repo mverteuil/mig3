@@ -1,10 +1,6 @@
 <template>
   <v-container>
-    <v-flex>
-      <span class="display-4 font-weight-black text-capitalize">{{ projectName }}</span>
-      <span class="display-4 font-weight-thin">{{ targetName }}</span>
-      <span class="display-2 text-uppercase">builds</span>
-    </v-flex>
+    <breadcrumb-title :project="project" :target="target" />
     <v-data-table :headers="headers" :items="builds" class="elevation-1" header-key="text" item-key="id">
       <template v-slot:headers="props">
         <th width="100">
@@ -43,8 +39,10 @@
   </v-container>
 </template>
 <script>
+import BreadcrumbTitle from "@/components/BreadcrumbTitle";
 export default {
   name: "ProjectTargetBuildList",
+  components: { BreadcrumbTitle },
   data() {
     return {
       projectName: "barbara",

@@ -23,11 +23,9 @@ getenv_boolean: callable = lambda k, default=None: bool(strtobool(getenv(k, str(
 getenv_list: callable = lambda k, default=None: list(map(lambda s: s.strip(), getenv(k, default).split(",")))
 getenv_int: callable = lambda k, default=None: int(getenv(k, default))
 
-
 # Load environment variables from disk
 
 dotenv.load_dotenv(dotenv.find_dotenv(), verbose=True)
-
 
 # Build paths inside the project like this: BASE_DIR / "subdir" / "subdir"
 
@@ -37,13 +35,11 @@ FRONTEND_DIR: Path = BASE_DIR / "mig3-ui"
 FRONTEND_DIST_DIR: Path = FRONTEND_DIR / "dist"
 TEMPLATES_DIR: Path = BACKEND_DIR / "templates"
 
-
 # Secret Key
 # https://docs.djangoproject.com/en/2.2/ref/settings/#secret-key
 # SECURITY WARNING: keep the secret key used in production secret!
 
 SECRET_KEY: str = getenv("SECRET_KEY")
-
 
 # Debug
 # https://docs.djangoproject.com/en/2.2/ref/settings/#debug
@@ -51,18 +47,15 @@ SECRET_KEY: str = getenv("SECRET_KEY")
 
 DEBUG: bool = getenv_boolean("DEBUG", False)
 
-
 # Allowed Hosts
 # https://docs.djangoproject.com/en/2.2/ref/settings/#allowed-hosts
 
 ALLOWED_HOSTS: list = getenv_list("ALLOWED_HOSTS")
 
-
 # Sites Framework
 # https://docs.djangoproject.com/en/2.2/ref/contrib/sites/#enabling-the-sites-framework
 
 SITE_ID: int = 1
-
 
 # Application definition
 # https://docs.djangoproject.com/en/2.2/ref/settings/#installed-apps
@@ -84,7 +77,6 @@ INSTALLED_APPS: list = [
     "projects",
 ]
 
-
 # Middleware
 # https://docs.djangoproject.com/en/2.2/ref/settings/#middleware
 
@@ -98,18 +90,15 @@ MIDDLEWARE: list = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-
 # URL Routing Root
 # https://docs.djangoproject.com/en/2.2/ref/settings/#root-urlconf
 
 ROOT_URLCONF: str = "mig3.urls"
 
-
 # Append '/' to URLs if they're not included
 # https://docs.djangoproject.com/en/2.2/ref/settings/#append-slash
 
 APPEND_SLASH: bool = True
-
 
 # Templates
 # https://docs.djangoproject.com/en/2.2/ref/settings/#templates
@@ -140,36 +129,30 @@ EMAIL_BACKEND: str = getenv("EMAIL_BACKEND", "django.core.mail.backends.filebase
 
 EMAIL_FILE_PATH: Path = BASE_DIR / "logs" / "emails-sent"
 
-
 # Default Sender (email address)
 # https://docs.djangoproject.com/en/2.2/ref/settings/#default-from-email
 
 DEFAULT_FROM_EMAIL: str = "admin@example.com"
-
 
 # WSGI Application Entry Point
 # https://docs.djangoproject.com/en/2.2/ref/settings/#wsgi-application
 
 WSGI_APPLICATION: str = "mig3.wsgi.application"
 
-
 # Databases
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES: dict = {"default": dj_database_url.parse(getenv("DATABASE_URL"))}
-
 
 # Django Custom User Model
 # https://docs.djangoproject.com/en/2.2/topics/auth/customizing/#substituting-a-custom-user-model
 
 AUTH_USER_MODEL: str = "accounts.UserAccount"
 
-
 # Authentication Backends
 # https://docs.djangoproject.com/en/2.2/ref/settings/#authentication-backends
 
 AUTHENTICATION_BACKENDS: list = ["django.contrib.auth.backends.ModelBackend"]
-
 
 # Logging
 # https://docs.djangoproject.com/en/2.2/ref/settings/#logging
@@ -193,7 +176,6 @@ AUTH_PASSWORD_VALIDATORS: list = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-
 # Login URL route name
 # https://docs.djangoproject.com/en/2.2/ref/settings/#login-url
 
@@ -208,7 +190,6 @@ LOGIN_REDIRECT_URL: str = "projects"
 # https://docs.djangoproject.com/en/2.2/topics/auth/default/#django.contrib.auth.views.LogoutView
 LOGOUT_REDIRECT_URL: str = "login"
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -217,36 +198,30 @@ LOGOUT_REDIRECT_URL: str = "login"
 
 LANGUAGE_CODE: str = "en-us"
 
-
 # Server Timezone
 # https://docs.djangoproject.com/en/2.2/ref/settings/#time-zone
 
 TIME_ZONE: str = "UTC"
-
 
 # Use Internationalization
 # https://docs.djangoproject.com/en/2.2/ref/settings/#use-i18n
 
 USE_I18N: bool = True
 
-
 # Use Localization
 # https://docs.djangoproject.com/en/2.2/ref/settings/#use-l10n
 
 USE_L10N: bool = True
-
 
 # Use Timezone-aware Datetimes
 # https://docs.djangoproject.com/en/2.2/ref/settings/#use-tz
 
 USE_TZ: bool = True
 
-
 # Default file storage class to be used for any file-related operations that don’t specify a particular storage system.
 # https://docs.djangoproject.com/en/2.2/ref/settings/#default-file-storage
 
 DEFAULT_FILE_STORAGE: str = "django.core.files.storage.FileSystemStorage"
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
@@ -256,18 +231,15 @@ DEFAULT_FILE_STORAGE: str = "django.core.files.storage.FileSystemStorage"
 
 STATICFILES_STORAGE: str = "django.contrib.staticfiles.storage.StaticFilesStorage"
 
-
 # URL to use when referring to static files located in STATIC_ROOT
 # https://docs.djangoproject.com/en/2.2/ref/settings/#static-url
 
 STATIC_URL: str = "/static/"
 
-
 # Additional paths to to traverse if FileSystemFinder is enabled
 # https://docs.djangoproject.com/en/2.2/ref/settings/#staticfiles-dirs
 
 STATICFILES_DIRS: list = []
-
 
 # --------------------------------------------------------------------------------------------------------------------
 # Third-party Settings
@@ -285,7 +257,6 @@ HASHID_SALTS: dict = {
     "projects.Target": getenv("HASHID_SALT_PROJECTS_TARGET", "abc123"),
 }
 
-
 # Django REST Framework
 # https://www.django-rest-framework.org/api-guide/
 
@@ -300,7 +271,6 @@ REST_FRAMEWORK: dict = {
     # https://www.django-rest-framework.org/api-guide/testing/#setting-the-default-format
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
 }
-
 
 # Django Webpack Loader
 # https://github.com/owais/django-webpack-loader#configuration
@@ -318,7 +288,6 @@ WEBPACK_LOADER = {
         "STATS_FILE": FRONTEND_DIST_DIR / "webpack-stats.json",
     }
 }
-
 
 # DRF-YASG
 # https://drf-yasg.readthedocs.io/en/stable/
