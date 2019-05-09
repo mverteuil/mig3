@@ -10,7 +10,7 @@
         <span v-else>{{ project.name }}</span>
       </router-link>
     </v-flex>
-    <v-flex class="shrink" v-if="target !== false">
+    <v-flex class="shrink" v-if="target">
       <router-link
         :to="{ name: 'target', params: { targetId: target.id } }"
         class="display-4 font-weight-thin flat-link"
@@ -32,7 +32,7 @@ export default {
   props: {
     number: {
       required: false,
-      type: Number,
+      type: String,
       default: null
     },
     project: {

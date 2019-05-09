@@ -12,7 +12,6 @@ INVALID_HTTP_METHODS = ("delete", "patch", "put", "post")
     (
         ("api:project_list", {}),
         ("api:project_detail", {"project_id": "qL70nKe"}),
-        ("api:project_target_list", {"project_id": "qL70nKe"}),
         ("api:target_build_list", {"target_id": "qL70nKe"}),
     ),
 )
@@ -30,7 +29,6 @@ def test_object_immutability(project, target, session_authentication, view_name,
     (
         ("api:project_list", {}),
         ("api:project_detail", {"project_id": "qL70nKe"}),
-        ("api:project_target_list", {"project_id": "qL70nKe"}),
         ("api:target_build_list", {"target_id": "qL70nKe"}),
     ),
 )
@@ -47,7 +45,6 @@ def test_view_with_session(project, target, session_authentication, view_name, v
     (
         ("api:project_list", {}),
         ("api:project_detail", {"project_id": "qL70nKe"}),
-        ("api:project_target_list", {"project_id": "qL70nKe"}),
         ("api:target_build_list", {"target_id": "qL70nKe"}),
     ),
 )

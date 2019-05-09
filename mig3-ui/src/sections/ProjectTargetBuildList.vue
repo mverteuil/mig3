@@ -1,14 +1,9 @@
 <template>
   <v-container>
-    <breadcrumb-title :project="project" :target="target" />
+    <breadcrumb-title :project="project" :target="this" />
     <v-data-table :headers="headers" :items="builds" class="elevation-1" header-key="text" item-key="id">
       <template v-slot:headers="props">
-        <th width="100">
-          <v-icon color="green">mdi-shield-check</v-icon>
-        </th>
-        <th :key="header.text" align="left" v-for="header in props.headers">
-          {{ header.text }}
-        </th>
+        <th style="text-align:left" v-for="header in props.headers" v-bind:key="header" v-html="header"></th>
       </template>
       <template v-slot:items="props">
         <router-link
@@ -25,14 +20,13 @@
             <span class="font-weight-light">{{ props.item.id }}</span>
           </td>
           <td>{{ props.item.builder.name }}</td>
-          <td>{{ props.item.version.hash }}</td>
+          <td>{{ shortHash(props.item.version.hash) }}</td>
           <td>{{ props.item.version.author.email }}</td>
-          <td>{{ props.item.total }}</td>
-          <td>{{ props.item.passed }}</td>
-          <td>{{ props.item.xfailed }}</td>
-          <td>{{ props.item.failed }}</td>
-          <td>{{ props.item.error }}</td>
-          <td>{{ props.item.skipped }}</td>
+          <td>{{ props.item.outcome_summary.passed }}</td>
+          <td>{{ props.item.outcome_summary.xfailed }}</td>
+          <td>{{ props.item.outcome_summary.failed }}</td>
+          <td>{{ props.item.outcome_summary.error }}</td>
+          <td>{{ props.item.outcome_summary.skipped }}</td>
         </router-link>
       </template>
     </v-data-table>
@@ -40,11 +34,12 @@
 </template>
 <script>
 import BreadcrumbTitle from "@/components/BreadcrumbTitle";
+
 export default {
   name: "ProjectTargetBuildList",
   components: { BreadcrumbTitle },
   data: () => ({
-    headers: [],
+    headers: ["", "Build", "Builder", "Commit", "Author", "Passed", "XFailed", "Failed", "Error", "Skipped"],
     id: "qL70nKe",
     url: "http://localhost:8000/api/targets/qL70nKe/",
     name: "python3.8",
@@ -58,7 +53,17 @@ export default {
       {
         id: "qL70nKe",
         url: "http://localhost:8000/api/builds/qL70nKe/",
-        target: "qL70nKe",
+        target: {
+          id: "qL70nKe",
+          url: "http://localhost:8000/api/targets/qL70nKe/",
+          name: "python3.8",
+          python_major_version: 3,
+          python_minor_version: 8,
+          python_patch_version: 0,
+          additional_details: "",
+          full_version: "3.8.0",
+          python_version: "3.8.0"
+        },
         number: "1",
         version: {
           hash: "04d04ac04d62bb2952311c4e616ee96799e08592",
@@ -71,6 +76,13 @@ export default {
         builder: {
           id: "qL70nKe",
           name: "Travis-CI"
+        },
+        outcome_summary: {
+          error: 0,
+          failed: 0,
+          passed: 20,
+          skipped: 0,
+          xfailed: 0
         }
       }
     ],
@@ -80,6 +92,9 @@ export default {
       url: "http://localhost:8000/api/projects/qL70nKe/",
       repo_url: "https://github.com/mverteuil/mig3.git"
     }
-  })
+  }),
+  methods: {
+    shortHash: hash => hash.substr(0, 8)
+  }
 };
 </script>
