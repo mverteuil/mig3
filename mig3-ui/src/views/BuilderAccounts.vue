@@ -3,8 +3,8 @@
   <builder-account-detail v-else />
 </template>
 <script>
-import BuilderAccountDetail from "../components/BuilderAccountDetail";
-import BuilderAccountList from "../components/BuilderAccountList";
+import BuilderAccountDetail from "../sections/BuilderAccountDetail";
+import BuilderAccountList from "../sections/BuilderAccountList";
 
 export default {
   name: "Builders",

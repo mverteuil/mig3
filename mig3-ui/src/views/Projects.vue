@@ -3,7 +3,7 @@
   <router-view v-else />
 </template>
 <script>
-import ProjectList from "@/components/ProjectList";
+import ProjectList from "@/sections/ProjectList";
 
 export default {
   components: { ProjectList }

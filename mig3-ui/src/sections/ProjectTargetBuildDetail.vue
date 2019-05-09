@@ -1,67 +1,32 @@
 <template>
   <v-container column>
-    <v-layout align-baseline>
-      <router-link :to="{ name: 'project', params: { projectId: project.id } }" class="flat-link">
-        <span class="display-4 font-weight-black text-capitalize">{{ project.name }}</span>
-      </router-link>
-      <router-link :to="{ name: 'target', params: { targetId: target.id } }" class="flat-link">
-        <span class="display-4 font-weight-thin">{{ target.name }}</span>
-      </router-link>
-      <v-flex class="display-2 text-uppercase">build {{ number }}</v-flex>
-    </v-layout>
+    <breadcrumb-title :number="number" :project="project" :target="target" />
     <v-layout column-xs tag="v-container">
       <v-flex md6 xs12>
         <v-container class="title">Test Modules</v-container>
-        <v-expansion-panel>
-          <v-expansion-panel-content v-bind:key="module.path" v-for="module in modules">
-            <template v-slot:actions>
-              <v-layout align-center>
-                <v-avatar class="green align-center darken-3 white--text" size="25">10</v-avatar>
-                <v-spacer />
-                <v-icon color="primary">$vuetify.icons.expand</v-icon>
-              </v-layout>
-            </template>
-            <template v-slot:header>
-              <v-layout align-center
-                ><v-icon class="pr-2">mdi-folder</v-icon><span>{{ module.path }}</span></v-layout
-              >
-            </template>
-            <v-card>
-              <v-card-text class="grey lighten-3">
-                <v-list>
-                  <v-list-tile v-bind:key="test.name" v-for="test in module.tests">
-                    <code>{{ test.name }}</code
-                    >: {{ test.result }}
-                  </v-list-tile>
-                </v-list>
-              </v-card-text>
-            </v-card>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
+        <build-test-modules-panel :modules="modules" />
       </v-flex>
-      <v-flex gridlist-xs offset-md1 md4 xs12>
+      <v-flex column ml-3 xs3>
         <v-container class="title">Build Details</v-container>
-        <v-card dark dense>
-          <v-sheet color="red darken-2 elevation-5">
-            <v-card-text class="white--text headline text-uppercase">{{ version.hash.substr(0, 8) }}</v-card-text>
-          </v-sheet>
-          <v-card-title class="text-uppercase body-2">Commit Hash</v-card-title>
-        </v-card>
-        <v-card dark>
-          <v-sheet color="red darken-2 elevation-5">
-            <v-card-text class="white--text headline">{{ version.author.email }}</v-card-text>
-          </v-sheet>
-          <v-card-title>
-            <span class="text-uppercase">Author</span>
-          </v-card-title>
-        </v-card>
+        <build-detail-card :value="version.hash.substr(0, 8)" field="Commit Hash" />
+        <build-detail-card :value="builder.name" field="Builder" />
+        <build-detail-card :value="version.author.email" field="Author" />
       </v-flex>
     </v-layout>
   </v-container>
 </template>
 <script>
+import BuildDetailCard from "@/components/BuildDetailCard";
+import BuildTestModulesPanel from "@/components/BuildTestModulesPanel";
+import BreadcrumbTitle from "@/components/BreadcrumbTitle";
+
 export default {
   name: "ProjectTargetBuildDetail",
+  components: {
+    BreadcrumbTitle,
+    BuildTestModulesPanel,
+    BuildDetailCard
+  },
   data: () => ({
     id: "qL70nKe",
     url: "http://localhost:8000/api/builds/qL70nKe/",
@@ -192,14 +157,6 @@ export default {
       url: "http://localhost:8000/api/projects/qL70nKe/",
       repo_url: "https://github.com/mverteuil/mig3.git"
     }
-  }),
-  methods: {
-    getResultIcon(result) {
-      switch (result) {
-        case "PASSED":
-          return "checked-";
-      }
-    }
-  }
+  })
 };
 </script>

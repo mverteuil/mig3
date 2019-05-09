@@ -3,8 +3,8 @@
   <project-target-build-detail v-else />
 </template>
 <script>
-import ProjectTargetBuildDetail from "@/components/ProjectTargetBuildDetail";
-import ProjectTargetBuildList from "@/components/ProjectTargetBuildList";
+import ProjectTargetBuildDetail from "@/sections/ProjectTargetBuildDetail";
+import ProjectTargetBuildList from "@/sections/ProjectTargetBuildList";
 
 export default {
   components: {
