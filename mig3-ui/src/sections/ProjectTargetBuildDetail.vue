@@ -156,6 +156,13 @@ export default {
       name: "mig3",
       url: "http://localhost:8000/api/projects/qL70nKe/",
       repo_url: "https://github.com/mverteuil/mig3.git"
+    },
+    outcome_summary: {
+      error: 0,
+      failed: 0,
+      passed: 20,
+      skipped: 0,
+      xfailed: 0
     }
   })
 };

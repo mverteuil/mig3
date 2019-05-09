@@ -2,7 +2,6 @@ from hashid_field import rest as hashid_field
 from rest_framework import serializers, status
 from rest_framework.exceptions import APIException, MethodNotAllowed
 
-from accounts.api import serializers as account_serializers
 from api.serializers import ReadOnlySerializer
 from projects import models as projects
 from projects.api.serializers import common as project_common_serializers
@@ -45,16 +44,6 @@ class ModuleTestOutcomeListSerializer(serializers.ListSerializer):
         """Filter queryset by root serializer Build instance and parent serializer Module instance."""
         module_outcomes = self.root.instance.testoutcome_set.filter(test__module=data)
         return super().to_representation(module_outcomes)
-
-
-class ResultCountsSerializer(ReadOnlySerializer):
-    """Summarize result counts for each test result type."""
-
-    error = serializers.IntegerField()
-    failed = serializers.IntegerField()
-    passed = serializers.IntegerField()
-    skipped = serializers.IntegerField()
-    xfailed = serializers.IntegerField()
 
 
 class TestResultField(serializers.Field):
@@ -140,10 +129,7 @@ class BuildReadSerializer(BuildSummarySerializer):
 
     project = project_common_serializers.ProjectSummarySerializer(source="target.project")
     target = project_common_serializers.TargetSummarySerializer()
-    version = project_common_serializers.VersionReadSerializer()
-    builder = account_serializers.BuilderAccountSerializer()
     modules = ModuleSerializer(many=True)
-    outcome_summary = ResultCountsSerializer()
 
     class Meta(BuildSummarySerializer.Meta):  # noqa: D106
-        fields = BuildSummarySerializer.Meta.fields + ("modules", "project", "outcome_summary")
+        fields = BuildSummarySerializer.Meta.fields + ("modules", "project", "target")
