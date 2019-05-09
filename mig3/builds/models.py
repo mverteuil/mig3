@@ -1,8 +1,11 @@
 from typing import Dict, List, Union
 
-from django.db import models
+from django.conf import settings
+from django.db import IntegrityError, models
+from django.db.models import QuerySet
 
 import django_fsm
+import hashid_field
 from django_choices_enum import ChoicesEnum
 from model_utils.models import TimeStampedModel
 
@@ -13,8 +16,12 @@ DeserializedResult = Dict[str, Union[str, "TestOutcome.Results"]]
 DeserializedResultList = List[DeserializedResult]
 
 
+class Duplicate(IntegrityError):
+    """Attempted to introduce duplicate Build result."""
+
+
 class RegressionDetected(ValueError):
-    """Detected attempt to introduce TestOutcome regression."""
+    """Attempted to introduce TestOutcome regression."""
 
     def __init__(self, test: str, previous_result: "TestOutcome.Results", current_result: "TestOutcome.Results"):
         super().__init__(
@@ -32,19 +39,33 @@ class BuildManager(models.Manager):
     def create_build(
         self, number: str, target: Target, version: Version, builder: BuilderAccount, results: DeserializedResultList
     ) -> "Build":
-        """Create a new Build with TestOutcomes."""
-        build = self.model(number=number, target=target, version=version, builder=builder)
-        build.save()
-        for result in results:
-            module, _ = Module.objects.get_or_create(path=result["module"], project=target.project)
-            test, _ = Test.objects.get_or_create(name=result["test"], module=module)
-            build.testoutcome_set.create(test=test, result=result["result"])
-        return build
+        """Create a new Build with TestOutcomes.
+
+        Raises
+        ------
+        Duplicate
+            Attempted to create a duplicate of an existing Build record.
+        RegressionDetected
+            Attempted to introduce TestOutcome regression.
+
+        """
+        try:
+            build = self.model(number=number, target=target, version=version, builder=builder)
+            build.save()
+        except IntegrityError:
+            raise Duplicate((number, version.hash))
+        else:
+            for result in results:
+                module, _ = Module.objects.get_or_create(path=result["module"], project=target.project)
+                test, _ = module.test_set.get_or_create(name=result["test"])
+                build.testoutcome_set.create(test=test, result=result["result"])
+            return build
 
 
 class Build(TimeStampedModel):
     """Attempt to move the migration state forward, submitted by a builder."""
 
+    id = hashid_field.HashidAutoField(primary_key=True, salt=settings.HASHID_SALTS["builds.Build"])
     builder = models.ForeignKey("accounts.BuilderAccount", on_delete=models.CASCADE)
     target = models.ForeignKey("projects.Target", on_delete=models.CASCADE)
     version = models.ForeignKey("projects.Version", on_delete=models.CASCADE)
@@ -52,8 +73,19 @@ class Build(TimeStampedModel):
 
     objects = BuildManager()
 
+    class Meta:  # noqa: D106
+        constraints = (
+            models.UniqueConstraint(fields=["number", "target"], name="unique_number_per_target"),
+            models.UniqueConstraint(fields=["version", "target"], name="unique_version_per_target"),
+        )
+
     def __str__(self):
         return f"{self.number}: {self.target.project.name} @ {self.target.name} on {self.builder.name} ({self.version.hash[:8]})"
+
+    @property
+    def modules(self) -> QuerySet:
+        """Modules under test during this build."""
+        return Module.objects.filter(pk__in=self.testoutcome_set.values_list("test__module__id").distinct())
 
 
 class TestOutcomeManager(models.Manager):
@@ -75,7 +107,14 @@ class TestOutcomeManager(models.Manager):
         return test_outcome
 
     def create(self, build: Build, test: Test, result: "TestOutcome.Results") -> "TestOutcome":
-        """Create validated test outcome."""
+        """Create validated test outcome.
+
+        Raises
+        ------
+        RegressionDetected
+            Attempted to introduce TestOutcome regression.
+
+        """
         try:
             return self._perform_result_transition(test, build.target, result)
         except TestOutcome.DoesNotExist:

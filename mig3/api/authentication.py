@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AnonymousUser
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 
 from rest_framework.authentication import TokenAuthentication
@@ -25,7 +26,7 @@ class BearerAuthentication(TokenAuthentication):
         model = self.get_model()
         try:
             builder = model.objects.get(token=token)
-        except model.DoesNotExist:
+        except ObjectDoesNotExist:
             raise AuthenticationFailed("Invalid token.")
 
         return AnonymousUser(), builder

@@ -1,10 +1,17 @@
 import copy
+import json
 
 import pytest
 
 from accounts import models as accounts
 from builds import models as builds
 from projects import models as projects
+
+
+@pytest.fixture
+def another_version(version) -> projects.Version:
+    """Create a second Version from the original Version's author."""
+    return version.author.version_set.create(hash="b2" * 20)
 
 
 @pytest.fixture
@@ -18,9 +25,30 @@ def better_test_results(test_results) -> builds.DeserializedResultList:
 
 
 @pytest.fixture
+def build(db, target, version, builder_account, test_results) -> builds.Build:
+    """Create a fully populated Build.
+
+    Includes: Project, Target, BuilderAccount, Modules, Tests, TestOutcomes
+    """
+    return builds.Build.objects.create_build("1", target, version, builder_account, test_results)
+
+
+@pytest.fixture
 def builder_account(db) -> accounts.BuilderAccount:
-    """Create a BuilderAccount fixture."""
+    """Create a BuilderAccount."""
     return accounts.BuilderAccount.objects.create(name="Test CI Service")
+
+
+@pytest.fixture
+def serialized_build(shared_datadir):
+    """Provide serialized incoming build request data."""
+    return json.load(open(shared_datadir / "serialized_build.json"))
+
+
+@pytest.fixture
+def serialized_build_regression(shared_datadir):
+    """Provide serialized incoming build request data."""
+    return json.load(open(shared_datadir / "serialized_build_regression.json"))
 
 
 @pytest.fixture

@@ -7,6 +7,6 @@ analyze:
     - name: https://github.com/mverteuil/mig3
       type: pip
       target: .
-      path:  .
+      path: .
       options:
         strategy: pipenv

@@ -1,16 +1,20 @@
-import logging
-
-from django.conf import settings
-from django.contrib.auth import get_user_model
-
-from hashid_field.rest import HashidSerializerCharField
+from hashid_field import rest as hashid_field
 from rest_framework import serializers, status
-from rest_framework.exceptions import APIException
+from rest_framework.exceptions import APIException, MethodNotAllowed
 
-from builds import models as builds
+from accounts.api import serializers as account_serializers
+from api.serializers import ReadOnlySerializer
 from projects import models as projects
+from projects.api import serializers as project_serializers
+from .. import models as builds
 
-logger = logging.getLogger(__name__)
+
+class Duplicate(APIException):
+    """The build has already been accepted and is now immutable."""
+
+    status_code = status.HTTP_400_BAD_REQUEST
+    default_detail = "The build has already been accepted and is now immutable."
+    default_code = "duplicate"
 
 
 class Regression(APIException):
@@ -18,7 +22,7 @@ class Regression(APIException):
 
     status_code = status.HTTP_409_CONFLICT
     default_detail = "The build introduced a regression to your migration and is unacceptable."
-    default_code = "conflict"
+    default_code = "regression"
 
 
 class CurrentBuilderAccount(object):
@@ -26,52 +30,52 @@ class CurrentBuilderAccount(object):
 
     def set_context(self, serializer_field):
         """Initialize value for callers."""
-        self.builder_account = serializer_field.context["request"].auth
+        self._builder_account = serializer_field.context["request"].auth
 
     def __call__(self):
         """Produce value for callers."""
-        return self.builder_account
+        return self._builder_account
 
 
 class TestResultField(serializers.Field):
-    """Consume submitted test result for a TestOutcome."""
+    """Serialize TestOutcome.Result values."""
 
     def get_attribute(self, instance):
         """Return the object to deserialize."""
-        return instance
+        if self.source_attrs:
+            return super().get_attribute(instance)
+        else:
+            return instance
 
-    def to_internal_value(self, data):
+    def to_internal_value(self, data: str):
         """Deserialize result for storage."""
         return builds.TestOutcome.Results[data.upper()]
 
-    def to_representation(self, value):
-        """Serialize result for representation."""
-        return value
+    def to_representation(self, value: int):
+        """Convert integer value to result label."""
+        return builds.TestOutcome.Results(value).name
 
 
-class VersionField(serializers.Field):
-    """Consume submitted version author details for a Build.
+class ModuleTestOutcomeListSerializer(serializers.ListSerializer):
+    """API representation of test results grouped by module."""
 
-    Will create a new inactive UserAccount for the author if the email has not been seen before.
-    """
-
-    def _get_or_create_author(self, email: str) -> settings.AUTH_USER_MODEL:
-        UserAccount = get_user_model()
-        try:
-            return UserAccount.objects.get_by_natural_key(email)
-        except UserAccount.DoesNotExist:
-            return UserAccount.objects.create_user(email=email)
-
-    def to_internal_value(self, data: dict) -> projects.Version:
-        """Deserialize version and author for storage."""
-        return projects.Version.objects.create(hash=data["hash"], author=self._get_or_create_author(data["author"]))
-
-    def to_representation(self, value) -> str:
-        """Serialize version for representation."""
-        return str(value)
+    def to_representation(self, data):
+        """Filter queryset by root serializer Build instance and parent serializer Module instance."""
+        module_outcomes = self.root.instance.testoutcome_set.filter(test__module=data)
+        return super().to_representation(module_outcomes)
 
 
-class TestOutcomeSerializer(serializers.Serializer):
+class TestOutcomeReadSerializer(ReadOnlySerializer):
+    """API representation for test results."""
+
+    name = serializers.CharField(source="test.name")
+    result = TestResultField()
+
+    class Meta:  # noqa: D106
+        list_serializer_class = ModuleTestOutcomeListSerializer
+
+
+class TestOutcomeWriteSerializer(serializers.Serializer):
     """Consume TestOutcomes submitted through the API."""
 
     module = serializers.CharField()
@@ -79,16 +83,27 @@ class TestOutcomeSerializer(serializers.Serializer):
     result = TestResultField()
 
 
-class BuildSerializer(serializers.Serializer):
+class ModuleSerializer(ReadOnlySerializer):
+    """API representation for python test modules."""
+
+    path = serializers.CharField()
+    tests = TestOutcomeReadSerializer(many=True, source="*")
+
+
+class BuildWriteSerializer(serializers.Serializer):
     """Consume Builds submitted through the API."""
 
-    number = serializers.CharField()
-    builder = serializers.HiddenField(default=CurrentBuilderAccount())
-    results = TestOutcomeSerializer(many=True, write_only=True)
     target = serializers.PrimaryKeyRelatedField(
-        queryset=projects.Target.objects.all(), pk_field=HashidSerializerCharField(source_field="projects.Target.id")
+        queryset=projects.Target.objects.all(),
+        pk_field=hashid_field.HashidSerializerCharField(source_field="projects.Target.id"),
     )
-    version = VersionField()
+    number = serializers.CharField()
+    version = project_serializers.VersionWriteSerializer()
+    builder = serializers.HiddenField(default=CurrentBuilderAccount())
+    results = TestOutcomeWriteSerializer(many=True, write_only=True)
+
+    class Meta:  # noqa: D106
+        model = builds.Build
 
     def create(self, validated_data: dict) -> builds.Build:
         """Create a new Build from API request."""
@@ -96,3 +111,39 @@ class BuildSerializer(serializers.Serializer):
             return builds.Build.objects.create_build(**validated_data)
         except builds.RegressionDetected as e:
             raise Regression(str(e))
+        except builds.Duplicate:
+            raise Duplicate()
+
+    def update(self, instance, validated_data):
+        """Invalid operation."""
+        raise MethodNotAllowed("update")
+
+
+class BuildSummarySerializer(ReadOnlySerializer, serializers.ModelSerializer):
+    """Summary API representation for CI builds."""
+
+    id = hashid_field.HashidSerializerCharField(source_field="builds.Build.id")
+    url = serializers.HyperlinkedIdentityField(view_name="api:build_detail", lookup_url_kwarg="build_id")
+    number = serializers.CharField()
+    target = serializers.PrimaryKeyRelatedField(
+        queryset=projects.Target.objects.all(),
+        pk_field=hashid_field.HashidSerializerCharField(source_field="projects.Target.id"),
+    )
+    version = project_serializers.VersionReadSerializer()
+    builder = account_serializers.BuilderAccountSerializer()
+
+    class Meta:  # noqa: D106
+        model = builds.Build
+        fields = ("id", "url", "target", "number", "version", "builder")
+
+
+class BuildReadSerializer(BuildSummarySerializer):
+    """API representation for CI builds."""
+
+    target = project_serializers.TargetSummarySerializer()
+    version = project_serializers.VersionReadSerializer()
+    builder = account_serializers.BuilderAccountSerializer()
+    modules = ModuleSerializer(many=True)
+
+    class Meta(BuildSummarySerializer.Meta):  # noqa: D106
+        fields = BuildSummarySerializer.Meta.fields + ("modules",)
