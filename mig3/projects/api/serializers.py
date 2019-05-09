@@ -63,21 +63,6 @@ class TargetSummarySerializer(serializers.ModelSerializer):
         )
 
 
-class TargetSerializer(TargetSummarySerializer):
-    """API representation for configuration targets."""
-
-    builds = serializers.HyperlinkedRelatedField(
-        many=True,
-        queryset=builds.Build.objects.all(),
-        source="build_set",
-        view_name="api:build_detail",
-        lookup_field="pk",
-    )
-
-    class Meta(TargetSummarySerializer.Meta):  # noqa: D106
-        fields = TargetSummarySerializer.Meta.fields + ("builds",)
-
-
 class ProjectSummarySerializer(serializers.ModelSerializer):
     """Summary API representation for Projects."""
 
@@ -89,6 +74,22 @@ class ProjectSummarySerializer(serializers.ModelSerializer):
         fields = ("id", "name", "url", "repo_url")
 
 
+class TargetSerializer(TargetSummarySerializer):
+    """API representation for configuration targets."""
+
+    project = ProjectSummarySerializer()
+    builds = serializers.HyperlinkedRelatedField(
+        many=True,
+        queryset=builds.Build.objects.all(),
+        source="build_set",
+        view_name="api:build_detail",
+        lookup_url_kwarg="build_id",
+    )
+
+    class Meta(TargetSummarySerializer.Meta):  # noqa: D106
+        fields = TargetSummarySerializer.Meta.fields + ("builds", "project")
+
+
 class ProjectSerializer(ProjectSummarySerializer):
     """API representation for Projects."""
 
@@ -97,7 +98,7 @@ class ProjectSerializer(ProjectSummarySerializer):
         queryset=projects.Target.objects.all(),
         source="target_set",
         view_name="api:target_detail",
-        lookup_field="pk",
+        lookup_url_kwarg="target_id",
     )
 
     class Meta(ProjectSummarySerializer.Meta):  # noqa: D106

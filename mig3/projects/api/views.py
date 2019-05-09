@@ -27,6 +27,7 @@ class TargetDetailView(generics.RetrieveAPIView):
     """Retrieve Project Target Details."""
 
     authentication_classes = (authentication.SessionAuthentication,)
+    lookup_url_kwarg = "target_id"
     permission_classes = (permissions.IsAuthenticated,)
     queryset = projects.Target.objects.all()
     serializer_class = serializers.TargetSerializer
