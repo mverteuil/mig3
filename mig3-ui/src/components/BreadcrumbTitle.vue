@@ -1,26 +1,18 @@
 <template>
   <v-layout align-baseline>
-    <v-flex class="shrink">
-      <router-link
-        :to="{ name: 'project', params: { projectId: project.id } }"
-        class="display-4 font-weight-black text-capitalize flat-link"
-        v-if="project && target"
-      >
-        <span v-if="project === null">Projects</span>
-        <span v-else>{{ project.name }}</span>
+    <v-flex class="shrink display-4 font-weight-black text-capitalize">
+      <router-link :to="{ name: 'project', params: { projectId: project.id } }" class="flat-link" v-if="project">
+        {{ project.name }}
       </router-link>
+      <span v-else>Projects</span>
     </v-flex>
-    <v-flex class="shrink" v-if="target">
-      <router-link
-        :to="{ name: 'target', params: { targetId: target.id } }"
-        class="display-4 font-weight-thin flat-link"
-        v-if="target && number"
-      >
-        <span v-if="project && target === null">Targets</span>
-        <span v-else>{{ target.name }}</span>
+    <v-flex class="shrink display-4 font-weight-thin" v-if="project">
+      <router-link :to="{ name: 'target', params: { targetId: target.id } }" class="flat-link" v-if="project && target">
+        {{ target.name }}
       </router-link>
+      <span v-else>Targets</span>
     </v-flex>
-    <v-flex class="display-2 shrink text-uppercase">
+    <v-flex class="display-2 shrink text-uppercase" v-if="project && target">
       <span v-if="target && number === null">Builds</span>
       <span v-else>Build {{ number }}</span>
     </v-flex>

@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import Dict, List, Union
 
 from django.conf import settings
@@ -5,7 +6,6 @@ from django.db import IntegrityError, models
 
 import django_fsm
 import hashid_field
-from attr import dataclass
 from django_choices_enum import ChoicesEnum
 from model_utils.models import TimeStampedModel
 
