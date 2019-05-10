@@ -24,11 +24,11 @@
             <v-card-actions class="space-evenly">
               <div>
                 <v-icon class="vertical-middle" color="green">mdi-shield-check</v-icon>
-                <span class="icon-text">{{ builder.successes }}</span>
+                <span class="icon-text">{{ builder.statistics.build_count }}</span>
               </div>
               <div>
                 <v-icon class="mdi-at vertical-middle">mdi-upload-network</v-icon>
-                <span class="icon-text">{{ builder.builds }}</span>
+                <span class="icon-text">{{ builder.statistics.version_count }}</span>
               </div>
             </v-card-actions>
           </v-card>
@@ -44,15 +44,11 @@ export default {
     builders: [
       {
         id: "qL70nKe",
-        name: "Travis CI",
-        builds: 10,
-        versions: 1
-      },
-      {
-        id: "E0lrPbR",
-        name: "CircleCI",
-        builds: 143,
-        versions: 1
+        name: "Travis-CI",
+        statistics: {
+          build_count: 3,
+          version_count: 2
+        }
       }
     ]
   })

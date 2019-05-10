@@ -39,7 +39,23 @@ export default {
     name: "mig3",
     url: "http://localhost:8000/api/projects/qL70nKe/",
     repo_url: "https://github.com/mverteuil/mig3.git",
+    statistics: {
+      target_count: 2,
+      module_count: 3,
+      test_count: 20
+    },
     targets: [
+      {
+        id: "E0lrPbR",
+        url: "http://localhost:8000/api/targets/E0lrPbR/",
+        name: "python3.7 + django2.0",
+        python_major_version: 3,
+        python_minor_version: 7,
+        python_patch_version: 3,
+        additional_details: "django==2.0",
+        full_version: "3.7.3+django==2.0",
+        python_version: "3.7.3"
+      },
       {
         id: "qL70nKe",
         url: "http://localhost:8000/api/targets/qL70nKe/",

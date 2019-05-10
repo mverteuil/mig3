@@ -51,6 +51,46 @@ export default {
     python_version: "3.8.0",
     builds: [
       {
+        id: "w6l2Rl5",
+        url: "http://localhost:8000/api/builds/w6l2Rl5/",
+        target: {
+          id: "qL70nKe",
+          url: "http://localhost:8000/api/targets/qL70nKe/",
+          name: "python3.8",
+          python_major_version: 3,
+          python_minor_version: 8,
+          python_patch_version: 0,
+          additional_details: "",
+          full_version: "3.8.0",
+          python_version: "3.8.0"
+        },
+        number: "2",
+        version: {
+          hash: "cbbab338e077b87d9fd169e63e832b7986e492f5",
+          author: {
+            id: "E0lrPbR",
+            email: "mverteuil@github.com",
+            name: "",
+            build_count: 3
+          }
+        },
+        builder: {
+          id: "qL70nKe",
+          name: "Travis-CI",
+          statistics: {
+            build_count: 3,
+            version_count: 2
+          }
+        },
+        outcome_summary: {
+          error: 0,
+          failed: 0,
+          passed: 0,
+          skipped: 0,
+          xfailed: 0
+        }
+      },
+      {
         id: "qL70nKe",
         url: "http://localhost:8000/api/builds/qL70nKe/",
         target: {
@@ -69,18 +109,23 @@ export default {
           hash: "04d04ac04d62bb2952311c4e616ee96799e08592",
           author: {
             id: "E0lrPbR",
-            email: "onceuponajooks@gmail.com",
-            name: ""
+            email: "mverteuil@github.com",
+            name: "",
+            build_count: 3
           }
         },
         builder: {
           id: "qL70nKe",
-          name: "Travis-CI"
+          name: "Travis-CI",
+          statistics: {
+            build_count: 3,
+            version_count: 2
+          }
         },
         outcome_summary: {
           error: 0,
           failed: 0,
-          passed: 20,
+          passed: 40,
           skipped: 0,
           xfailed: 0
         }
@@ -90,7 +135,12 @@ export default {
       id: "qL70nKe",
       name: "mig3",
       url: "http://localhost:8000/api/projects/qL70nKe/",
-      repo_url: "https://github.com/mverteuil/mig3.git"
+      repo_url: "https://github.com/mverteuil/mig3.git",
+      statistics: {
+        target_count: 2,
+        module_count: 3,
+        test_count: 20
+      }
     }
   }),
   methods: {

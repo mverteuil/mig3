@@ -46,7 +46,7 @@ export default {
       hash: "04d04ac04d62bb2952311c4e616ee96799e08592",
       author: {
         id: "E0lrPbR",
-        email: "onceuponajooks@gmail.com",
+        email: "mverteuil@github.com",
         name: ""
       }
     },
