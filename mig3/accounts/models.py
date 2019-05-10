@@ -1,4 +1,5 @@
 import secrets
+from dataclasses import dataclass
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
@@ -6,6 +7,8 @@ from django.db import models
 
 from hashid_field import HashidAutoField
 from model_utils.models import TimeStampedModel
+
+from projects import models as projects
 
 
 class UserAccountManager(BaseUserManager):
@@ -87,6 +90,14 @@ class UserAccount(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
         self.email = self.__class__.objects.normalize_email(self.email)
 
 
+@dataclass
+class BuilderStatistics:
+    """Aggregated Project Statistics."""
+
+    build_count: int
+    version_count: int
+
+
 class BuilderAccount(TimeStampedModel):
     """Authorize builders to submit job results."""
 
@@ -98,3 +109,11 @@ class BuilderAccount(TimeStampedModel):
 
     def __str__(self):
         return f"{self.name} ({self.id})"
+
+    @property
+    def statistics(self) -> BuilderStatistics:
+        """Aggregate statistics about this builder's relationships."""
+        return BuilderStatistics(
+            build_count=self.build_set.count(),
+            version_count=projects.Version.objects.filter(build__builder=self).distinct("hash").count(),
+        )

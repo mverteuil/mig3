@@ -43,4 +43,4 @@ class UserAccountSerializer(serializers.ModelSerializer):
 
     class Meta:  # noqa: D106
         model = get_user_model()
-        fields = ("id", "email", "name")
+        fields = ("id", "email", "name", "build_count")

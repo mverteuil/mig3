@@ -46,13 +46,13 @@ export default {
         id: "qL70nKe",
         name: "Travis CI",
         builds: 10,
-        successes: 1
+        versions: 1
       },
       {
         id: "E0lrPbR",
         name: "CircleCI",
         builds: 143,
-        successes: 1
+        versions: 1
       }
     ]
   })

@@ -9,9 +9,9 @@
               <v-card-title>
                 <v-flex>
                   <v-avatar color="red" left small>
-                    <span class="white--text headline text-uppercase">{{ user.name.substr(0, 1) }}</span>
+                    <span class="white--text headline text-uppercase">{{ getUserAvatar(user) }}</span>
                   </v-avatar>
-                  <span class="headline icon-text">{{ user.name }}</span>
+                  <span class="headline icon-text">{{ getNameOrEmailUsername(user) }}</span>
                 </v-flex>
               </v-card-title>
             </v-sheet>
@@ -22,7 +22,7 @@
               </div>
               <div>
                 <v-icon class="mdi-at vertical-middle">mdi-upload-network</v-icon>
-                <span class="icon-text">{{ user.builds }}</span>
+                <span class="icon-text">{{ user.build_count }}</span>
               </div>
             </v-card-actions>
           </v-card>
@@ -37,24 +37,26 @@ export default {
   data: () => ({
     users: [
       {
-        id: "",
-        email: "mverteuil@gmail.com",
-        name: "Matthew de Verteuil",
-        builds: 10
-      },
-      {
         id: "E0lrPbR",
-        email: "nfisher@yahoo.com",
-        name: "Theresa Brown",
-        builds: 143
+        email: "jwood@hotmail.com",
+        name: "Joshua Wood",
+        build_count: 1
       },
       {
-        id: "vJ7v5lA",
-        email: "kmartinez@wright.com",
-        name: "Ryan Gallagher",
-        builds: 16
+        id: "qL70nKe",
+        email: "mverteuil@github.com",
+        name: "",
+        build_count: 0
       }
     ]
-  })
+  }),
+  methods: {
+    getUserAvatar(user) {
+      return this.getNameOrEmailUsername(user).substr(0, 1);
+    },
+    getNameOrEmailUsername(user) {
+      return user.name ? user.name : user.email.split("@")[0];
+    }
+  }
 };
 </script>
