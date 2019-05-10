@@ -2,7 +2,7 @@ import "@babel/polyfill";
 import Vue from "vue";
 import "@/plugins/vuetify";
 import App from "@/App.vue";
-import router from "@/router";
+import router from "@/router/index";
 import store from "@/store";
 
 import "./assets/stylus/style.styl";

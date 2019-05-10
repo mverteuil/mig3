@@ -1,12 +1,11 @@
 <template>
-  <project-target-list v-if="!$route.params.targetId" />
   <router-view v-else />
 </template>
 <script>
-import ProjectTargetList from "../sections/ProjectTargetList";
+import ProjectTargetBuildList from "../../sections/ProjectTargetBuildList";
 
 export default {
-  components: { ProjectTargetList },
+  components: { ProjectTargetBuildList },
   data: () => ({
     projectName: "barbara",
     targets: {
