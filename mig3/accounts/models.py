@@ -74,7 +74,12 @@ class UserAccount(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = []
 
     def __str__(self):
-        return f"{self.email}{'†' if self.is_staff else '￿'}{'*' if self.is_superuser else ''} ({self.id})"
+        return f"{self.email}{'†' if self.is_staff else '•'}{'*' if self.is_superuser else ''} ({self.id})"
+
+    @property
+    def build_count(self) -> int:
+        """Sum of accepted builds for versions authored by this user account."""
+        return self.version_set.aggregate(models.Count("build__id"))["build__id__count"]
 
     def clean(self):
         """Validate and transform values for saving."""
