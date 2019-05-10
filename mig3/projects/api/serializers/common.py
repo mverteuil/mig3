@@ -2,6 +2,7 @@ from hashid_field import rest as hashid_field
 from rest_framework import serializers
 
 from accounts.api import serializers as accounts_serializers
+from api.serializers import ReadOnlySerializer
 from projects import models as projects
 
 
@@ -15,15 +16,24 @@ class VersionReadSerializer(serializers.ModelSerializer):
         fields = ("hash", "author")
 
 
+class ProjectStatisticsSerializer(ReadOnlySerializer):
+    """Summary API representation for project relationship counts."""
+
+    target_count = serializers.IntegerField()
+    module_count = serializers.IntegerField()
+    test_count = serializers.IntegerField()
+
+
 class ProjectSummarySerializer(serializers.ModelSerializer):
-    """Summary API representation for Projects."""
+    """Summary API representation for projects."""
 
     id = hashid_field.HashidSerializerCharField(source_field="projects.Target.id")
     url = serializers.HyperlinkedIdentityField(view_name="api:project_detail", lookup_url_kwarg="project_id")
+    statistics = ProjectStatisticsSerializer()
 
     class Meta:  # noqa: D106
         model = projects.Project
-        fields = ("id", "name", "url", "repo_url")
+        fields = ("id", "name", "url", "repo_url", "statistics")
 
 
 class TargetSummarySerializer(serializers.ModelSerializer):
