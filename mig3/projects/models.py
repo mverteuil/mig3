@@ -29,7 +29,11 @@ class Project(TimeStampedModel):
     @property
     def statistics(self) -> ProjectStatistics:
         """Aggregate statistics about this project's relationships."""
-        # aggregates = {f"{key}_count": self.target_set.aggregate(.Count("id")}
+        module_count_aggregate = models.Count("id", distinct=True)
+        test_count_aggregate = models.Count("test__id", distinct=True)
+        aggregates = self.module_set.aggregate(module_count=module_count_aggregate, test_count=test_count_aggregate)
+        aggregates["target_count"] = self.target_set.count()
+        return ProjectStatistics(**aggregates)
 
 
 class Target(TimeStampedModel):

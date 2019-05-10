@@ -2,8 +2,7 @@ from django.db import IntegrityError
 
 import pytest
 
-from builds import models as builds
-from builds.models import TestResult
+from .. import models as builds
 
 
 def test_manager_create(target, version, builder_account, test_results):
@@ -54,7 +53,7 @@ def test_modules(build):
     assert set(build.modules) == set(build.target.project.module_set.all())
 
 
-@pytest.mark.parametrize("result", TestResult)
+@pytest.mark.parametrize("result", builds.TestResult)
 def test_outcome_summary(build, result):
     """Should produce outcome summary with accurate result counts."""
     assert build.outcome_summary is not None
