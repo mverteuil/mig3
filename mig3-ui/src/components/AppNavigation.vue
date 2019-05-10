@@ -45,7 +45,7 @@ export default {
       },
       {
         icon: "mdi-application-export",
-        name: "Builder Registration",
+        name: "Builders",
         href: null,
         route: { name: "builderAccounts" }
       },

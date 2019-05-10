@@ -4,13 +4,7 @@
       <span class="display-4 font-weight-black text-capitalize">Builders</span>
       <v-layout>
         <v-flex :key="builder.email" v-for="builder in builders" xs4>
-          <v-card
-            :to="{
-              name: 'builderAccounts',
-              params: { builderAccountId: builder.id }
-            }"
-            dark
-          >
+          <v-card dark>
             <v-sheet color="indigo darken-4">
               <v-card-title>
                 <v-flex>
@@ -27,7 +21,7 @@
                 <span class="icon-text">{{ builder.statistics.build_count }}</span>
               </div>
               <div>
-                <v-icon class="mdi-at vertical-middle">mdi-upload-network</v-icon>
+                <v-icon class="vertical-middle">mdi-upload-network</v-icon>
                 <span class="icon-text">{{ builder.statistics.version_count }}</span>
               </div>
             </v-card-actions>

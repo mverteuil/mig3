@@ -4,7 +4,7 @@
       <span class="display-4 font-weight-black text-capitalize">Users</span>
       <v-layout>
         <v-flex :key="user.email" v-for="user in users" xs4>
-          <v-card :to="{ name: 'users', params: { userAccountId: user.id } }" dark>
+          <v-card dark>
             <v-sheet color="red darken-4">
               <v-card-title>
                 <v-flex>
