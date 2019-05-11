@@ -1,20 +1,16 @@
 <template>
   <v-card class="detail-card" dark>
     <v-sheet color="detail-heading">
-      <v-card-text class="detail-value">{{ this.value }}</v-card-text>
+      <v-card-text class="detail-value">{{ value }}</v-card-text>
     </v-sheet>
     <v-card-title>
-      <span class="detail-field">{{ this.field }}</span>
+      <span class="detail-field">{{ field }}</span>
     </v-card-title>
   </v-card>
 </template>
 <script>
 export default {
   name: "BuildDetailCard",
-  data: () => ({
-    field: this.field,
-    value: this.value
-  }),
   props: {
     field: {
       type: String,

@@ -19,7 +19,7 @@ class ProjectStatistics:
 class Project(TimeStampedModel):
     """Project undergoing migration from a target to one or more other targets."""
 
-    id = HashidAutoField(primary_key=True, salt=settings.HASHID_SALTS["project.js.Project"])
+    id = HashidAutoField(primary_key=True, salt=settings.HASHID_SALTS["projects.Project"])
     name = models.CharField("Project Name", max_length=255)
     repo_url = models.URLField("Repository URL")
 
@@ -39,7 +39,7 @@ class Project(TimeStampedModel):
 class Target(TimeStampedModel):
     """Target configuration for a project."""
 
-    id = HashidAutoField(primary_key=True, salt=settings.HASHID_SALTS["project.js.Target"])
+    id = HashidAutoField(primary_key=True, salt=settings.HASHID_SALTS["projects.Target"])
     project = models.ForeignKey("projects.Project", on_delete=models.CASCADE)
     name = models.CharField("Target Name", max_length=255)
     python_major_version = models.PositiveIntegerField(default=3)

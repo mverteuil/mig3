@@ -1,7 +1,7 @@
 <template>
   <v-navigation-drawer app dark permanent width="260">
     <v-layout class="fill-height" column tag="v-list">
-      <v-list-tile :to="{ name: 'home' }" xs4>
+      <v-list-tile :to="{ name: 'Projects' }" xs4>
         <v-list-tile-action></v-list-tile-action>
         <v-list-tile-title class="title font-weight-black"
           >MIG3
@@ -35,19 +35,19 @@ export default {
         icon: "mdi-code-braces",
         name: "Projects",
         href: null,
-        route: { name: "projects" }
+        route: { name: "Projects" }
       },
       {
         icon: "mdi-account-box-multiple",
         name: "User Accounts",
         href: null,
-        route: { name: "userAccounts" }
+        route: { name: "Users" }
       },
       {
         icon: "mdi-application-export",
         name: "Builders",
         href: null,
-        route: { name: "builderAccounts" }
+        route: { name: "Builders" }
       },
       {
         icon: "mdi-chef-hat",

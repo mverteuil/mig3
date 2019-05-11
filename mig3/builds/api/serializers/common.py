@@ -24,10 +24,9 @@ class BuildSummarySerializer(ReadOnlySerializer, serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name="api:build_detail", lookup_url_kwarg="build_id")
     number = serializers.CharField()
     builder = account_serializers.BuilderAccountSerializer()
-    target = project_common_serializers.TargetSummarySerializer()
     version = project_common_serializers.VersionReadSerializer()
     outcome_summary = OutcomeSummarySerializer()
 
     class Meta:  # noqa: D106
         model = builds.Build
-        fields = ("id", "url", "target", "number", "version", "builder", "outcome_summary")
+        fields = ("id", "url", "number", "version", "builder", "outcome_summary")

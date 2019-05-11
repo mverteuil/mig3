@@ -1,14 +1,14 @@
 <template>
   <v-container>
     <breadcrumb-title :project="project" :target="this" />
-    <v-data-table :headers="headers" :items="builds" class="elevation-1" header-key="text" item-key="id">
-      <template v-slot:headers="props">
-        <th style="text-align:left" v-for="header in props.headers" v-bind:key="header" v-html="header"></th>
-      </template>
+    <v-data-table :headers="headers" :items="builds" class="elevation-1" header-key="text" item-key="id" hide-actions>
       <template v-slot:items="props">
         <router-link
-          :style="{ cursor: 'pointer' }"
-          :to="{ name: 'builds', params: { buildId: props.item.id } }"
+          :to="{
+            name: 'Project.Target.Build',
+            params: { projectId: project.id, targetId: id, buildId: props.item.id }
+          }"
+          style="cursor:pointer"
           tag="tr"
         >
           <td align="center">
@@ -36,10 +36,21 @@
 import BreadcrumbTitle from "@/components/BreadcrumbTitle";
 
 export default {
-  name: "ProjectTargetBuildList",
+  name: "ProjectTargetBuilds",
   components: { BreadcrumbTitle },
   data: () => ({
-    headers: ["", "Build", "Builder", "Commit", "Author", "Passed", "XFailed", "Failed", "Error", "Skipped"],
+    headers: [
+      { text: "", sortable: false },
+      { text: "Build", value: "number" },
+      { text: "Builder", value: "builder.name" },
+      { text: "Commit", value: "version.hash" },
+      { text: "Author", value: "version.author.email" },
+      { text: "Passed", value: "statistics.passed" },
+      { text: "Xfailed", value: "statistics.xfailed" },
+      { text: "Failed", value: "statistics.failed" },
+      { text: "Error", value: "statistics.error" },
+      { text: "Skipped", value: "statistics.skipped" }
+    ],
     id: "qL70nKe",
     url: "http://localhost:8000/api/targets/qL70nKe/",
     name: "python3.8",
@@ -53,17 +64,6 @@ export default {
       {
         id: "w6l2Rl5",
         url: "http://localhost:8000/api/builds/w6l2Rl5/",
-        target: {
-          id: "qL70nKe",
-          url: "http://localhost:8000/api/targets/qL70nKe/",
-          name: "python3.8",
-          python_major_version: 3,
-          python_minor_version: 8,
-          python_patch_version: 0,
-          additional_details: "",
-          full_version: "3.8.0",
-          python_version: "3.8.0"
-        },
         number: "2",
         version: {
           hash: "cbbab338e077b87d9fd169e63e832b7986e492f5",
@@ -93,17 +93,6 @@ export default {
       {
         id: "qL70nKe",
         url: "http://localhost:8000/api/builds/qL70nKe/",
-        target: {
-          id: "qL70nKe",
-          url: "http://localhost:8000/api/targets/qL70nKe/",
-          name: "python3.8",
-          python_major_version: 3,
-          python_minor_version: 8,
-          python_patch_version: 0,
-          additional_details: "",
-          full_version: "3.8.0",
-          python_version: "3.8.0"
-        },
         number: "1",
         version: {
           hash: "04d04ac04d62bb2952311c4e616ee96799e08592",

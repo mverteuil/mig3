@@ -2,14 +2,11 @@
   <v-container>
     <breadcrumb-title :project="{ id, name }" />
     <v-data-table :headers="headers" :items="targets" class="elevation-1" item-key="name">
-      <template v-slot:headers="props">
-        <th style="text-align:left" v-for="header in props.headers" v-bind:key="header" v-html="header"></th>
-      </template>
       <template v-slot:items="props">
         <router-link
           :style="{ cursor: 'pointer' }"
           :to="{
-            name: 'target',
+            name: 'Project.Target.Builds',
             params: { projectId: id, targetId: props.item.id }
           }"
           tag="tr"
@@ -34,7 +31,12 @@ export default {
   name: "ProjectTargetList",
   components: { BreadcrumbTitle },
   data: () => ({
-    headers: ["", "Target Name", "Python Version", "Full Version"],
+    headers: [
+      { text: null, sortable: false },
+      { text: "Target Name", value: "name" },
+      { text: "Python Version", value: "python_version" },
+      { text: "Full Version", value: "full_version" }
+    ],
     id: "qL70nKe",
     name: "mig3",
     url: "http://localhost:8000/api/projects/qL70nKe/",

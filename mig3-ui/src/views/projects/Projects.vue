@@ -4,7 +4,7 @@
       <span class="display-4 font-weight-black text-capitalize">Projects</span>
       <v-layout>
         <v-flex :key="project.id" v-for="project in projects" xs4>
-          <v-card :to="{ name: 'project', params: { projectId: project.id } }" dark>
+          <v-card :to="{ name: 'Project.Targets', params: { projectId: project.id } }" dark>
             <v-sheet color="red darken-2">
               <v-card-title>
                 <v-flex>

@@ -30,9 +30,6 @@
 <script>
 export default {
   name: "BuildTestModulesPanel",
-  data: () => ({
-    modules: this.modules
-  }),
   props: {
     modules: {
       type: Array,
