@@ -1,5 +1,5 @@
 <template>
-  <v-layout align-baseline>
+  <v-layout align-baseline elevation-24>
     <v-flex class="shrink display-4 font-weight-black text-capitalize">
       <router-link
         :to="{ name: 'Project.Targets', params: { projectId: project.id } }"
@@ -21,30 +21,22 @@
       <span v-else>Targets</span>
     </v-flex>
     <v-flex class="display-2 shrink text-uppercase" v-if="project && target">
-      <span v-if="target && number === null">Builds</span>
-      <span v-else>Build {{ number }}</span>
+      <span v-if="target && build === null">Builds</span>
+      <span v-else>Build {{ build.number }}</span>
     </v-flex>
   </v-layout>
 </template>
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "breadcrumb-title",
-  props: {
-    number: {
-      required: false,
-      type: String,
-      default: null
-    },
-    project: {
-      required: false,
-      type: Object,
-      default: null
-    },
-    target: {
-      required: false,
-      type: Object,
-      default: null
-    }
+  computed: {
+    ...mapState({
+      project: "selected.project",
+      target: "selected.target",
+      build: "selected.build"
+    })
   }
 };
 </script>

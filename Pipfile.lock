@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "ab3ab8df3dadf48f3d07a3f3a1fb37ddf4566ff083dd5b7597384baa1900caaa"
+            "sha256": "05715e62168847ef783f384740d1868fa0389e526e193bfb3c79d588a2b4ac35"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -64,6 +64,14 @@
             "git": "https://github.com/NewVadim/django-choices-enum.git",
             "ref": "b5578e049f705c7b47f0aa3d200889dd83302b87"
         },
+        "django-cors-headers": {
+            "hashes": [
+                "sha256:2876346858f7507ff7f1b3a159ae108b54c0902458ca0f9407760d28eb3029e5",
+                "sha256:f484f2cca7df29d3ce8cc74f4ddc00aedb7d3789e16fce9fb5d860d6ec1ebcf4"
+            ],
+            "index": "pypi",
+            "version": "==3.0.0"
+        },
         "django-extensions": {
             "hashes": [
                 "sha256:109004f80b6f45ad1f56addaa59debca91d94aa0dc1cb19678b9364b4fe9b6f4",
@@ -106,11 +114,11 @@
         },
         "djangorestframework": {
             "hashes": [
-                "sha256:1d22971a5fc98becdbbad9710ca2a9148dd339f6cbea4c3ddbed2cb84bab94e1",
-                "sha256:2884763160b997073ff1e937bd820a69d23978902a3ccd0ba53a217e196239f0"
+                "sha256:376f4b50340a46c15ae15ddd0c853085f4e66058f97e4dbe7d43ed62f5e60651",
+                "sha256:c12869cfd83c33d579b17b3cb28a2ae7322a53c3ce85580c2a2ebe4e3f56c4fb"
             ],
             "index": "pypi",
-            "version": "==3.9.3"
+            "version": "==3.9.4"
         },
         "drf-yasg": {
             "hashes": [
@@ -433,11 +441,11 @@
         },
         "pytest": {
             "hashes": [
-                "sha256:3773f4c235918987d51daf1db66d51c99fac654c81d6f2f709a046ab446d5e5d",
-                "sha256:b7802283b70ca24d7119b32915efa7c409982f59913c1a6c0640aacf118b95f5"
+                "sha256:136632a40451162cdfc18fe4d7ecc5d169b558a3d4bbb1603d4005308a42fd03",
+                "sha256:62b129bf8368554ca7a942cbdb57ea26aafef46cc65bc317cdac3967e54483a3"
             ],
             "index": "pypi",
-            "version": "==4.4.1"
+            "version": "==4.4.2"
         },
         "pytest-cov": {
             "hashes": [

@@ -12,7 +12,7 @@ INVALID_HTTP_METHODS = ("delete", "patch", "put", "post")
     (
         ("api:project_list", {}),
         ("api:project_detail", {"project_id": "qL70nKe"}),
-        ("api:target_build_list", {"target_id": "qL70nKe"}),
+        ("api:target_detail", {"target_id": "qL70nKe"}),
     ),
 )
 @pytest.mark.parametrize("view_method", INVALID_HTTP_METHODS)
@@ -29,7 +29,7 @@ def test_object_immutability(project, session_authentication, target, view_name,
     (
         ("api:project_list", {}),
         ("api:project_detail", {"project_id": "qL70nKe"}),
-        ("api:target_build_list", {"target_id": "qL70nKe"}),
+        ("api:target_detail", {"target_id": "qL70nKe"}),
     ),
 )
 def test_view_with_session(project, django_db_reset_sequences, session_authentication, target, view_name, view_kwargs):
@@ -45,7 +45,7 @@ def test_view_with_session(project, django_db_reset_sequences, session_authentic
     (
         ("api:project_list", {}),
         ("api:project_detail", {"project_id": "qL70nKe"}),
-        ("api:target_build_list", {"target_id": "qL70nKe"}),
+        ("api:target_detail", {"target_id": "qL70nKe"}),
     ),
 )
 def test_view_without_session(client, django_db_reset_sequences, project, target, view_name, view_kwargs):

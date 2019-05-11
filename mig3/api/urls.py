@@ -18,6 +18,5 @@ urlpatterns = [
     path("projects/<str:project_id>/", view=projects.ProjectDetailView.as_view(), name="project_detail"),
     path("swagger/", include(schema_patterns)),
     path("targets/<str:target_id>/", view=projects.TargetDetailView.as_view(), name="target_detail"),
-    path("targets/<str:target_id>/builds/", view=builds.TargetBuildListView.as_view(), name="target_build_list"),
     path("users/", view=accounts.UserAccountList.as_view(), name="user_account_list"),
 ]

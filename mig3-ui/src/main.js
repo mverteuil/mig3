@@ -3,7 +3,7 @@ import Vue from "vue";
 import "@/plugins/vuetify";
 import App from "@/App.vue";
 import router from "@/router/index";
-import store from "@/store";
+import store from "@/store/store";
 
 import "./assets/stylus/style.styl";
 
