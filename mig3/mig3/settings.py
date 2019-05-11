@@ -67,6 +67,7 @@ INSTALLED_APPS: list = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "corsheaders",
     "django_extensions",
     "django_fsm",
     "drf_yasg",
@@ -81,6 +82,7 @@ INSTALLED_APPS: list = [
 # https://docs.djangoproject.com/en/2.2/ref/settings/#middleware
 
 MIDDLEWARE: list = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -245,6 +247,18 @@ STATICFILES_DIRS: list = []
 # Third-party Settings
 # --------------------------------------------------------------------------------------------------------------------
 
+# Django CORS Headers
+# https://github.com/ottoyiu/django-cors-headers/
+
+# Whitelist
+# https://github.com/ottoyiu/django-cors-headers/#cors_origin_whitelist
+
+CORS_ORIGIN_WHITELIST = ["http://localhost:8000", "http://localhost:8080"]
+
+# Restrict Headers to matching regex
+# https://github.com/ottoyiu/django-cors-headers/#cors_urls_regex
+
+CORS_URLS_REGEX = r"^/api/.*$"
 
 # Hash ID Field
 # https://github.com/nshafer/django-hashid-field/

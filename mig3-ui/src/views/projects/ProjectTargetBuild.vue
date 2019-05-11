@@ -15,19 +15,17 @@
 <script>
 import BuildDetailCard from "@/components/BuildDetailCard";
 import BuildTestModulesPanel from "@/components/BuildTestModulesPanel";
-import BreadcrumbTitle from "@/components/BreadcrumbTitle";
-import { mapGetters } from "vuex";
+import { mapState } from "vuex";
 
 export default {
   name: "ProjectTargetBuildDetail",
   components: {
-    BreadcrumbTitle,
     BuildTestModulesPanel,
     BuildDetailCard
   },
   computed: {
-    ...mapGetters({
-      build: "selected.build"
+    ...mapState({
+      build: state => state.selected.build
     })
   }
 };

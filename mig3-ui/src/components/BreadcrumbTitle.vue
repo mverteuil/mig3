@@ -1,5 +1,5 @@
 <template>
-  <v-layout align-baseline elevation-24>
+  <v-layout align-baseline>
     <v-flex class="shrink display-4 font-weight-black text-capitalize">
       <router-link
         :to="{ name: 'Project.Targets', params: { projectId: project.id } }"
@@ -33,9 +33,9 @@ export default {
   name: "breadcrumb-title",
   computed: {
     ...mapState({
-      project: "selected.project",
-      target: "selected.target",
-      build: "selected.build"
+      project: state => state.selected.project,
+      target: state => state.selected.target,
+      build: state => state.selected.build
     })
   }
 };

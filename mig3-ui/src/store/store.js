@@ -33,12 +33,13 @@ export default new Vuex.Store({
     },
     async FETCH_BUILD({ commit }, { id }) {
       let response = await apiClient.getBuildDetails(id);
-      commit("RECEIVE_TARGET", response.data);
+      commit("RECEIVE_BUILD", response.data);
     }
   },
   mutations: {
     RECEIVE_BUILD(state, payload) {
-      state.selected = { project: payload.project, target: payload.target, build: payload };
+      const { project, target, ...build } = payload;
+      state.selected = { project: project, target: target, build: build };
       router.push({
         name: "Project.Target.Build",
         params: { projectId: payload.project.id, targetId: payload.target.id, buildId: payload.id }
@@ -46,18 +47,19 @@ export default new Vuex.Store({
     },
     RECEIVE_PROJECT(state, payload) {
       // eslint-disable-next-line no-console
-      console.log(payload);
-      state.selected = { project: payload, target: null, build: null };
-      state.targets = payload.targets;
-      router.push({ name: "Project.Targets", params: { projectId: payload.id } });
+      const { targets, ...project } = payload;
+      state.selected = { project: project, target: null, build: null };
+      state.targets = targets;
+      router.push({ name: "Project.Targets", params: { projectId: project.id } });
     },
     RECEIVE_PROJECTS(state, payload) {
       state.projects = payload;
     },
     RECEIVE_TARGET(state, payload) {
-      state.selected = { project: payload.project, target: payload, build: null };
-      state.builds = payload.builds;
-      router.push({ name: "Project.Target.Builds", params: { projectId: payload.project.id, targetId: payload.id } });
+      const { builds, project, ...target } = payload;
+      state.selected = { project: project, target: target, build: null };
+      state.builds = builds;
+      router.push({ name: "Project.Target.Builds", params: { projectId: project.id, targetId: target.id } });
     }
   }
 });

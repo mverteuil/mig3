@@ -19,6 +19,6 @@ export default {
     return client().get(URLS.GET_PROJECTS);
   },
   async getProjectDetails(projectId) {
-    return client().get(URLS.GET_PROJECT_DETAILS({ projectId }));
+    return client().get(URLS.GET_PROJECT_DETAILS({ projectId: projectId }));
   }
 };

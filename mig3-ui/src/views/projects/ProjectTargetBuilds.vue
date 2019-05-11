@@ -1,15 +1,8 @@
 <template>
   <v-container>
-    <v-data-table
-      :headers="headers"
-      :items="target.builds"
-      class="elevation-1"
-      header-key="text"
-      item-key="id"
-      hide-actions
-    >
+    <v-data-table :headers="headers" :items="builds" class="elevation-1" header-key="text" item-key="id" hide-actions>
       <template v-slot:items="props">
-        <router-link @click="setSelectedBuild(props.item)" style="cursor:pointer" tag="tr">
+        <tr @click="setSelectedBuild(props.item)" style="cursor:pointer">
           <td align="center">
             <v-icon color="green">mdi-shield-check</v-icon>
           </td>
@@ -26,18 +19,19 @@
           <td>{{ props.item.outcome_summary.failed }}</td>
           <td>{{ props.item.outcome_summary.error }}</td>
           <td>{{ props.item.outcome_summary.skipped }}</td>
-        </router-link>
+        </tr>
       </template>
     </v-data-table>
   </v-container>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapState } from "vuex";
 
 export default {
   name: "ProjectTargetBuilds",
   computed: {
-    ...mapGetters({
+    ...mapState({
+      builds: "builds",
       target: "selected.target"
     })
   },

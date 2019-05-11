@@ -1,7 +1,7 @@
 <template>
   <v-data-table :headers="headers" :items="targets" class="elevation-1" item-key="name">
     <template v-slot:items="props">
-      <router-link @click="setSelectedTarget(props.item)" :style="{ cursor: 'pointer' }" tag="tr">
+      <tr @click="setSelectedTarget(props.item)" :style="{ cursor: 'pointer' }">
         <td align="center">
           <v-icon>mdi-bullseye-arrow</v-icon>
         </td>
@@ -11,17 +11,18 @@
         </td>
         <td>{{ props.item.python_version }}</td>
         <td>{{ props.item.full_version }}</td>
-      </router-link>
+      </tr>
     </template>
   </v-data-table>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapState } from "vuex";
 
 export default {
   name: "ProjectTargetList",
   computed: {
-    ...mapGetters({
+    ...mapState({
+      project: "project",
       targets: "targets"
     })
   },
