@@ -1,8 +1,17 @@
-{% load staticfiles %}<!DOCTYPE html>
+{% load staticfiles %}
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <style>
       @import url(https://fonts.googleapis.com/css?family=Roboto:300);
+
+      .errorlist {
+        margin: 0;
+        padding: 1.5em 0;
+        list-style-type: none;
+        color: red;
+        font-weight: bold;
+      }
 
       .login-page {
         width: 360px;
@@ -13,12 +22,13 @@
       .form {
         position: relative;
         z-index: 1;
-        background: #FFFFFF;
+        background: #ffffff;
         max-width: 360px;
         margin: 0 auto 100px;
         padding: 45px;
         text-align: center;
-        box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+        box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2),
+          0 5px 5px 0 rgba(0, 0, 0, 0.24);
       }
 
       .form input {
@@ -37,19 +47,21 @@
         font-family: "Roboto", sans-serif;
         text-transform: uppercase;
         outline: 0;
-        background: #4CAF50;
+        background: #4caf50;
         width: 100%;
         border: 0;
         padding: 15px;
-        color: #FFFFFF;
+        color: #ffffff;
         font-size: 14px;
         -webkit-transition: all 0.3 ease;
         transition: all 0.3 ease;
         cursor: pointer;
       }
 
-      .form button:hover, .form button:active, .form button:focus {
-        background: #43A047;
+      .form button:hover,
+      .form button:active,
+      .form button:focus {
+        background: #43a047;
       }
 
       .form .message {
@@ -59,12 +71,13 @@
       }
 
       .form .message a {
-        color: #4CAF50;
+        color: #4caf50;
         text-decoration: none;
       }
 
       body {
         background: #76b852; /* fallback for old browsers */
+        /* prettier-ignore */
         background-image: url({% static "mig3-logo.png" %});
         background-position: top;
         font-family: "Roboto", sans-serif;
@@ -76,18 +89,35 @@
   <body>
     <div class="login-page">
       <div class="form">
-        <form id="login-form" class="login-form" method="post" action="{% url "login" %}">
+        <form
+          id="login-form"
+          class="login-form"
+          method="post"
+          action="{% url 'login' %}"
+        >
+          <h1>✈</h1>
           {% csrf_token %}
           <div>
-            <input name="username" required type="text" placeholder="username"/>
+            <input
+              name="username"
+              required
+              type="text"
+              placeholder="username"
+            />
             {{ form.username.errors }}
           </div>
           <div>
-            <input name="password" required type="password" placeholder="password"/>
+            <input
+              name="password"
+              required
+              type="password"
+              placeholder="password"
+            />
             {{ form.password.errors }}
           </div>
-          <input name="next" type="hidden" value="/projects/"/>
-          <input type="submit" value="Log in"/>
+          {{ form.non_field_errors }}
+          <input name="next" type="hidden" value="/" />
+          <input type="submit" value="Log in" />
         </form>
       </div>
     </div>

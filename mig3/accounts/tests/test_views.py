@@ -33,3 +33,29 @@ def test_object_immutability_with_session(session_authentication, view_name, vie
     url = reverse(view_name)
     response = getattr(api_client, view_method)(url)
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+
+
+def test_login(client, user_account, webpack_safe):
+    """Should create session for active users."""
+    url = reverse("login")
+    response = client.post(url, data={"username": user_account.email, "password": "password"}, follow=True)
+    assert response.status_code == status.HTTP_200_OK
+
+
+def test_login_without_account(client, db):
+    """Should require valid credentials to create login session."""
+    url = reverse("login")
+    response = client.post(url, data={"username": "user@example.com", "password": "password"})
+    assert response.status_code == status.HTTP_200_OK
+    assert "Please enter a correct Email Address" in str(response.content)
+
+
+def test_login_with_inactive_account(client, user_account):
+    """Should require active account to create login session."""
+    user_account.is_active = False
+    user_account.save()
+
+    url = reverse("login")
+    response = client.post(url, data={"username": user_account.email, "password": "password"}, follow=True)
+    assert response.status_code == status.HTTP_200_OK
+    assert "Please enter a correct Email Address" in str(response.content)

@@ -18,9 +18,13 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    CLEAR_SELECTED_PROJECT({ commit }) {
+      commit("SET_SELECTED", {});
+    },
     async FETCH_BUILD({ commit }, { id }) {
       let response = await apiClient.getBuildDetails(id);
-      commit("RECEIVE_BUILD", response.data);
+      const { project, target, ...build } = response.data;
+      commit("SET_SELECTED", { project, target, build });
     },
     async FETCH_BUILDERS({ commit }) {
       let response = await apiClient.getBuilders();
@@ -28,15 +32,20 @@ export default new Vuex.Store({
     },
     async FETCH_PROJECT({ commit }, { id }) {
       let response = await apiClient.getProjectDetails(id);
-      commit("RECEIVE_PROJECT", response.data);
+      const { targets, ...project } = response.data;
+      commit("RECEIVE_TARGETS", targets);
+      commit("SET_SELECTED", { project });
     },
     async FETCH_PROJECTS({ commit }) {
       let response = await apiClient.getProjects();
+      commit("SET_SELECTED", {});
       commit("RECEIVE_PROJECTS", response.data);
     },
     async FETCH_TARGET({ commit }, { id }) {
       let response = await apiClient.getTargetDetails(id);
-      commit("RECEIVE_TARGET", response.data);
+      const { builds, project, ...target } = response.data;
+      commit("RECEIVE_BUILDS", builds);
+      commit("SET_SELECTED", { project, target });
     },
     async FETCH_USERS({ commit }) {
       let response = await apiClient.getUsers();
@@ -44,28 +53,23 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    RECEIVE_BUILD(state, payload) {
-      const { project, target, ...build } = payload;
-      state.selected = { project: project, target: target, build: build };
+    RECEIVE_BUILDS(state, payload) {
+      state.builds = payload;
     },
     RECEIVE_BUILDERS(state, payload) {
       state.builders = payload;
     },
-    RECEIVE_PROJECT(state, payload) {
-      const { targets, ...project } = payload;
-      state.selected = { project: project, target: null, build: null };
-      state.targets = targets;
-    },
     RECEIVE_PROJECTS(state, payload) {
       state.projects = payload;
     },
-    RECEIVE_TARGET(state, payload) {
-      const { builds, project, ...target } = payload;
-      state.selected = { project: project, target: target, build: null };
-      state.builds = builds;
+    RECEIVE_TARGETS(state, payload) {
+      state.targets = payload;
     },
     RECEIVE_USERS(state, payload) {
       state.users = payload;
+    },
+    SET_SELECTED(state, { project, target, build }) {
+      state.selected = { project: project, target: target, build: build };
     }
   }
 });

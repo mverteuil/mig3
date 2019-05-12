@@ -1,5 +1,5 @@
 <template>
-  <v-layout row>
+  <v-layout row align-bottom>
     <v-flex class="shrink display-4 font-weight-black text-capitalize">
       <router-link
         :to="{ name: 'Project.Targets', params: { projectId: project.id } }"
@@ -21,8 +21,8 @@
       <span v-else>Targets</span>
     </v-flex>
     <v-flex class="display-2 shrink text-uppercase" v-if="project && target">
-      <span v-if="target && build === null">Builds</span>
-      <span v-else>Build {{ build.number }}</span>
+      <span v-if="target && build">Build {{ build.number }}</span>
+      <span v-else>Builds</span>
     </v-flex>
   </v-layout>
 </template>
