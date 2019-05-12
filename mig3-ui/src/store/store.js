@@ -1,6 +1,5 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import router from "@/router/index";
 import apiClient from "@/services/api";
 
 Vue.use(Vuex);
