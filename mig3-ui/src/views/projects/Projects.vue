@@ -1,6 +1,10 @@
 <template>
-  <v-layout row wrap>
-    <ProjectCard :project="project" :key="project.id" v-for="project in projects" />
+  <v-layout row wrapx>
+    <v-container fluid grid-list-lg align-content-start pl-1>
+      <v-layout row wrap>
+        <ProjectCard :project="project" :key="project.id" v-for="project in projects" />
+      </v-layout>
+    </v-container>
   </v-layout>
 </template>
 <script>

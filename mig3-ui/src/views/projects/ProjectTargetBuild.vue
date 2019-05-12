@@ -1,10 +1,10 @@
 <template>
-  <v-layout column-xs tag="v-container">
-    <v-flex md6 xs12>
+  <v-layout row>
+    <v-flex xs12 lg6>
       <v-container class="title">Test Modules</v-container>
       <build-test-modules-panel :modules="build.modules" />
     </v-flex>
-    <v-flex column ml-3 xs3>
+    <v-flex xs12 lg5 offset-lg1>
       <v-container class="title">Build Details</v-container>
       <build-detail-card :value="build.version.hash.substr(0, 8)" field="Commit Hash" />
       <build-detail-card :value="build.builder.name" field="Builder" />
