@@ -13,14 +13,14 @@ class ProjectListView(generics.ListAPIView):
     serializer_class = serializers.ProjectSummarySerializer
 
 
-class ProjectTargetListView(generics.ListAPIView):
-    """List Project Targets."""
+class ProjectDetailView(generics.RetrieveAPIView):
+    """Retrieve Project Details."""
 
     authentication_classes = (authentication.SessionAuthentication,)
-    lookup_field = "project"
+    lookup_url_kwarg = "project_id"
     permission_classes = (permissions.IsAuthenticated,)
-    queryset = projects.Target.objects.all()
-    serializer_class = serializers.TargetSummarySerializer
+    queryset = projects.Project.objects.all()
+    serializer_class = serializers.ProjectSerializer
 
 
 class TargetDetailView(generics.RetrieveAPIView):

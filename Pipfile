@@ -26,6 +26,7 @@ drf-yasg = "*"
 gitpython = "*"
 psycopg2-binary = "*"
 python-dotenv = "*"
+django-cors-headers = "*"
 
 [requires]
 python_version = "3.7"

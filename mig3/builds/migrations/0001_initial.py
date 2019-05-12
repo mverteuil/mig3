@@ -12,7 +12,6 @@ import builds.models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [("projects", "0001_initial"), ("accounts", "0001_initial")]
@@ -79,7 +78,7 @@ class Migration(migrations.Migration):
                     "result",
                     django_fsm.FSMIntegerField(
                         choices=[(0, "Error"), (1, "Failed"), (2, "Passed"), (3, "Skipped"), (4, "XFailed")],
-                        default=builds.models.TestOutcome.Results(0),
+                        default=builds.models.TestResult(0),
                         protected=True,
                     ),
                 ),

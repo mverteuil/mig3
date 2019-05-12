@@ -1,8 +1,19 @@
+from dataclasses import dataclass
+
 from django.conf import settings
 from django.db import models
 
 from hashid_field import HashidAutoField
 from model_utils.models import TimeStampedModel
+
+
+@dataclass
+class ProjectStatistics:
+    """Aggregated Project Statistics."""
+
+    target_count: int
+    module_count: int
+    test_count: int
 
 
 class Project(TimeStampedModel):
@@ -14,6 +25,15 @@ class Project(TimeStampedModel):
 
     def __str__(self) -> str:
         return f"{self.name} | {self.repo_url} ({self.id})"
+
+    @property
+    def statistics(self) -> ProjectStatistics:
+        """Aggregate statistics about this project's relationships."""
+        module_count_aggregate = models.Count("id", distinct=True)
+        test_count_aggregate = models.Count("test__id", distinct=True)
+        aggregates = self.module_set.aggregate(module_count=module_count_aggregate, test_count=test_count_aggregate)
+        aggregates["target_count"] = self.target_set.count()
+        return ProjectStatistics(**aggregates)
 
 
 class Target(TimeStampedModel):

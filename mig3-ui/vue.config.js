@@ -1,8 +1,7 @@
 const BundleTracker = require("webpack-bundle-tracker");
 
 module.exports = {
-  publicPath:
-    process.env.NODE_ENV === "production" ? "/" : "http://0.0.0.0:8080/",
+  publicPath: process.env.NODE_ENV === "production" ? "/" : "http://0.0.0.0:8080/",
   outputDir: "./dist/",
 
   chainWebpack: config => {
@@ -10,10 +9,7 @@ module.exports = {
 
     config.plugin("BundleTracker").use(BundleTracker, [
       {
-        filename:
-          process.env.NODE_ENV === "production"
-            ? "../mig3/webpack-stats.json"
-            : "./dist/webpack-stats.json"
+        filename: process.env.NODE_ENV === "production" ? "../mig3/webpack-stats.json" : "./dist/webpack-stats.json"
       }
     ]);
 

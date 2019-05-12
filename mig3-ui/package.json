@@ -10,11 +10,13 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0-rc.1",
+    "axios": "^0.18.0",
     "core-js": "^2.6.5",
+    "lodash.template": "^4.4.0",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
     "vuetify": "^1.5.5",
-    "vuex": "^3.0.1"
+    "vuex": "^3.1.1"
   },
   "devDependencies": {
     "@mdi/font": "^3.6.95",
@@ -26,7 +28,6 @@
     "@vue/test-utils": "1.0.0-beta.29",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
-    "babel-jest": "^23.6.0",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "stylus": "^0.54.5",
@@ -53,6 +54,9 @@
     "plugins": {
       "autoprefixer": {}
     }
+  },
+  "prettier": {
+    "printWidth": 120
   },
   "browserslist": [
     "> 1%",
