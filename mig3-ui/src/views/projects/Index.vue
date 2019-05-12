@@ -1,12 +1,14 @@
 <template>
-  <v-container>
-    <breadcrumb-title />
-    <router-view />
-  </v-container>
+  <v-layout column grid-list-lg tag="v-container">
+    <v-flex>
+      <project-breadcrumb-title />
+      <router-view />
+    </v-flex>
+  </v-layout>
 </template>
 <script>
-import BreadcrumbTitle from "@/components/BreadcrumbTitle";
+import ProjectBreadcrumbTitle from "@/components/ProjectBreadcrumbTitle";
 export default {
-  components: { BreadcrumbTitle }
+  components: { ProjectBreadcrumbTitle }
 };
 </script>

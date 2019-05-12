@@ -1,5 +1,5 @@
 <template>
-  <v-layout align-baseline>
+  <v-layout row>
     <v-flex class="shrink display-4 font-weight-black text-capitalize">
       <router-link
         :to="{ name: 'Project.Targets', params: { projectId: project.id } }"
@@ -30,7 +30,7 @@
 import { mapState } from "vuex";
 
 export default {
-  name: "breadcrumb-title",
+  name: "ProjectBreadcrumbTitle",
   computed: {
     ...mapState({
       project: state => state.selected.project,

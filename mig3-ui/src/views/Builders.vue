@@ -32,19 +32,22 @@
   </v-layout>
 </template>
 <script>
+import { mapState } from "vuex";
+
 export default {
-  name: "BuilderAccountList",
-  data: () => ({
-    builders: [
-      {
-        id: "qL70nKe",
-        name: "Travis-CI",
-        statistics: {
-          build_count: 3,
-          version_count: 2
-        }
-      }
-    ]
-  })
+  name: "Builders",
+  computed: {
+    ...mapState({
+      builders: "builders"
+    })
+  },
+  methods: {
+    fetchBuilders() {
+      return this.$store.dispatch("FETCH_BUILDERS");
+    }
+  },
+  mounted() {
+    this.fetchBuilders();
+  }
 };
 </script>

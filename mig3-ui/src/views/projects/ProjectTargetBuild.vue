@@ -27,6 +27,15 @@ export default {
     ...mapState({
       build: state => state.selected.build
     })
+  },
+  methods: {
+    fetchBuild() {
+      this.$store.dispatch("FETCH_BUILD", { id: this.$route.params.buildId });
+    },
+    shortHash: hash => hash.substr(0, 8)
+  },
+  mounted() {
+    this.fetchBuild();
   }
 };
 </script>

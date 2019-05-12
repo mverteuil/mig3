@@ -1,13 +1,11 @@
 <template>
-  <v-flex column grid-list-lg>
-    <v-layout>
-      <ProjectCard :project="project" :key="project.id" v-for="project in projects" />
-    </v-layout>
-  </v-flex>
+  <v-layout row wrap>
+    <ProjectCard :project="project" :key="project.id" v-for="project in projects" />
+  </v-layout>
 </template>
 <script>
 import { mapState } from "vuex";
-import ProjectCard from "@/views/projects/ProjectCard";
+import ProjectCard from "@/components/ProjectCard";
 
 export default {
   name: "ProjectList",

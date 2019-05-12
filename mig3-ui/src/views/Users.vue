@@ -32,31 +32,28 @@
   </v-layout>
 </template>
 <script>
+import { mapState } from "vuex";
+
 export default {
-  name: "UserAccountList",
-  data: () => ({
-    users: [
-      {
-        id: "E0lrPbR",
-        email: "jwood@hotmail.com",
-        name: "Joshua Wood",
-        build_count: 1
-      },
-      {
-        id: "qL70nKe",
-        email: "mverteuil@github.com",
-        name: "",
-        build_count: 0
-      }
-    ]
-  }),
+  name: "Users",
+  computed: {
+    ...mapState({
+      users: "users"
+    })
+  },
   methods: {
+    fetchUsers() {
+      return this.$store.dispatch("FETCH_USERS");
+    },
     getUserAvatar(user) {
       return this.getNameOrEmailUsername(user).substr(0, 1);
     },
     getNameOrEmailUsername(user) {
       return user.name ? user.name : user.email.split("@")[0];
     }
+  },
+  mounted() {
+    this.fetchUsers();
   }
 };
 </script>

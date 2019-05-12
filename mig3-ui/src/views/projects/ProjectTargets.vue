@@ -1,7 +1,11 @@
 <template>
   <v-data-table :headers="headers" :items="targets" class="elevation-1" item-key="name">
     <template v-slot:items="props">
-      <tr @click="setSelectedTarget(props.item)" :style="{ cursor: 'pointer' }">
+      <router-link
+        :style="{ cursor: 'pointer' }"
+        :to="{ name: 'Project.Target.Builds', params: { projectId: project.id, targetId: props.item.id } }"
+        tag="tr"
+      >
         <td align="center">
           <v-icon>mdi-bullseye-arrow</v-icon>
         </td>
@@ -11,7 +15,7 @@
         </td>
         <td>{{ props.item.python_version }}</td>
         <td>{{ props.item.full_version }}</td>
-      </tr>
+      </router-link>
     </template>
   </v-data-table>
 </template>
@@ -22,7 +26,7 @@ export default {
   name: "ProjectTargetList",
   computed: {
     ...mapState({
-      project: "project",
+      project: state => state.selected.project,
       targets: "targets"
     })
   },
@@ -49,9 +53,12 @@ export default {
     };
   },
   methods: {
-    setSelectedTarget({ id }) {
-      this.$store.dispatch("FETCH_TARGET", { id });
+    fetchProject() {
+      this.$store.dispatch("FETCH_PROJECT", { id: this.$route.params.projectId });
     }
+  },
+  mounted() {
+    this.fetchProject();
   }
 };
 </script>
