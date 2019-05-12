@@ -22,7 +22,7 @@
         </v-list-tile-content>
       </v-list-tile>
       <v-spacer class="fill-height" />
-      <v-btn>Logout</v-btn>
+      <v-btn href="/logout/">Logout</v-btn>
     </v-layout>
   </v-navigation-drawer>
 </template>

@@ -241,7 +241,7 @@ STATIC_URL: str = "/static/"
 # Additional paths to to traverse if FileSystemFinder is enabled
 # https://docs.djangoproject.com/en/2.2/ref/settings/#staticfiles-dirs
 
-STATICFILES_DIRS: list = []
+STATICFILES_DIRS: list = [BASE_DIR / "assets"]
 
 # --------------------------------------------------------------------------------------------------------------------
 # Third-party Settings
