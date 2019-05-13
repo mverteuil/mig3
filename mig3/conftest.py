@@ -1,10 +1,12 @@
-from typing import Tuple
+from typing import Callable, Tuple
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.test import SimpleTestCase
 
 import pytest
 from rest_framework.test import APIClient
+from webpack_loader.loader import WebpackLoader
 
 from accounts import models as accounts
 from builds import models as builds
@@ -24,10 +26,22 @@ def api_client() -> APIClient:
 
 
 @pytest.fixture
+def assert_redirects() -> Callable:
+    """Provide redirect assertion."""
+    return SimpleTestCase().assertRedirects
+
+
+@pytest.fixture
 def bearer_authentication(api_client, builder_account) -> Tuple[APIClient, accounts.BuilderAccount]:
     """Create a test client and BuilderAccount authenticated by bearer token."""
     api_client.credentials(HTTP_AUTHORIZATION=f"Bearer {builder_account.token}")
     return api_client, builder_account
+
+
+@pytest.fixture
+def webpack_safe(monkeypatch):
+    """Patch webpack for views that interact with it."""
+    monkeypatch.setattr(WebpackLoader, "get_bundle", lambda loader, bundle_name: [])
 
 
 @pytest.fixture

@@ -1,35 +1,37 @@
 <template>
-  <v-container>
-    <v-data-table :headers="headers" :items="builds" class="elevation-1" header-key="text" item-key="id" hide-actions>
-      <template v-slot:items="props">
-        <router-link
-          :to="{
-            name: 'Project.Target.Build',
-            params: { projectId: project.id, targetId: target.id, buildId: props.item.id }
-          }"
-          style="cursor:pointer"
-          tag="tr"
-        >
-          <td align="center">
-            <v-icon color="green">mdi-shield-check</v-icon>
-          </td>
-          <td class="flow">
-            {{ props.item.number }}
-            <br />
-            <span class="font-weight-light">{{ props.item.id }}</span>
-          </td>
-          <td>{{ props.item.builder.name }}</td>
-          <td>{{ shortHash(props.item.version.hash) }}</td>
-          <td>{{ props.item.version.author.email }}</td>
-          <td>{{ props.item.outcome_summary.passed }}</td>
-          <td>{{ props.item.outcome_summary.xfailed }}</td>
-          <td>{{ props.item.outcome_summary.failed }}</td>
-          <td>{{ props.item.outcome_summary.error }}</td>
-          <td>{{ props.item.outcome_summary.skipped }}</td>
-        </router-link>
-      </template>
-    </v-data-table>
-  </v-container>
+  <v-layout fluid row>
+    <v-flex xs12>
+      <v-data-table :headers="headers" :items="builds" class="elevation-1" header-key="text" item-key="id" hide-actions>
+        <template v-slot:items="props">
+          <router-link
+            :to="{
+              name: 'Project.Target.Build',
+              params: { projectId: project.id, targetId: target.id, buildId: props.item.id }
+            }"
+            style="cursor:pointer"
+            tag="tr"
+          >
+            <td align="center">
+              <v-icon color="green">mdi-shield-check</v-icon>
+            </td>
+            <td class="flow">
+              {{ props.item.number }}
+              <br />
+              <span class="font-weight-light">{{ props.item.id }}</span>
+            </td>
+            <td>{{ props.item.builder.name }}</td>
+            <td>{{ shortHash(props.item.version.hash) }}</td>
+            <td>{{ props.item.version.author.email }}</td>
+            <td>{{ props.item.outcome_summary.passed }}</td>
+            <td>{{ props.item.outcome_summary.xfailed }}</td>
+            <td>{{ props.item.outcome_summary.failed }}</td>
+            <td>{{ props.item.outcome_summary.error }}</td>
+            <td>{{ props.item.outcome_summary.skipped }}</td>
+          </router-link>
+        </template>
+      </v-data-table>
+    </v-flex>
+  </v-layout>
 </template>
 <script>
 import { mapState } from "vuex";

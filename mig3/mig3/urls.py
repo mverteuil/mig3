@@ -17,10 +17,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path, re_path
-from django.views.generic import TemplateView
+
+from accounts import views as accounts
+from bridge import views as bridge
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include(("api.urls", "api"))),
-    re_path(".*", TemplateView.as_view(template_name="index.html")),
+    path("login/", accounts.LoginView.as_view(), name="login"),
+    path("logout/", accounts.LogoutView.as_view(), name="logout"),
+    re_path(".*", bridge.BridgeView.as_view(), name="bridge"),
 ]

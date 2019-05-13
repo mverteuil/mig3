@@ -74,6 +74,7 @@ INSTALLED_APPS: list = [
     "rest_framework",
     "webpack_loader",
     "accounts",
+    "bridge",
     "builds",
     "projects",
 ]
@@ -181,12 +182,12 @@ AUTH_PASSWORD_VALIDATORS: list = [
 # Login URL route name
 # https://docs.djangoproject.com/en/2.2/ref/settings/#login-url
 
-LOGIN_URL: str = "admin:login"
+LOGIN_URL: str = "login"
 
 # Post-login redirect URL route name
 # https://docs.djangoproject.com/en/2.2/ref/settings/#login-redirect-url
 
-LOGIN_REDIRECT_URL: str = "projects"
+LOGIN_REDIRECT_URL: str = "bridge"
 
 # Post-logout redirect URL route name
 # https://docs.djangoproject.com/en/2.2/topics/auth/default/#django.contrib.auth.views.LogoutView
@@ -241,7 +242,7 @@ STATIC_URL: str = "/static/"
 # Additional paths to to traverse if FileSystemFinder is enabled
 # https://docs.djangoproject.com/en/2.2/ref/settings/#staticfiles-dirs
 
-STATICFILES_DIRS: list = []
+STATICFILES_DIRS: list = [BASE_DIR / "assets"]
 
 # --------------------------------------------------------------------------------------------------------------------
 # Third-party Settings

@@ -5,6 +5,7 @@
         :style="{ cursor: 'pointer' }"
         :to="{ name: 'Project.Target.Builds', params: { projectId: project.id, targetId: props.item.id } }"
         tag="tr"
+        v-if="project"
       >
         <td align="center">
           <v-icon>mdi-bullseye-arrow</v-icon>
