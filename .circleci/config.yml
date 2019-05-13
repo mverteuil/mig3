@@ -1,0 +1,21 @@
+version: 2.1
+# ---------------------
+# Validate Vue.js build
+# ---------------------
+jobs:
+  build:
+    docker:
+      - image: circleci/node:12.1-browsers
+    working_directory: ~/code
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "mig3-ui/package.json" }}
+            - v1-dependencies-
+      - run: cd mig3-ui && yarn install
+      - save_cache:
+          paths:
+            - mig3-ui/node_modules
+          key: v1-dependencies-{{ checksum "mig3-ui/package.json" }}
+      - run: cd mig3-ui && yarn build
