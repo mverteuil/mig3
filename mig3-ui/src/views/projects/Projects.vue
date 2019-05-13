@@ -1,5 +1,5 @@
 <template>
-  <v-layout row wrapx>
+  <v-layout row wrap>
     <v-container fluid grid-list-lg align-content-start pl-1>
       <v-layout row wrap>
         <ProjectCard :project="project" :key="project.id" v-for="project in projects" />
