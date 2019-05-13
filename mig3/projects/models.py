@@ -26,6 +26,10 @@ class Project(TimeStampedModel):
     def __str__(self) -> str:
         return f"{self.name} | {self.repo_url} ({self.id})"
 
+    def get_absolute_url(self):
+        """Generate URL path to project view."""
+        return f"/projects/{self.id}/targets"
+
     @property
     def statistics(self) -> ProjectStatistics:
         """Aggregate statistics about this project's relationships."""
@@ -73,6 +77,9 @@ class Module(TimeStampedModel):
         "Module Path", max_length=511, help_text="Project root-relative filesystem path to test module."
     )
 
+    class Meta:  # noqa: D106
+        ordering = ("path",)
+
     def __str__(self) -> str:
         return self.path
 
@@ -83,6 +90,9 @@ class Test(TimeStampedModel):
     module = models.ForeignKey("projects.Module", on_delete=models.CASCADE)
     name = models.CharField("Test Name", max_length=511, help_text="Name of test routine.")
 
+    class Meta:  # noqa: D106
+        ordering = ("name",)
+
     def __str__(self) -> str:
         return f"{self.module.path}::{self.name}"
 
@@ -90,7 +100,7 @@ class Test(TimeStampedModel):
 class Version(TimeStampedModel):
     """Version of codebase for Project at Build time."""
 
-    hash = models.CharField("Commit Hash", max_length=63, help_text="Git commit hash as hexadecimal.")
+    hash = models.CharField("Commit Hash", unique=True, max_length=63, help_text="Git commit hash as hexadecimal.")
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self) -> str:

@@ -1,10 +1,18 @@
 <template>
-  <v-expansion-panel>
+  <v-expansion-panel v-if="modules">
     <v-expansion-panel-content v-bind:key="module.path" v-for="module in modules">
       <template v-slot:actions>
         <v-layout align-center>
-          <v-avatar class="green align-center darken-3 white--text" size="25">10</v-avatar>
-          <v-spacer />
+          <v-flex mr-1>
+            <v-avatar class="grey align-center darken-2 white--text " size="30">{{
+              getOtherTestResultCount(module)
+            }}</v-avatar>
+          </v-flex>
+          <v-flex mr-3>
+            <v-avatar class="green align-center darken-2 white--text" size="30">{{
+              getPassedTestResultCount(module)
+            }}</v-avatar>
+          </v-flex>
           <v-icon color="primary">$vuetify.icons.expand</v-icon>
         </v-layout>
       </template>
@@ -15,12 +23,19 @@
         </v-layout>
       </template>
       <v-card>
-        <v-card-text class="grey lighten-3">
+        <v-card-text class="grey darken-2">
           <v-list>
-            <v-list-tile v-bind:key="test.name" v-for="test in module.tests">
-              <code>{{ test.name }}</code>
-              <v-icon>{{ getResultIcon(test.result) }}</v-icon>
-            </v-list-tile>
+            <template v-for="(test, index) in module.tests">
+              <v-list-tile :key="test.name">
+                <v-list-tile-content>
+                  <code>{{ test.name }}</code>
+                </v-list-tile-content>
+                <v-list-tile-action>
+                  <v-icon>{{ getResultIcon(test.result) }}</v-icon>
+                </v-list-tile-action>
+              </v-list-tile>
+              <v-divider v-if="index + 1 < module.tests.length" :key="index"></v-divider>
+            </template>
           </v-list>
         </v-card-text>
       </v-card>
@@ -37,6 +52,12 @@ export default {
     }
   },
   methods: {
+    getOtherTestResultCount(module) {
+      return module.tests.length - this.getPassedTestResultCount(module);
+    },
+    getPassedTestResultCount(module) {
+      return module.tests.filter(t => t.result === "passed").length;
+    },
     getResultIcon(result) {
       if (result === "PASSED") {
         return "mdi-checkbox-marked-circle";

@@ -1,10 +1,10 @@
 <template>
   <v-layout row>
-    <v-flex xs12 lg6>
+    <v-flex xs12 lg6 v-if="build && build.modules">
       <v-container class="title">Test Modules</v-container>
       <build-test-modules-panel :modules="build.modules" />
     </v-flex>
-    <v-flex xs12 lg5 offset-lg1>
+    <v-flex xs12 lg5 offset-lg1 v-if="build">
       <v-container class="title">Build Details</v-container>
       <build-detail-card :value="build.version.hash.substr(0, 8)" field="Commit Hash" />
       <build-detail-card :value="build.builder.name" field="Builder" />
@@ -18,7 +18,7 @@ import BuildTestModulesPanel from "@/components/BuildTestModulesPanel";
 import { mapState } from "vuex";
 
 export default {
-  name: "ProjectTargetBuildDetail",
+  name: "ProjectTargetBuild",
   components: {
     BuildTestModulesPanel,
     BuildDetailCard
