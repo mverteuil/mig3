@@ -99,19 +99,21 @@
           {% csrf_token %}
           <div>
             <input
+              aria-label="User Email Address"
               name="username"
               required
               type="text"
-              placeholder="username"
+              placeholder="Email Address"
             />
             {{ form.username.errors }}
           </div>
           <div>
             <input
+              aria-label="Password"
               name="password"
               required
               type="password"
-              placeholder="password"
+              placeholder="Password"
             />
             {{ form.password.errors }}
           </div>
