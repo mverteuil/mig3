@@ -71,12 +71,12 @@ INSTALLED_APPS: list = [
     "django_extensions",
     "django_fsm",
     "drf_yasg",
-    "rest_framework",
-    "webpack_loader",
-    "accounts",
-    "bridge",
-    "builds",
-    "projects",
+    "rest_framework.apps.RestFrameworkConfig",
+    "webpack_loader.apps.WebpackLoaderConfig",
+    "accounts.apps.AccountsConfig",
+    "bridge.apps.BridgeConfig",
+    "builds.apps.BuildsConfig",
+    "projects.apps.ProjectsConfig",
 ]
 
 # Middleware
