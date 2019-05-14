@@ -13,8 +13,7 @@ services:
     environment:
       DATABASE_URL: "postgres://postgres:postgres@db:5432/postgres"
     volumes:
-      - ./mig3:/code/mig3
-      - ./mig3-ui/dist:/code/mig3-ui/dist
+      - .:/code
     ports:
       - 8000:8000
     depends_on:
@@ -22,10 +21,9 @@ services:
       - mig3-ui
   mig3-ui:
     build: mig3-ui
-    command: yarn serve
+    command: ./serve.sh
     volumes:
-      - ./mig3-ui:/code
-      - ./mig3-ui/dist:/code/mig3-ui/dist
+      - ./mig3-ui:/code/
     ports:
       - 8080:8080
 
