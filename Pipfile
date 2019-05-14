@@ -4,7 +4,6 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-barbara = "*"
 graphviz = "*"
 isort = "*"
 pytest = "*"
@@ -13,6 +12,7 @@ pytest-datadir = "*"
 pytest-django = "*"
 
 [packages]
+barbara = "*"
 dj-database-url = "*"
 django = "*"
 django-choices-enum = {git = "https://github.com/NewVadim/django-choices-enum.git",ref = "0.3"}

@@ -4,6 +4,7 @@
 [![Codacy Quality Badge](https://api.codacy.com/project/badge/Grade/79079a3fa54e49d4b6cfee5f3451737e)](https://www.codacy.com/app/mverteuil/mig3?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=mverteuil/mig3&amp;utm_campaign=Badge_Grade)
 [![Codacy Coverage Badge](https://api.codacy.com/project/badge/Coverage/79079a3fa54e49d4b6cfee5f3451737e)](https://www.codacy.com/app/mverteuil/mig3?utm_source=github.com&utm_medium=referral&utm_content=mverteuil/mig3&utm_campaign=Badge_Coverage)
 [![Build Status](https://travis-ci.com/mverteuil/mig3.svg?branch=master)](https://travis-ci.com/mverteuil/mig3)
+[![CircleCI](https://circleci.com/gh/mverteuil/mig3.svg?style=svg)](https://circleci.com/gh/mverteuil/mig3)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmverteuil%2Fmig3.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmverteuil%2Fmig3?ref=badge_shield)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/python/black)
 
@@ -11,27 +12,65 @@
 
 -   [mig3-client](https://github.com/mverteuil/mig3-client): Submit your results to this service.
 
-## Production Requirements
+## Deployment Methods
+
+| *Name*                    | Standard | Skeleton |
+|---------------------------|:--------:|:--------:|
+| Prevents Regressions      |     ✈    |     ✈    |
+| Python3 Required          |     ✈    |     ✈    |
+| Node Required             |     ✈    |          |
+| Admin User Interface      |     ✈    |     ✈    |
+| Standard User Interface   |     ✈    |          |
+| Stylish and Cool          |     ✈    |          |
+| People Will Like You†     |     ✈    |          |
+
+*†* Probably not true
+
+## Production Dependency Suggestions
+
+You may find success running with earlier versions of these dependencies, but these are the ideal set which the project
+was designed to be supported by:
+
+### Standard Dependencies
 
 -   Python 3.7+
--   Pipenv
+-   Pip 19+
+-   PostgreSQL 11+
+-   Node 12+
+-   Yarn 1.16+
+
+### Skeleton Dependencies
+
+-   Python 3.7+
+-   Pip 19+
+-   Pipenv 2018.11.26+
 -   PostgreSQL 11+
 
+---
+
 ## Production Installation
+
+### Standard Installation
+
+```zsh
+git clone https://github.com/mverteuil/mig3.git .
+make install
+```
+
+### Skeleton Installation
 
 ```zsh
 git clone https://github.com/mverteuil/mig3.git .
 pipenv install --deploy
-pipenv run barb  # Or "barb-deploy -z" in advanced AWS configuration
-pipenv run python mig3/manage.py migrate
-pipenv run python mig3/manage.py createsuperuser --email <your@email.address>
-pip install gunicorn  # or preferred alternative
+pipenv run pip install gunicorn
 ```
+
+---
 
 ## Development Requirements
 
--   All production requirements
--   Docker (optional, but helpful)
+-   All standard production requirements
+-   Docker
 -   Pre-Commit 1.15+
 
 ## Development Installation
@@ -42,6 +81,7 @@ pre-commit install
 pipenv install --dev
 pipenv shell
 barb -z
+cd mig3-ui && yarn install && yarn build && cd ..
 docker-compose up --detach  # or without "--detach" in another terminal session
 python mig3/manage.py migrate
 python mig3/manage.py createsuperuser --email <your@email.address>
