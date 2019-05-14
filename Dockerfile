@@ -13,9 +13,5 @@ RUN pip install pipenv==2018.11.26
 COPY Pipfile Pipfile.lock /code/
 RUN pipenv install --system --dev
 
-# Generate environment variables if they don't already exist
-COPY .env.yml /code/
-RUN barb -z
-
 # Copy project root
 COPY . /code/

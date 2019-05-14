@@ -14,7 +14,7 @@ run:
 	source .venv/bin/activate && cd mig3 && gunicorn mig3.wsgi
 
 dev-install:
-	docker-compose up
+	docker-compose up --build
 
 install: mig3-ui/node_modules mig3-ui/dist .venv
 	source .venv/bin/activate && pip install pipenv==2018.11.26 && pipenv install --deploy

@@ -9,7 +9,7 @@ services:
       - "5432:5432"
   mig3:
     build: .
-    command: python mig3/manage.py runserver 0.0.0.0:8000
+    command: ./runserver.sh
     environment:
       DATABASE_URL: "postgres://postgres:postgres@db:5432/postgres"
     volumes:
