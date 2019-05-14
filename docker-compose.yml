@@ -7,17 +7,27 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     ports:
       - "5432:5432"
-  web:
+  mig3:
     build: .
     command: python mig3/manage.py runserver 0.0.0.0:8000
     environment:
       DATABASE_URL: "postgres://postgres:postgres@db:5432/postgres"
     volumes:
-      - .:/code
+      - ./mig3:/code/mig3
+      - ./mig3-ui/dist:/code/mig3-ui/dist
     ports:
       - 8000:8000
     depends_on:
       - db
+      - mig3-ui
+  mig3-ui:
+    build: mig3-ui
+    command: yarn serve
+    volumes:
+      - ./mig3-ui:/code
+      - ./mig3-ui/dist:/code/mig3-ui/dist
+    ports:
+      - 8080:8080
 
 volumes:
   postgres_data:

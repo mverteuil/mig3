@@ -31,17 +31,18 @@
 You may find success running with earlier versions of these dependencies, but these are the ideal set which the project
 was designed to be supported by:
 
-### Standard
+### Standard Dependencies
 
 -   Python 3.7+
--   Pipenv 2018.11.26+
+-   Pip 19+
 -   PostgreSQL 11+
 -   Node 12+
 -   Yarn 1.16+
 
-### Skeleton
+### Skeleton Dependencies
 
 -   Python 3.7+
+-   Pip 19+
 -   Pipenv 2018.11.26+
 -   PostgreSQL 11+
 
@@ -49,17 +50,27 @@ was designed to be supported by:
 
 ## Production Installation
 
-### Standard
+### Standard Installation
 
 ```zsh
 git clone https://github.com/mverteuil/mig3.git .
 make install
 ```
 
+### Skeleton Installation
+
+```zsh
+git clone https://github.com/mverteuil/mig3.git .
+pipenv install --deploy
+pipenv run pip install gunicorn
+```
+
+---
+
 ## Development Requirements
 
--   All production requirements
--   Docker (optional, but helpful)
+-   All standard production requirements
+-   Docker
 -   Pre-Commit 1.15+
 
 ## Development Installation
@@ -70,6 +81,7 @@ pre-commit install
 pipenv install --dev
 pipenv shell
 barb -z
+cd mig3-ui && yarn install && yarn build && cd ..
 docker-compose up --detach  # or without "--detach" in another terminal session
 python mig3/manage.py migrate
 python mig3/manage.py createsuperuser --email <your@email.address>
