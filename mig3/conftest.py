@@ -14,6 +14,12 @@ from projects import models as projects
 
 
 @pytest.fixture
+def admin_user(db) -> settings.AUTH_USER_MODEL:
+    """Create a superuser account."""
+    return get_user_model().objects.create_superuser(email="admin@example.com", password="password")
+
+
+@pytest.fixture
 def another_version(version) -> projects.Version:
     """Create a second Version from the original Version's author."""
     return version.author.version_set.create(hash="b2" * 20)
