@@ -21,7 +21,7 @@ class AccountsConfig(AppConfig):
 def check_for_missing_administrator_account(app_configs, **kwargs):
     """Check for an existing administrator account and provide a bootstrapping URL if missing."""
     errors = []
-    user_model = apps.get_model("accounts", "UserAccount", require_ready=True)
+    user_model = apps.get_model("accounts", model_name="UserAccount", require_ready=True)
     try:
         if not user_model.objects.filter(is_superuser=True).count() > 0:
             host = "http://localhost:8000" if settings.DEBUG else "https://your-site.heroku.com"
