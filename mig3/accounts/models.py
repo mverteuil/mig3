@@ -20,9 +20,11 @@ class UserAccountManager(BaseUserManager):
         if not email:
             raise ValueError("Email is a required field.")
         email = self.normalize_email(email)
+        commit = extra_fields.pop("commit", True)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
-        user.save(using=self._db)
+        if commit:
+            user.save(using=self._db)
         return user
 
     def create_user(self, email: str, password: str = None, **extra_fields: dict) -> "UserAccount":

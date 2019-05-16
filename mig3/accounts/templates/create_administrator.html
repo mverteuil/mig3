@@ -1,0 +1,164 @@
+{% load staticfiles %}<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script type="application/javascript">
+      var password = document.getElementById("password"),
+        confirm_password = document.getElementById("confirm_password");
+
+      function validatePassword() {
+        if (password.value != confirm_password.value) {
+          confirm_password.setCustomValidity("Passwords Don't Match");
+        } else {
+          confirm_password.setCustomValidity("");
+        }
+      }
+
+      password.onchange = validatePassword;
+      confirm_password.onkeyup = validatePassword;
+    </script>
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Roboto:300);
+
+      .errorlist {
+        margin: 0;
+        padding: 1.5em 0;
+        list-style-type: none;
+        color: red;
+        font-weight: bold;
+      }
+
+      .create-admin-page {
+        width: 360px;
+        padding: 8% 0 0;
+        margin: auto;
+      }
+
+      .form {
+        position: relative;
+        z-index: 1;
+        background: #ffffff;
+        max-width: 360px;
+        margin: 0 auto 100px;
+        padding: 45px;
+        text-align: center;
+        box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2),
+          0 5px 5px 0 rgba(0, 0, 0, 0.24);
+      }
+
+      .form input {
+        font-family: "Roboto", sans-serif;
+        outline: 0;
+        background: #f2f2f2;
+        width: 100%;
+        border: 0;
+        margin: 0 0 15px;
+        padding: 15px;
+        box-sizing: border-box;
+        font-size: 14px;
+      }
+
+      .form button {
+        font-family: "Roboto", sans-serif;
+        text-transform: uppercase;
+        outline: 0;
+        background: #4caf50;
+        width: 100%;
+        border: 0;
+        padding: 15px;
+        color: #ffffff;
+        font-size: 14px;
+        -webkit-transition: all 0.3 ease;
+        transition: all 0.3 ease;
+        cursor: pointer;
+      }
+
+      .form button:hover,
+      .form button:active,
+      .form button:focus {
+        background: #43a047;
+      }
+
+      .form .message {
+        margin: 15px 0 0;
+        color: #b3b3b3;
+        font-size: 12px;
+      }
+
+      .form .message a {
+        color: #4caf50;
+        text-decoration: none;
+      }
+
+      body {
+        background: darkred; /* fallback for old browsers */
+        /* prettier-ignore */
+        background-image: url({% static "mig3-logo.png" %});
+        background-position: top;
+        font-family: "Roboto", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="create-admin-page">
+      <div class="form">
+        <form
+          id="admin-form"
+          class="admin-form"
+          method="post"
+          action="{{ form_action }}"
+        >
+          <h1>✈ Create Administrator</h1>
+          {% csrf_token %}
+          <div>
+            <input
+              aria-label="Administrator Email Address"
+              name="email"
+              required
+              type="text"
+              placeholder="Administrator Email Address"
+            />
+            {{ form.email.errors }}
+          </div>
+          <div>
+            <input
+              aria-label="Administrator Name"
+              name="name"
+              required
+              type="text"
+              placeholder="Administrator Name"
+            />
+            {{ form.name.errors }}
+          </div>
+          <div>
+            <input
+              aria-label="Administrator Password"
+              name="password1"
+              required
+              type="password"
+              placeholder="Administrator Password"
+            />
+            {{ form.password1.errors }}
+          </div>
+          <div>
+            <input
+              aria-label="Confirm Administrator Password"
+              name="password2"
+              required
+              type="password"
+              placeholder="Confirm Administrator Password"
+            />
+            {{ form.password2.errors }}
+          </div>
+          {{ form.non_field_errors }}
+          <input
+            aria-label="Create Administrator"
+            type="submit"
+            value="Create Administrator"
+          />
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

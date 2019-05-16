@@ -26,5 +26,6 @@ urlpatterns = [
     path("api/", include(("api.urls", "api"))),
     path("login/", accounts.LoginView.as_view(), name="login"),
     path("logout/", accounts.LogoutView.as_view(), name="logout"),
+    re_path(r"^create-admin-(?P<secret>.*)/$", accounts.CreateAdministratorView.as_view(), name="create_admin"),
     re_path(".*", bridge.BridgeView.as_view(), name="bridge"),
 ]

@@ -41,6 +41,12 @@ TEMPLATES_DIR: Path = BACKEND_DIR / "templates"
 
 SECRET_KEY: str = getenv("SECRET_KEY")
 
+# Secret URL Salt
+# Used as an additional security layer when generating the secret URL displayed in the console on first run to create
+# the initial superuser account.
+
+SECRET_URL_SALT: str = getenv("SECRET_URL_SALT", "secret sauce")
+
 # Debug
 # https://docs.djangoproject.com/en/2.2/ref/settings/#debug
 # SECURITY WARNING: don't run with debug turned on in production!
