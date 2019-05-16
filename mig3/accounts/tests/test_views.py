@@ -1,3 +1,6 @@
+from unittest import mock
+
+from django.contrib.auth import get_user_model
 from django.urls import reverse
 
 import pytest
@@ -59,3 +62,32 @@ def test_login_with_inactive_account(client, user_account):
     response = client.post(url, data={"username": user_account.email, "password": "password"}, follow=True)
     assert response.status_code == status.HTTP_200_OK
     assert "Please enter a correct Email Address" in str(response.content)
+
+
+@mock.patch("accounts.views.URLSignature")
+def test_administrator_view_guard_with_valid_signature(patched_signatures, client):
+    """Should allow user to visit administrator form with valid signature."""
+    url = reverse("create_admin", kwargs={"secret": "valid signature"})
+    patched_signatures.validate_signature.return_value = True
+    response = client.get(url)
+    assert response.status_code == status.HTTP_200_OK
+
+
+@mock.patch("accounts.views.URLSignature")
+def test_administrator_view_guard_with_invalid_signature(patched_signatures, client):
+    """Should refuse to visit administrator form with invalid signature."""
+    url = reverse("create_admin", kwargs={"secret": "invalid signature"})
+    patched_signatures.validate_signature.return_value = False
+    response = client.get(url)
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+
+
+@mock.patch("accounts.views.URLSignature")
+def test_administrator_create_view(patched_signatures, client, db):
+    """Should allow user to create administrator with valid signature."""
+    url = reverse("create_admin", kwargs={"secret": ""})
+    response = client.post(
+        url, data={"email": "admin@example.com", "name": "Test Administrator", "password": "password"}
+    )
+    assert response.status_code == status.HTTP_200_OK
+    assert get_user_model()
