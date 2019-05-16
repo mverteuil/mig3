@@ -2,7 +2,7 @@ import logging
 
 from django.apps import AppConfig, apps
 from django.conf import settings
-from django.core.checks import Warning, register
+from django.core import checks
 from django.db import ProgrammingError
 from django.urls import reverse
 
@@ -17,7 +17,7 @@ class AccountsConfig(AppConfig):
     name = "accounts"
 
 
-@register()
+@checks.register()
 def check_for_missing_administrator_account(app_configs, **kwargs):
     """Check for an existing administrator account and provide a bootstrapping URL if missing."""
     errors = []
@@ -27,7 +27,7 @@ def check_for_missing_administrator_account(app_configs, **kwargs):
             host = "http://localhost:8000" if settings.DEBUG else "https://your-site.heroku.com"
             create_admin_url = reverse("create_admin", kwargs={"secret": URLSignature.generate_signature()})
             errors.append(
-                Warning(
+                checks.Warning(
                     f"Please visit this URL and create your administrator account: {host}{create_admin_url}",
                     id="accounts.W001",
                     obj=user_model,
