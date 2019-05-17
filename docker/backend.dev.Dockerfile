@@ -15,4 +15,4 @@ RUN pipenv install --system --dev
 
 # Copy project root
 COPY . docker/runserver.sh /code/
-CMD /code/runserver.sh
+CMD /code/docker/runserver.sh
