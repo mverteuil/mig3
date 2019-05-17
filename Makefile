@@ -16,6 +16,7 @@ release:
 	.venv/bin/python mig3/manage.py migrate
 
 run:
+	source .venv/bin/activate && cd mig3 && DJANGO_SETTINGS_MODULE=mig3.settings python manage.py check
 	source .venv/bin/activate && cd mig3 && DJANGO_SETTINGS_MODULE=mig3.settings gunicorn mig3.wsgi
 
 dev-install:
@@ -23,7 +24,6 @@ dev-install:
 
 install: mig3-ui/dist .venv
 	source .venv/bin/activate && pip install pipenv==2018.11.26 && pipenv install --deploy
-	source .venv/bin/activate && pip install gunicorn
 	source .venv/bin/activate && barb -z
 
 clean:
