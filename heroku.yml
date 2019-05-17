@@ -9,5 +9,4 @@ release:
   command:
     - make release
 run:
-  command:
-    - make run
+  web: make run
