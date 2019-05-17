@@ -28,8 +28,6 @@ COPY . /code/
 
 # Install UI
 COPY --from=UI /code/dist /code/mig3-ui/dist
-RUN ln /bin/echo /bin/yarn
-RUN touch /code/mig3-ui/node_modules
 
 # Install dependencies
 RUN pip install pipenv==2018.11.26
