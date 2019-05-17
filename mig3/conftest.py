@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.test import SimpleTestCase
 
 import pytest
+from model_mommy import mommy
 from rest_framework.test import APIClient
 from webpack_loader.loader import WebpackLoader
 
@@ -51,30 +52,36 @@ def webpack_safe(monkeypatch):
 
 
 @pytest.fixture
-def build(db, target, version, builder_account, test_results) -> builds.Build:
-    """Create a fully populated Build.
+def primary_build(db, primary_target, version, builder_account, test_results) -> builds.Build:
+    """Create a fully populated Build for Primary Target.
 
     Includes: Project, Target, BuilderAccount, Modules, Tests, TestOutcomes
     """
-    return builds.Build.objects.create_build("1", target, version, builder_account, test_results)
+    return builds.Build.objects.create_build("1", primary_target, version, builder_account, test_results)
 
 
 @pytest.fixture
 def builder_account(db) -> accounts.BuilderAccount:
     """Create a BuilderAccount."""
-    return accounts.BuilderAccount.objects.create(name="Test CI Service")
+    return mommy.make("accounts.BuilderAccount", name="Test CI Service")
+
+
+@pytest.fixture
+def primary_target(project) -> projects.Target:
+    """Create a Primary Target."""
+    return project.target_set.create(name="Primary Target")
 
 
 @pytest.fixture
 def project(db) -> projects.Project:
     """Create a Project."""
-    return projects.Project.objects.create(name="Test Project")
+    return mommy.make("projects.Project", name="Test Project")
 
 
 @pytest.fixture
-def user_account(db) -> settings.AUTH_USER_MODEL:
-    """Create a UserAccount."""
-    return get_user_model().objects.create_user(name="Test User", email="user@example.com", password="password")
+def secondary_target(project) -> projects.Target:
+    """Create a Secondary Target."""
+    return project.target_set.create(name="Secondary Target")
 
 
 @pytest.fixture
@@ -82,13 +89,6 @@ def session_authentication(api_client, user_account) -> Tuple[APIClient, setting
     """Create a test client and UserAccount authenticated by session."""
     api_client.login(username=user_account.email, password="password")
     return api_client, user_account
-
-
-@pytest.fixture
-def target(db) -> projects.Target:
-    """Create a Project and Target."""
-    project = projects.Project.objects.create(name="Test Project")
-    return project.target_set.create(name="Test Target")
 
 
 @pytest.fixture
@@ -106,6 +106,12 @@ def test_results() -> builds.DeserializedResultList:
         {"module": "tests/test_example02.py", "test": "test_skipped", "result": builds.TestResult.SKIPPED},
         {"module": "tests/test_example02.py", "test": "test_xfailed", "result": builds.TestResult.XFAILED},
     ]
+
+
+@pytest.fixture
+def user_account(db) -> settings.AUTH_USER_MODEL:
+    """Create a UserAccount."""
+    return get_user_model().objects.create_user(name="Test User", email="user@example.com", password="password")
 
 
 @pytest.fixture

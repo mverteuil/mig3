@@ -16,21 +16,21 @@ def test_current_builder_account(db):
     assert value_builder() == expected_value
 
 
-def test_build_summary_serializer(build):
+def test_build_summary_serializer(primary_build):
     """Should produce summary serialized Build on the happy path."""
     context = {"request": mock.Mock(name="request", GET={})}
-    serializer = serializers.BuildSummarySerializer(instance=build, context=context)
+    serializer = serializers.BuildSummarySerializer(instance=primary_build, context=context)
     assert serializer.data is not None
 
 
-def test_build_read_serializer(build):
+def test_build_read_serializer(primary_build):
     """Should produce serialized Build on the happy path."""
     context = {"request": mock.Mock(name="request", GET={})}
-    serializer = serializers.BuildReadSerializer(instance=build, context=context)
+    serializer = serializers.BuildReadSerializer(instance=primary_build, context=context)
     assert serializer.data is not None
 
 
-def test_build_write_serializer_create(builder_account, django_db_reset_sequences, serialized_build, target):
+def test_build_write_serializer_create(builder_account, django_db_reset_sequences, serialized_build, primary_target):
     """Should produce Build with incoming serialized build request data."""
     context = {"request": mock.Mock(name="request", auth=builder_account)}
     serializer = serializers.BuildWriteSerializer(data=serialized_build, context=context)
@@ -39,10 +39,10 @@ def test_build_write_serializer_create(builder_account, django_db_reset_sequence
 
 
 def test_build_write_serializer_create_with_duplicate(
-    build, builder_account, django_db_reset_sequences, serialized_build, target
+    primary_build, builder_account, django_db_reset_sequences, serialized_build, primary_target
 ):
     """Should refuse duplicate builds."""
-    assert build.number == serialized_build["number"]
+    assert primary_build.number == serialized_build["number"]
     context = {"request": mock.Mock(name="request", auth=builder_account)}
     serializer = serializers.BuildWriteSerializer(data=serialized_build, context=context)
     assert serializer.is_valid(raise_exception=True)
@@ -51,7 +51,7 @@ def test_build_write_serializer_create_with_duplicate(
 
 
 def test_build_write_serializer_create_with_regression(
-    builder_account, django_db_reset_sequences, serialized_build, serialized_build_regression, target
+    builder_account, django_db_reset_sequences, serialized_build, serialized_build_regression, primary_target
 ):
     """Should refuse to create regressive builds."""
     context = {"request": mock.Mock(name="request", auth=builder_account)}
@@ -65,10 +65,12 @@ def test_build_write_serializer_create_with_regression(
         assert regression_serializer.save()
 
 
-def test_build_write_serializer_update(build, builder_account, django_db_reset_sequences, serialized_build, target):
+def test_build_write_serializer_update(
+    primary_build, builder_account, django_db_reset_sequences, serialized_build, primary_target
+):
     """Should refuse update operations on Builds."""
     context = {"request": mock.Mock(name="request", auth=builder_account)}
-    serializer = serializers.BuildWriteSerializer(data=serialized_build, instance=build, context=context)
+    serializer = serializers.BuildWriteSerializer(data=serialized_build, instance=primary_build, context=context)
     assert serializer.is_valid()
     with pytest.raises(MethodNotAllowed):
         serializer.save()

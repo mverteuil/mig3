@@ -5,7 +5,7 @@ import pytest
 
 
 @pytest.fixture
-def project_with_tests(project, target):
+def project_with_tests(project, primary_target):
     """Create a Project with Target, Modules and Tests."""
     for module_index in range(5):
         module = project.module_set.create(path=f"test_path/test_module{module_index}")

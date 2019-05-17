@@ -4,7 +4,9 @@ import pytest
 from rest_framework import status
 
 
-def test_build_list_view_post_with_bearer(django_db_reset_sequences, bearer_authentication, serialized_build, target):
+def test_build_list_view_post_with_bearer(
+    django_db_reset_sequences, bearer_authentication, serialized_build, primary_target
+):
     """Should accept post requests authenticated by bearer token."""
     client, builder_account = bearer_authentication
     url = reverse("api:build_list")
@@ -13,7 +15,7 @@ def test_build_list_view_post_with_bearer(django_db_reset_sequences, bearer_auth
 
 
 def test_build_list_view_delete_with_session(
-    django_db_reset_sequences, session_authentication, serialized_build, target
+    django_db_reset_sequences, session_authentication, serialized_build, primary_target
 ):
     """Should refuse delete requests authenticated by session key."""
     client, builder_account = session_authentication
@@ -22,7 +24,9 @@ def test_build_list_view_delete_with_session(
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
-def test_build_list_view_post_with_session(django_db_reset_sequences, session_authentication, serialized_build, target):
+def test_build_list_view_post_with_session(
+    django_db_reset_sequences, session_authentication, serialized_build, primary_target
+):
     """Should refuse post requests authenticated by session key."""
     client, builder_account = session_authentication
     url = reverse("api:build_list")
@@ -30,17 +34,17 @@ def test_build_list_view_post_with_session(django_db_reset_sequences, session_au
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
-def test_build_detail_view_with_session(build, session_authentication):
+def test_build_detail_view_with_session(primary_build, session_authentication):
     """Should return serialized result."""
     client, user_account = session_authentication
-    url = reverse("api:build_detail", kwargs={"build_id": build.pk})
+    url = reverse("api:build_detail", kwargs={"build_id": primary_build.pk})
     response = client.get(url)
     assert response.status_code == status.HTTP_200_OK
 
 
-def test_build_detail_view_without_session(build, client):
+def test_build_detail_view_without_session(primary_build, client):
     """Should refuse unauthenticated request."""
-    url = reverse("api:build_detail", kwargs={"build_id": build.pk})
+    url = reverse("api:build_detail", kwargs={"build_id": primary_build.pk})
     response = client.get(url)
     assert response.status_code == status.HTTP_403_FORBIDDEN
 
@@ -59,7 +63,7 @@ BUILD_DETAIL_INVALID_HTTP_METHODS = ("delete", "patch", "put", "post")
         ("api:build_detail", {"build_id": "qL70nKe"}, BUILD_DETAIL_INVALID_HTTP_METHODS),
     ),
 )
-def test_object_immutability_with_session(build, session_authentication, view_name, view_kwargs, view_methods):
+def test_object_immutability_with_session(primary_build, session_authentication, view_name, view_kwargs, view_methods):
     """Should refuse invalid object operations with session authentication."""
     api_client, _ = session_authentication
     url = reverse(view_name, kwargs=view_kwargs)

@@ -18,17 +18,17 @@ def test_project_serializer(project):
     assert serializer.data is not None
 
 
-def test_target_summary_serializer(target):
+def test_target_summary_serializer(primary_target):
     """Should produce summary serialized Target on the happy path."""
     context = {"request": mock.Mock(name="request", GET={})}
-    serializer = projects.api.serializers.common.TargetSummarySerializer(instance=target, context=context)
+    serializer = projects.api.serializers.common.TargetSummarySerializer(instance=primary_target, context=context)
     assert serializer.data is not None
 
 
-def test_target_serializer(target):
+def test_target_serializer(primary_target):
     """Should produce serialized Target on the happy path."""
     context = {"request": mock.Mock(name="request", GET={})}
-    serializer = serializers.TargetSerializer(instance=target, context=context)
+    serializer = serializers.TargetSerializer(instance=primary_target, context=context)
     assert serializer.data is not None
 
 
