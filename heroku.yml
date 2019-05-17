@@ -8,5 +8,4 @@ build:
 release:
   command:
     - make release
-run:
-  web: make run
+  image: web
