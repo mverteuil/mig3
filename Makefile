@@ -1,4 +1,6 @@
-.PHONY = clean dev-install install run
+.PHONY = clean dev-install install release run
+
+SHELL := /bin/bash
 
 
 mig3-ui/node_modules:
@@ -10,17 +12,19 @@ mig3-ui/dist: mig3-ui/node_modules
 .venv:
 	python3 -m venv .venv
 
+release:
+	.venv/bin/python mig3/manage.py migrate
+
 run:
-	source .venv/bin/activate && cd mig3 && gunicorn mig3.wsgi
+	source .venv/bin/activate && gunicorn mig3.wsgi
 
 dev-install:
 	docker-compose up --build
 
-install: mig3-ui/node_modules mig3-ui/dist .venv
+install: mig3-ui/dist .venv
 	source .venv/bin/activate && pip install pipenv==2018.11.26 && pipenv install --deploy
 	source .venv/bin/activate && pip install gunicorn
 	source .venv/bin/activate && barb -z
-	.venv/bin/python mig3/manage.py migrate
 
 clean:
 	rm -rf .venv/
