@@ -56,7 +56,7 @@ DEBUG: bool = getenv_boolean("DEBUG", False)
 # Allowed Hosts
 # https://docs.djangoproject.com/en/2.2/ref/settings/#allowed-hosts
 
-ALLOWED_HOSTS: list = getenv_list("ALLOWED_HOSTS")
+ALLOWED_HOSTS: list = getenv_list("ALLOWED_HOSTS", [])
 
 # Sites Framework
 # https://docs.djangoproject.com/en/2.2/ref/contrib/sites/#enabling-the-sites-framework

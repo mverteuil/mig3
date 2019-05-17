@@ -6,6 +6,7 @@
   "website": "https://mverteuil.github.io/mig3/",
   "repository": "https://github.com/mverteuil/mig3/",
   "env": {
+    "DISABLE_COLLECTSTATIC": {},
     "SECRET_KEY": {
       "description": "Django's secret key for cryptographic operations.",
       "generator": "secret"
