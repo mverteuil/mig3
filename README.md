@@ -89,15 +89,15 @@ cd mig3-ui
 yarn install
 ```
 then,
-```
+```zsh
 make devserver  # build and start detatched containers
 ```
 or
-```
+```zsh
 make run-dev  # build and start containers in console
 ```
 or
-```
+```zsh
 make devserver-db  # Start only the database
 ```
 It's recommended that you validate your installation at this point by confirming that linters and tests are passing as expected:
