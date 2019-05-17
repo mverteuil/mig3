@@ -22,5 +22,16 @@
         "version": "11"
       }
     }
+  ],
+  "engines": {
+    "yarn": "1.16.0"
+  },
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    },
+    {
+      "url": "heroku/python"
+    }
   ]
 }
