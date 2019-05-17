@@ -19,9 +19,8 @@ dev-install:
 install: mig3-ui/node_modules mig3-ui/dist .venv
 	source .venv/bin/activate && pip install pipenv==2018.11.26 && pipenv install --deploy
 	source .venv/bin/activate && pip install gunicorn
-	source .venv/bin/activate && barb
+	source .venv/bin/activate && barb -z
 	.venv/bin/python mig3/manage.py migrate
-	.venv/bin/python mig3/manage.py createsuperuser
 
 clean:
 	rm -rf .venv/
