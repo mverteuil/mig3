@@ -7,9 +7,11 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     ports:
       - 15432:5432
-  mig3:
-    build: .
-    command: ./runserver.sh
+  backend:
+    build:
+      context: .
+      dockerfile: docker/backend.dev.Dockerfile
+    command: ./docker/runserver.sh
     environment:
       DATABASE_URL: "postgres://postgres:postgres@db:5432/postgres"
     volumes:
@@ -18,14 +20,18 @@ services:
       - 8000:8000
     depends_on:
       - db
-      - mig3-ui
-  mig3-ui:
-    build: mig3-ui
-    command: ./serve.sh
+      - frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/frontend.dev.Dockerfile
     volumes:
-      - ./mig3-ui:/code/
+      - ./mig3-ui/dist:/code/dist
+      - ./mig3-ui/public:/code/public
+      - ./mig3-ui/src:/code/src
     ports:
       - 8080:8080
+    command: yarn serve
 
 volumes:
   postgres_data:

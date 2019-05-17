@@ -13,6 +13,7 @@ from distutils.util import strtobool
 from pathlib import Path
 
 import dj_database_url
+import django_heroku
 import dotenv
 
 # Environment variable utilities
@@ -56,7 +57,7 @@ DEBUG: bool = getenv_boolean("DEBUG", False)
 # Allowed Hosts
 # https://docs.djangoproject.com/en/2.2/ref/settings/#allowed-hosts
 
-ALLOWED_HOSTS: list = getenv_list("ALLOWED_HOSTS")
+ALLOWED_HOSTS: list = getenv_list("ALLOWED_HOSTS", [])
 
 # Sites Framework
 # https://docs.djangoproject.com/en/2.2/ref/contrib/sites/#enabling-the-sites-framework
@@ -318,3 +319,9 @@ SWAGGER_SETTINGS: dict = {
     # https://drf-yasg.readthedocs.io/en/stable/security.html?highlight=Bearer#security-definitions
     "SECURITY_DEFINITIONS": {"Bearer": {"type": "apiKey", "name": "Authorization", "in": "header"}}
 }
+
+# Activate Django-Heroku in production
+# https://devcenter.heroku.com/articles/django-app-configuration
+
+if getenv_boolean("HEROKU", False):
+    django_heroku.settings(locals())

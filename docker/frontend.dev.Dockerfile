@@ -5,8 +5,9 @@ FROM node:12.2-stretch
 WORKDIR /code
 
 # Install dependencies
-COPY package.json yarn.lock /code/
+COPY mig3-ui/package.json mig3-ui/yarn.lock /code/
 RUN yarn install
 
 # Copy project root
-COPY . /code/
+COPY mig3-ui /code/
+CMD yarn serve

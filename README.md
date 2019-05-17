@@ -53,10 +53,7 @@ was designed to be supported by:
 
 ### Standard Installation
 
-```zsh
-git clone https://github.com/mverteuil/mig3.git .
-make install
-```
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 ### Skeleton Installation
 
@@ -76,18 +73,33 @@ pipenv run pip install gunicorn
 
 ## Development Installation
 
+If you're simply interested in running mig3 locally to play around with it:
+```zsh
+git clone https://github.com/mverteuil/mig3.git .
+make run-dev
+```
+
+What follows are the instructions for getting started with actual mig3 development:
+
 ```zsh
 git clone https://github.com/mverteuil/mig3.git .
 pre-commit install
-pipenv install --dev
-pipenv shell
-barb -z
-cd mig3-ui && yarn install && yarn build && cd ..
-docker-compose up --detach  # or without "--detach" in another terminal session
-python mig3/manage.py migrate
-python mig3/manage.py createsuperuser --email <your@email.address>
+pipenv install
+cd mig3-ui
+yarn install
 ```
-
+then,
+```zsh
+make devserver  # build and start detatched containers
+```
+or
+```zsh
+make run-dev  # build and start containers in console
+```
+or
+```zsh
+make devserver-db  # Start only the database
+```
 It's recommended that you validate your installation at this point by confirming that linters and tests are passing as expected:
 
 ```zsh
