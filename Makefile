@@ -16,7 +16,7 @@ release:
 	.venv/bin/python mig3/manage.py migrate
 
 run:
-	source .venv/bin/activate && gunicorn mig3.mig3.wsgi
+	source .venv/bin/activate && cd mig3 && DJANGO_SETTINGS_MODULE=mig3.settings gunicorn mig3.wsgi
 
 dev-install:
 	docker-compose up --build
