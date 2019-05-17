@@ -10,3 +10,4 @@ release:
     - make release
 run:
   command:
+    - make run
