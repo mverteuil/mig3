@@ -13,6 +13,7 @@ from distutils.util import strtobool
 from pathlib import Path
 
 import dj_database_url
+import django_heroku
 import dotenv
 
 # Environment variable utilities
@@ -318,3 +319,8 @@ SWAGGER_SETTINGS: dict = {
     # https://drf-yasg.readthedocs.io/en/stable/security.html?highlight=Bearer#security-definitions
     "SECURITY_DEFINITIONS": {"Bearer": {"type": "apiKey", "name": "Authorization", "in": "header"}}
 }
+
+# Activate Django-Heroku in production
+# https://devcenter.heroku.com/articles/django-app-configuration
+
+django_heroku.settings(locals())

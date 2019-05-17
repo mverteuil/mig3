@@ -27,6 +27,8 @@ gitpython = "*"
 psycopg2-binary = "*"
 python-dotenv = "*"
 django-cors-headers = "*"
+gunicorn = "*"
+django-heroku = "*"
 
 [requires]
 python_version = "3.7"
