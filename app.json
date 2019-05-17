@@ -1,0 +1,26 @@
+{
+  "name": "mig3",
+  "description": "Detect regressions in your python3 migration!",
+  "keywords": ["migration", "migration-tool", "python", "python2", "python3"],
+  "logo": "https://repository-images.githubusercontent.com/183804036/f4e59c00-69bb-11e9-96c5-6188c6a6f664#.png",
+  "website": "https://mverteuil.github.io/mig3/",
+  "repository": "https://github.com/mverteuil/mig3/",
+  "env": {
+    "SECRET_KEY": {
+      "description": "Django's secret key for cryptographic operations.",
+      "generator": "secret"
+    },
+    "SECRET_URL_SALT": {
+      "description": "Extra salt used to sign the administrator bootstrap process.",
+      "generator": "secret"
+    }
+  },
+  "addons": [
+    {
+      "plan": "heroku-postgresql",
+      "options": {
+        "version": "11.2"
+      }
+    }
+  ]
+}
