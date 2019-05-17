@@ -5,6 +5,10 @@
   "repository": "https://github.com/mverteuil/mig3/",
   "addons": [{ "plan": "heroku-postgresql", "options": { "version": "11" } }],
   "env": {
+    "HEROKU": {
+      "description": "When present, activates Heroku Django settings overrides.",
+      "value": 1
+    },
     "SECRET_KEY": {
       "description": "Django's secret key for cryptographic operations.",
       "generator": "secret"

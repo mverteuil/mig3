@@ -323,4 +323,5 @@ SWAGGER_SETTINGS: dict = {
 # Activate Django-Heroku in production
 # https://devcenter.heroku.com/articles/django-app-configuration
 
-django_heroku.settings(locals(), logging=not DEBUG, databases=not DEBUG)
+if getenv_boolean("HEROKU", False):
+    django_heroku.settings(locals())
