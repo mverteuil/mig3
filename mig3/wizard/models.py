@@ -1,3 +1,6 @@
+import abc
+from typing import Union
+
 from django.contrib.auth import get_user_model
 from django.db import models
 
@@ -6,70 +9,95 @@ from builds import models as builds
 from projects import models as projects
 
 
-class SetupProgressStagesMeta:
-    """Attach STAGES property to SetupProgress based on the order the stages are defined in the class."""
+class RequirementChecker(abc.ABC):
+    """Discrete requirements stage of installation setup."""
 
-    def __new__(cls, name, bases, dct):
-        """Build class with STAGES defined."""
-        dct["STAGES"] = [
-            name
-            for name, prop in dct.items()
-            if name.startswith("has_") and isinstance(prop, (classmethod, staticmethod))
-        ]
-        return type(name, bases, dct)
-
-
-class SetupProgress(metaclass=SetupProgressStagesMeta):
-    """Determine how much progress has been made in setting up the mig3 configuration."""
-
-    #: Declared progress stages, populated by SetupProgressStagesMeta
-    STAGES: list = []
+    condition_name: str = None
 
     @staticmethod
-    def has_administrator() -> bool:
-        """Has at least one active administrator."""
+    @abc.abstractmethod
+    def check() -> bool:
+        """Check if this requirement is met."""
+        return NotImplemented
+
+
+class HasAdministrator(RequirementChecker):
+    """Has at least one active administrator."""
+
+    condition_name = "Active Administrator Account"
+
+    @staticmethod
+    def check() -> bool:
+        """Check if this requirement is met."""
         return get_user_model().objects.filter(is_active=True, is_superuser=True).exists()
 
+
+class HasBuilder(RequirementChecker):
+    """Has at least one Builder Account."""
+
+    condition_name = "Builder Account"
+
     @staticmethod
-    def has_builder() -> bool:
-        """Has at least one Builder Account."""
+    def check() -> bool:
+        """Check if this requirement is met."""
         return accounts.BuilderAccount.objects.exists()
 
+
+class HasProject(RequirementChecker):
+    """Has at least one project."""
+
+    condition_name = "First Project"
+
     @staticmethod
-    def has_project() -> bool:
-        """Has at least one project."""
+    def check() -> bool:
+        """Check if this requirement is met."""
         return projects.Project.objects.exists()
 
+
+class HasTargets(RequirementChecker):
+    """Has a project with at least two targets.
+
+    Two or more targets are expected to be present:
+        - one for the present configuration
+        - at least one for desired configuration once the migration has completed
+
+    """
+
+    condition_name = "Source and Destination Targets"
+
     @staticmethod
-    def has_targets() -> bool:
-        """Has a project with at least two targets.
-
-        Two or more targets are expected to be present:
-            - one for the present configuration
-            - at least one for desired configuration once the migration has completed
-
-        """
+    def check() -> bool:
+        """Check if this requirement is met."""
         projects_with_target_counts = projects.Project.objects.annotate(target_count=models.Count("target"))
         return projects_with_target_counts.filter(target_count__gte=2).exists()
 
+
+class HasBuilds(RequirementChecker):
+    """Has a build for each target."""
+
+    condition_name = "One Build for Each Target"
+
     @staticmethod
-    def has_builds() -> bool:
-        """Has a build for each target."""
+    def check() -> bool:
+        """Check if this requirement is met."""
         return builds.Build.objects.distinct("target").count() >= 2
 
-    @classmethod
-    def has_working_installation(cls) -> bool:
-        """All setup progress stages are complete."""
-        return all(getattr(cls, stage)() for stage in cls.STAGES if stage != "has_working_installation")
+
+class InstallationSetup:
+    """Determine how much progress has been made in setting up the mig3 installation."""
+
+    #: Conditions which must be met before installation setup is considered complete.
+    REQUIREMENTS: list = [HasAdministrator, HasBuilder, HasProject, HasTargets, HasBuilds]
 
     @classmethod
-    def get_current_stage_index(cls) -> int:
+    def is_complete(cls) -> bool:
+        """All installation setup requirements have been met."""
+        return all(requirement.check() for requirement in cls.REQUIREMENTS)
+
+    @classmethod
+    def get_current_requirement_index(cls) -> Union[int, None]:
         """Get the index for the current setup step."""
-        for index, check_stage_complete_method_name in enumerate(cls.STAGES):
-            check_stage_complete = getattr(cls, check_stage_complete_method_name)
-            if not check_stage_complete():
-                current_stage_index = index
-                break
-        else:
-            current_stage_index = len(cls.STAGES) - 1
-        return current_stage_index
+        for index, requirement in enumerate(cls.REQUIREMENTS):
+            if not requirement.check():
+                return index
+        return None
