@@ -1,6 +1,7 @@
 import inspect
 from unittest import mock
 
+import pytest
 from model_mommy import mommy
 
 from . import models as wizard
@@ -106,3 +107,16 @@ def test_final_index():
 
     for requirement in mock_requirements:
         requirement.check.assert_called_once()
+
+
+@pytest.mark.parametrize(
+    ("satisfied_count", "unsatisfied_count", "expected_result"),
+    [(0, 1, 0), (1, 0, 100), (1, 2, 33), (2, 3, 40), (17, 28, 37)],
+)
+def test_satisfied_requirements_percentage(satisfied_count, unsatisfied_count, expected_result):
+    """Should calculate correct percentage, and round the result in deterministic way."""
+    satisfied_requirements = [mock.Mock(**{"check.return_value": True})] * satisfied_count
+    unsatisfied_requirements = [mock.Mock(**{"check.return_value": False})] * unsatisfied_count
+    mock_requirements = satisfied_requirements + unsatisfied_requirements
+    with mock.patch.object(wizard.InstallationSetup, "REQUIREMENTS", mock_requirements):
+        assert wizard.InstallationSetup.calculate_satisfied_requirements_percentage() == expected_result

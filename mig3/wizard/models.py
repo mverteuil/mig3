@@ -86,13 +86,21 @@ class HasBuilds(RequirementChecker):
 class InstallationSetup:
     """Determine how much progress has been made in setting up the mig3 installation."""
 
-    #: Conditions which must be met before installation setup is considered complete.
+    #: Conditions which must be satisfied before installation setup is considered complete.
     REQUIREMENTS: list = [HasAdministrator, HasBuilder, HasProject, HasTargets, HasBuilds]
 
     @classmethod
     def is_complete(cls) -> bool:
         """All installation setup requirements have been met."""
         return all(requirement.check() for requirement in cls.REQUIREMENTS)
+
+    @classmethod
+    def calculate_satisfied_requirements_percentage(cls) -> int:
+        """Calculate the percentage of satisfied requirements, rounded to the nearest whole number."""
+        satisfied_requirements = [
+            satisfied for satisfied in filter(lambda requirement: requirement.check(), cls.REQUIREMENTS)
+        ]
+        return int((len(satisfied_requirements) / len(cls.REQUIREMENTS)) * 100)
 
     @classmethod
     def get_current_requirement_index(cls) -> Union[int, None]:
