@@ -65,8 +65,11 @@ class SetupProgress(metaclass=SetupProgressStagesMeta):
     @classmethod
     def get_current_stage_index(cls) -> int:
         """Get the index for the current setup step."""
-        for index, stage in enumerate(cls.STAGES):
-            if not getattr(cls, stage)():
-                return index
+        for index, check_stage_complete_method_name in enumerate(cls.STAGES):
+            check_stage_complete = getattr(cls, check_stage_complete_method_name)
+            if not check_stage_complete():
+                current_stage_index = index
+                break
         else:
-            return len(cls.STAGES) - 1
+            current_stage_index = len(cls.STAGES) - 1
+        return current_stage_index
