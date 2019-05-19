@@ -1,8 +1,6 @@
 import client from "@/services/axios-client";
 import template from "lodash.template";
 
-client.inter;
-
 const URLS = {
   GET_BUILD_DETAILS: template("builds/${ buildId }/"),
   GET_BUILDERS: "builders/",

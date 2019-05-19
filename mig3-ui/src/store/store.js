@@ -17,10 +17,10 @@ export default new Vuex.Store({
       build: null
     },
     installationSetup: {
-      requirements: [],
+      requirements: [{ condition_name: "Active Administrator", is_satisfied: false, id: "Administrator" }],
       current_requirement_index: 0,
       satisfied_requirements_percentage: 0,
-      is_complete: null
+      is_complete: false
     }
   },
   actions: {

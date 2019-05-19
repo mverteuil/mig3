@@ -10,9 +10,18 @@ from projects import models as projects
 
 
 class RequirementChecker(abc.ABC):
-    """Discrete requirements stage of installation setup."""
+    """Discrete requirements stage of installation setup.
+
+    IMPORTANT: Concrete implementation names follow "HasConditionDetail" convention.
+    """
 
     condition_name: str = NotImplemented
+
+    def __init_subclass__(cls) -> None:
+        if cls.__name__.startswith("Has"):
+            super().__init_subclass__()
+        else:
+            raise ValueError(f"RequirementChecker implementation name ({cls}) must follow 'HasCondition' convention")
 
     @staticmethod
     @abc.abstractmethod

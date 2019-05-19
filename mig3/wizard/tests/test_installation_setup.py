@@ -7,6 +7,16 @@ from model_mommy import mommy
 from wizard import models as wizard
 
 
+def test_faulty_requirement_name():
+    """Should enforce naming convention for requirement checkers."""
+    with pytest.raises(ValueError):
+        # noinspection PyUnusedLocal
+        class BadCheckerName(wizard.RequirementChecker):
+            @staticmethod
+            def check() -> bool:
+                return False
+
+
 def get_requirement_index(requirement):
     """Find the index in InstallationRequirements.REQUIREMENTS for a concrete RequirementChecker implementation."""
     return wizard.InstallationSetup.REQUIREMENTS.index(requirement)
