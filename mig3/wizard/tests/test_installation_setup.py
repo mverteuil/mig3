@@ -4,7 +4,7 @@ from unittest import mock
 import pytest
 from model_mommy import mommy
 
-from . import models as wizard
+from wizard import models as wizard
 
 
 def get_requirement_index(requirement):

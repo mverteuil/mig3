@@ -12,7 +12,7 @@ from projects import models as projects
 class RequirementChecker(abc.ABC):
     """Discrete requirements stage of installation setup."""
 
-    condition_name: str = None
+    condition_name: str = NotImplemented
 
     @staticmethod
     @abc.abstractmethod
