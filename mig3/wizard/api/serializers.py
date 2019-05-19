@@ -14,5 +14,6 @@ class InstallationSetupSerializer(ReadOnlySerializer):
     """API representation of installation setup progress."""
 
     requirements = RequirementSerializer(source="REQUIREMENTS", many=True)
+    current_requirement_index = serializers.IntegerField(source="get_current_requirement_index", allow_null=True)
     satisfied_requirements_percentage = serializers.IntegerField(source="calculate_satisfied_requirements_percentage")
     is_complete = serializers.BooleanField()

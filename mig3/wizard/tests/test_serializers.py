@@ -41,3 +41,4 @@ def test_installation_setup_serializer(db):
     expected_satisfied_requirements_percentage = wizard.InstallationSetup.calculate_satisfied_requirements_percentage()
     assert serialized_data["satisfied_requirements_percentage"] == expected_satisfied_requirements_percentage
     assert serialized_data["is_complete"] is False
+    assert serialized_data["current_requirement_index"] == wizard.InstallationSetup.get_current_requirement_index()

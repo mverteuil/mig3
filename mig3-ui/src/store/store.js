@@ -15,6 +15,12 @@ export default new Vuex.Store({
       project: null,
       target: null,
       build: null
+    },
+    installationSetup: {
+      requirements: [],
+      current_requirement_index: 0,
+      satisfied_requirements_percentage: 0,
+      is_complete: null
     }
   },
   actions: {
@@ -29,6 +35,10 @@ export default new Vuex.Store({
     async FETCH_BUILDERS({ commit }) {
       let response = await apiClient.getBuilders();
       commit("RECEIVE_BUILDERS", response.data);
+    },
+    async FETCH_INSTALLATION_SETUP_DETAILS({ commit }) {
+      let response = await apiClient.getInstallationSetupDetails();
+      commit("RECEIVE_INSTALLATION_SETUP_DETAILS", response.data);
     },
     async FETCH_PROJECT({ commit }, { id }) {
       let response = await apiClient.getProjectDetails(id);
@@ -58,6 +68,9 @@ export default new Vuex.Store({
     },
     RECEIVE_BUILDERS(state, payload) {
       state.builders = payload;
+    },
+    RECEIVE_INSTALLATION_SETUP_DETAILS(state, payload) {
+      state.installationSetup = payload;
     },
     RECEIVE_PROJECTS(state, payload) {
       state.projects = payload;

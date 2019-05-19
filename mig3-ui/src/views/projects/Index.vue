@@ -11,8 +11,6 @@ import store from "@/store/store";
 export default {
   components: { ProjectBreadcrumbTitle },
   beforeRouteLeave: (to, from, next) => {
-    // eslint-disable-next-line no-console
-    console.log("HI!");
     store.dispatch("CLEAR_SELECTED_PROJECT");
     next();
   }

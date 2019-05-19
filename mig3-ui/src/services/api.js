@@ -6,6 +6,7 @@ client.inter;
 const URLS = {
   GET_BUILD_DETAILS: template("builds/${ buildId }/"),
   GET_BUILDERS: "builders/",
+  GET_INSTALLATION_SETUP_DETAILS: "installation-setup/",
   GET_PROJECTS: "projects/",
   GET_PROJECT_DETAILS: template("projects/${ projectId }/"),
   GET_TARGET_DETAILS: template("targets/${ targetId }/"),
@@ -18,6 +19,9 @@ export default {
   },
   async getBuilders() {
     return client().get(URLS.GET_BUILDERS);
+  },
+  async getInstallationSetupDetails() {
+    return client().get(URLS.GET_INSTALLATION_SETUP_DETAILS);
   },
   async getProjects() {
     return client().get(URLS.GET_PROJECTS);
