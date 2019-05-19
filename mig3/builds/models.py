@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from dataclasses import dataclass
 from typing import Dict, List, Union
 
@@ -17,7 +19,7 @@ DeserializedResultList = List[DeserializedResult]
 
 
 class TestResult(int, ChoicesEnum):
-    """Enumerate possible test testResult."""
+    """Enumerate possible test results."""
 
     ERROR = (0, "Error")
     FAILED = (1, "Failed")
@@ -59,7 +61,7 @@ class BuildManager(models.Manager):
 
     def create_build(
         self, number: str, target: Target, version: Version, builder: BuilderAccount, results: DeserializedResultList
-    ) -> "Build":
+    ) -> Build:
         """Create a new Build with TestOutcomes.
 
         Raises
@@ -124,19 +126,19 @@ class TestOutcomeManager(models.Manager):
     use_for_related_fields = True
 
     @staticmethod
-    def _clone_latest_outcome_for_target(test: Test, target: Target) -> "TestOutcome":
+    def _clone_latest_outcome_for_target(test: Test, target: Target) -> TestOutcome:
         cloned_outcome = test.testoutcome_set.filter(build__target=target).latest("id")
         cloned_outcome.id = None
         return cloned_outcome
 
-    def _perform_result_transition(self, test: Test, target: Target, result: TestResult) -> "TestOutcome":
+    def _perform_result_transition(self, test: Test, target: Target, result: TestResult) -> TestOutcome:
         test_outcome = self._clone_latest_outcome_for_target(test, target)
         transition_method_name = f"set_{result.name.lower()}"
         getattr(test_outcome, transition_method_name)()
         test_outcome.save()
         return test_outcome
 
-    def create(self, build: Build, test: Test, result: TestResult) -> "TestOutcome":
+    def create(self, build: Build, test: Test, result: TestResult) -> TestOutcome:
         """Create validated test outcome.
 
         Raises

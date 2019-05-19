@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 
+from model_mommy import mommy
+
 from builds import models as builds
 
 UserAccount = get_user_model()
@@ -56,14 +58,9 @@ def test_create_inactive_user(db):
     assert not ModelBackend().authenticate(request=None, username=user.email, password=password)
 
 
-def test_build_count(build, another_version, user_account):
+def test_build_count(primary_build, another_version, user_account):
     """Should have accurate build count."""
     assert user_account.build_count == builds.Build.objects.filter(version__author=user_account).count()
-
-    # Reset ID for new record, then assign new number, and version to remove uniqueness constraints
-    build.id = None
-    build.number = "2"
-    build.version = another_version
-    build.save()
+    mommy.make(builds.Build, number="2", version=another_version)
 
     assert user_account.build_count == builds.Build.objects.filter(version__author=user_account).count()

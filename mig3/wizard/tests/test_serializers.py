@@ -1,0 +1,43 @@
+import pytest
+
+from .. import models as wizard
+from ..api import serializers
+
+
+class MockFalseRequirement(wizard.RequirementChecker):
+    """Always False."""
+
+    condition_name: str = "Always False"
+
+    @staticmethod
+    def check() -> bool:  # noqa: D102
+        return False
+
+
+class MockTrueRequirement(wizard.RequirementChecker):
+    """Always True."""
+
+    condition_name: str = "Always True"
+
+    @staticmethod
+    def check() -> bool:  # noqa: D102
+        return True
+
+
+@pytest.mark.parametrize("requirement", [MockFalseRequirement, MockTrueRequirement])
+def test_requirement_serializer(requirement):
+    """Should accurately serialize requirement as defined."""
+    serializer = serializers.RequirementSerializer(instance=requirement)
+    serialized_data = serializer.data
+    assert serialized_data["is_satisfied"] is requirement.check()
+    assert serialized_data["condition_name"] is requirement.condition_name
+
+
+def test_installation_setup_serializer(db):
+    """Should accurately serialize installation setup state."""
+    serializer = serializers.InstallationSetupSerializer(instance=wizard.InstallationSetup)
+    serialized_data = serializer.data
+    assert len(serialized_data["requirements"]) == len(wizard.InstallationSetup.REQUIREMENTS)
+    expected_satisfied_requirements_percentage = wizard.InstallationSetup.calculate_satisfied_requirements_percentage()
+    assert serialized_data["satisfied_requirements_percentage"] == expected_satisfied_requirements_percentage
+    assert serialized_data["is_complete"] is False

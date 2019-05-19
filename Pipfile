@@ -10,6 +10,7 @@ pytest = "*"
 pytest-cov = "*"
 pytest-datadir = "*"
 pytest-django = "*"
+model-mommy = "*"
 
 [packages]
 barbara = "*"
