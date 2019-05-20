@@ -68,7 +68,8 @@ pipenv run pip install gunicorn
 ## Development Requirements
 
 -   All standard production requirements
--   Docker
+-   Docker 18.09.2+
+-   docker-compose 1.23.2+
 -   Pre-Commit 1.15+
 
 ## Development Installation
