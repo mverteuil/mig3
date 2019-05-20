@@ -6,6 +6,12 @@ from django.urls import reverse
 import pytest
 from rest_framework import status
 
+#: HTTP methods which operate on a detail endpoint
+MUTATING_HTTP_DETAIL_METHODS = ("delete", "patch", "put")
+
+#: HTTP methods which operate on a list endpoint
+MUTATING_HTTP_LIST_METHODS = ("post",)
+
 
 @pytest.mark.parametrize("view_name", ["api:user_account_list", "api:builder_account_list"])
 def test_view_with_session(session_authentication, view_name):
@@ -22,13 +28,6 @@ def test_view_without_session(client, view_name):
     url = reverse(view_name)
     response = client.get(url)
     assert response.status_code == status.HTTP_403_FORBIDDEN
-
-
-#: HTTP methods which operate on a detail endpoint
-MUTATING_HTTP_DETAIL_METHODS = ("delete", "patch", "put")
-
-#: HTTP methods which operate on a list endpoint
-MUTATING_HTTP_LIST_METHODS = ("post",)
 
 
 @pytest.mark.parametrize("view_name", ["api:user_account_list", "api:builder_account_list"])

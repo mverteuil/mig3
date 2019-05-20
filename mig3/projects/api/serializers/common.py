@@ -27,9 +27,9 @@ class ProjectStatisticsSerializer(ReadOnlySerializer):
 class ProjectSummarySerializer(serializers.ModelSerializer):
     """Summary API representation for projects."""
 
-    id = hashid_field.HashidSerializerCharField(source_field="projects.Target.id")
+    id = hashid_field.HashidSerializerCharField(source_field="projects.Target.id", read_only=True)
     url = serializers.HyperlinkedIdentityField(view_name="api:project_detail", lookup_url_kwarg="project_id")
-    statistics = ProjectStatisticsSerializer()
+    statistics = ProjectStatisticsSerializer(read_only=True)
 
     class Meta:  # noqa: D106
         model = projects.Project
