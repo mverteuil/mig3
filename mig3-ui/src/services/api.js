@@ -8,6 +8,7 @@ const URLS = {
   PROJECT_DETAIL: template("projects/${ projectId }/"),
   PROJECT_LIST: "projects/",
   TARGET_DETAIL: template("targets/${ targetId }/"),
+  TARGET_LIST: template("targets/"),
   USER_LIST: "users/"
 };
 
@@ -17,6 +18,9 @@ export default {
   },
   async getBuilders() {
     return client().get(URLS.BUILDER_LIST);
+  },
+  async postBuilder({ name }) {
+    return client().post(URLS.BUILDER_LIST, { name });
   },
   async getInstallationSetupDetails() {
     return client().get(URLS.INSTALLATION_SETUP_DETAIL);
