@@ -34,6 +34,7 @@ import InstallationSetupBuilder from "@/components/installationsetup/Installatio
 import InstallationSetupBuilds from "@/components/installationsetup/InstallationSetupBuilds";
 import InstallationSetupProject from "@/components/installationsetup/InstallationSetupProject";
 import InstallationSetupTargets from "@/components/installationsetup/InstallationSetupTargets";
+import { FETCH_INSTALLATION_SETUP_DETAILS } from "@/store/action-types";
 
 export default {
   name: "InstallationSetupWizard",
@@ -64,7 +65,7 @@ export default {
     getRequirement: (requirements, stepNumber) => requirements[stepNumber - 1]
   },
   mounted() {
-    this.$store.dispatch("FETCH_INSTALLATION_SETUP_DETAILS");
+    this.$store.dispatch(FETCH_INSTALLATION_SETUP_DETAILS);
   }
 };
 </script>

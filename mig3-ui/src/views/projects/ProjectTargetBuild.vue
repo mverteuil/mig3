@@ -16,6 +16,7 @@
 import BuildDetailCard from "@/components/BuildDetailCard";
 import BuildTestModulesPanel from "@/components/BuildTestModulesPanel";
 import { mapState } from "vuex";
+import { FETCH_BUILD } from "@/store/action-types";
 
 export default {
   name: "ProjectTargetBuild",
@@ -30,7 +31,7 @@ export default {
   },
   methods: {
     fetchBuild() {
-      this.$store.dispatch("FETCH_BUILD", { id: this.$route.params.buildId });
+      this.$store.dispatch(FETCH_BUILD, { id: this.$route.params.buildId });
     },
     shortHash: hash => hash.substr(0, 8)
   },

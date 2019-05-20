@@ -7,11 +7,12 @@
 <script>
 import ProjectBreadcrumbTitle from "@/components/ProjectBreadcrumbTitle";
 import store from "@/store/store";
+import { CLEAR_SELECTED_PROJECT } from "@/store/action-types";
 
 export default {
   components: { ProjectBreadcrumbTitle },
   beforeRouteLeave: (to, from, next) => {
-    store.dispatch("CLEAR_SELECTED_PROJECT");
+    store.dispatch(CLEAR_SELECTED_PROJECT);
     next();
   }
 };

@@ -35,6 +35,7 @@
 </template>
 <script>
 import { mapState } from "vuex";
+import { FETCH_TARGET } from "@/store/action-types";
 
 export default {
   name: "ProjectTargetBuilds",
@@ -63,7 +64,7 @@ export default {
   },
   methods: {
     fetchTarget() {
-      this.$store.dispatch("FETCH_TARGET", { id: this.$route.params.targetId });
+      this.$store.dispatch(FETCH_TARGET, { id: this.$route.params.targetId });
     },
     shortHash: hash => hash.substr(0, 8)
   },

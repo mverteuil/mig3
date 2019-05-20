@@ -22,6 +22,7 @@
 </template>
 <script>
 import { mapState } from "vuex";
+import { FETCH_PROJECT } from "@/store/action-types";
 
 export default {
   name: "ProjectTargetList",
@@ -55,7 +56,7 @@ export default {
   },
   methods: {
     fetchProject() {
-      this.$store.dispatch("FETCH_PROJECT", { id: this.$route.params.projectId });
+      this.$store.dispatch(FETCH_PROJECT, { id: this.$route.params.projectId });
     }
   },
   mounted() {

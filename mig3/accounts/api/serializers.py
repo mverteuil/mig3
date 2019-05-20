@@ -19,11 +19,12 @@ class BuilderAccountSerializer(serializers.ModelSerializer):
     """API representation of a CI/build service."""
 
     id = hashid_field.HashidSerializerCharField(source_field="accounts.BuilderAccount.id")
-    statistics = BuilderStatisticsSerializer(read_only=True)
+    statistics = BuilderStatisticsSerializer()
 
     class Meta:  # noqa: D106
         model = accounts.BuilderAccount
         fields = ("id", "name", "statistics")
+        read_only_fields = ("id", "statistics")
 
 
 class UserAccountField(serializers.Field):
@@ -48,9 +49,10 @@ class UserAccountField(serializers.Field):
 class UserAccountSerializer(serializers.ModelSerializer):
     """API representation of a user account."""
 
-    id = hashid_field.HashidSerializerCharField(source_field="accounts.UserAccount.id", read_only=True)
+    id = hashid_field.HashidSerializerCharField(source_field="accounts.UserAccount.id")
 
     class Meta:  # noqa: D106
         model = get_user_model()
         fields = ("id", "email", "name", "build_count")
+        read_only_fields = ("id", "build_count")
         ref_name = "UserAccount"

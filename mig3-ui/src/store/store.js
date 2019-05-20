@@ -15,6 +15,7 @@ import {
 } from "@/store/mutation-types";
 import {
   CLEAR_SELECTED_PROJECT,
+  CREATE_BUILDER,
   FETCH_BUILD,
   FETCH_BUILDERS,
   FETCH_INSTALLATION_SETUP_DETAILS,
@@ -48,6 +49,10 @@ export default new Vuex.Store({
   actions: {
     [CLEAR_SELECTED_PROJECT]({ commit }) {
       commit(SET_SELECTED, {});
+    },
+    async [CREATE_BUILDER]({ commit }, { name }) {
+      let response = await apiClient.postBuilder({ name });
+      commit(RECEIVE_BUILDER, response.data);
     },
     async [FETCH_BUILD]({ commit }, { id }) {
       let response = await apiClient.getBuildDetails(id);
