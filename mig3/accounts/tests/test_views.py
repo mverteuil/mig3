@@ -24,18 +24,45 @@ def test_view_without_session(client, view_name):
     assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
-#: HTTP methods which modify the object state
-INVALID_HTTP_METHODS = ("delete", "patch", "put", "post")
+#: HTTP methods which operate on a detail endpoint
+MUTATING_HTTP_DETAIL_METHODS = ("delete", "patch", "put")
+
+#: HTTP methods which operate on a list endpoint
+MUTATING_HTTP_LIST_METHODS = ("post",)
 
 
 @pytest.mark.parametrize("view_name", ["api:user_account_list", "api:builder_account_list"])
-@pytest.mark.parametrize("view_method", INVALID_HTTP_METHODS)
-def test_object_immutability_with_session(session_authentication, view_name, view_method):
+@pytest.mark.parametrize("view_method", MUTATING_HTTP_DETAIL_METHODS)
+def test_invalid_list_methods(admin_user, session_authentication, view_name, view_method):
+    """Should refuse operations that don't make sense."""
+    api_client, _ = session_authentication
+    url = reverse(view_name)
+    response = getattr(api_client, view_method)(url)
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    api_client.login(username=admin_user.email, password="password")
+    response = getattr(api_client, view_method)(url)
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+
+
+@pytest.mark.parametrize("view_name", ["api:user_account_list", "api:builder_account_list"])
+@pytest.mark.parametrize("view_method", MUTATING_HTTP_LIST_METHODS)
+def test_object_immutability_with_user(session_authentication, view_name, view_method):
     """Should refuse to mutate object with session authentication."""
     api_client, _ = session_authentication
     url = reverse(view_name)
     response = getattr(api_client, view_method)(url)
-    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+@pytest.mark.parametrize("view_name", ["api:user_account_list", "api:builder_account_list"])
+@pytest.mark.parametrize("view_method", MUTATING_HTTP_LIST_METHODS)
+def test_object_mutability_with_admin_session(admin_user, api_client, view_name, view_method):
+    """Should refuse to mutate object with session authentication."""
+    api_client.login(username=admin_user.email, password="password")
+    url = reverse(view_name)
+    response = getattr(api_client, view_method)(url)
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
 def test_login(client, user_account, webpack_safe):

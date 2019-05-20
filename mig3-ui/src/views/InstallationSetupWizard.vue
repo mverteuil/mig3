@@ -1,16 +1,31 @@
 <template>
-  <v-stepper v-model="currentStep" vertical>
-    <template v-for="index in requirements.length">
-      <v-stepper-step :key="`${index}-step`" :complete="getRequirement(requirements, index).is_satisfied" :step="index">
-        {{ getRequirement(requirements, index).condition_name }}
-      </v-stepper-step>
-      <component
-        :is="`InstallationSetup${getRequirement(requirements, index).id}`"
-        :key="`${index}-content`"
-        :step="index"
-      ></component>
-    </template>
-  </v-stepper>
+  <v-container fluid>
+    <v-layout column>
+      <v-flex wrap justify-left align-center>
+        <span class="display-4 font-weight-black text-capitalize">Installation Setup</span>
+      </v-flex>
+    </v-layout>
+    <v-layout row wrap>
+      <v-flex d-flex xs5>
+        <v-stepper v-model="currentStep" vertical>
+          <template v-for="index in requirements.length">
+            <v-stepper-step
+              :key="`${index}-step`"
+              :complete="getRequirement(requirements, index).is_satisfied"
+              :step="index"
+            >
+              {{ getRequirement(requirements, index).condition_name }}
+            </v-stepper-step>
+            <component
+              :is="`InstallationSetup${getRequirement(requirements, index).id}`"
+              :key="`${index}-content`"
+              :step="index"
+            ></component>
+          </template>
+        </v-stepper>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 <script>
 import { mapState } from "vuex";
@@ -46,8 +61,7 @@ export default {
     }
   },
   methods: {
-    getRequirement: (requirements, stepNumber) => requirements[stepNumber - 1],
-    getStepComponent: (requirements, stepNumber) => this.currentStep
+    getRequirement: (requirements, stepNumber) => requirements[stepNumber - 1]
   },
   mounted() {
     this.$store.dispatch("FETCH_INSTALLATION_SETUP_DETAILS");

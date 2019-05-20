@@ -2,35 +2,35 @@ import client from "@/services/axios-client";
 import template from "lodash.template";
 
 const URLS = {
-  GET_BUILD_DETAILS: template("builds/${ buildId }/"),
-  GET_BUILDERS: "builders/",
-  GET_INSTALLATION_SETUP_DETAILS: "installation-setup/",
-  GET_PROJECTS: "projects/",
-  GET_PROJECT_DETAILS: template("projects/${ projectId }/"),
-  GET_TARGET_DETAILS: template("targets/${ targetId }/"),
-  GET_USERS: "users/"
+  BUILD_DETAIL: template("builds/${ buildId }/"),
+  BUILDER_LIST: "builders/",
+  INSTALLATION_SETUP_DETAIL: "installation-setup/",
+  PROJECT_DETAIL: template("projects/${ projectId }/"),
+  PROJECT_LIST: "projects/",
+  TARGET_DETAIL: template("targets/${ targetId }/"),
+  USER_LIST: "users/"
 };
 
 export default {
   async getBuildDetails(buildId) {
-    return client().get(URLS.GET_BUILD_DETAILS({ buildId }));
+    return client().get(URLS.BUILD_DETAIL({ buildId }));
   },
   async getBuilders() {
-    return client().get(URLS.GET_BUILDERS);
+    return client().get(URLS.BUILDER_LIST);
   },
   async getInstallationSetupDetails() {
-    return client().get(URLS.GET_INSTALLATION_SETUP_DETAILS);
+    return client().get(URLS.INSTALLATION_SETUP_DETAIL);
   },
   async getProjects() {
-    return client().get(URLS.GET_PROJECTS);
+    return client().get(URLS.PROJECT_LIST);
   },
   async getProjectDetails(projectId) {
-    return client().get(URLS.GET_PROJECT_DETAILS({ projectId: projectId }));
+    return client().get(URLS.PROJECT_DETAIL({ projectId: projectId }));
   },
   async getTargetDetails(targetId) {
-    return client().get(URLS.GET_TARGET_DETAILS({ targetId }));
+    return client().get(URLS.TARGET_DETAIL({ targetId }));
   },
   async getUsers() {
-    return client().get(URLS.GET_USERS);
+    return client().get(URLS.USER_LIST);
   }
 };

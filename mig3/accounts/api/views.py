@@ -6,19 +6,20 @@ from .. import models as accounts
 from . import serializers
 
 
-class BuilderAccountList(generics.ListAPIView):
+class BuilderAccountList(generics.ListCreateAPIView):
     """List Builder Accounts."""
 
     authentication_classes = (authentication.SessionAuthentication,)
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.DjangoModelPermissions, permissions.IsAuthenticated)
     queryset = accounts.BuilderAccount.objects.all()
     serializer_class = serializers.BuilderAccountSerializer
 
 
-class UserAccountList(generics.ListAPIView):
+class UserAccountList(generics.ListCreateAPIView):
     """List User Accounts."""
 
     authentication_classes = (authentication.SessionAuthentication,)
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.DjangoModelPermissions, permissions.IsAuthenticated)
     queryset = get_user_model().objects.all()
     serializer_class = serializers.UserAccountSerializer
+    write_serializer_class = serializers.UserAccountSerializer
