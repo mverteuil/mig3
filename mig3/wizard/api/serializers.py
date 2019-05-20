@@ -17,8 +17,8 @@ class RequirementSerializer(ReadOnlySerializer):
 
         Used in the frontend to choose the correct form component for the setup wizard.
         """
-        _, id = obj.__name__.split("Has")
-        return id
+        _, requirement_id = obj.__name__.split("Has")
+        return requirement_id
 
 
 class InstallationSetupSerializer(ReadOnlySerializer):

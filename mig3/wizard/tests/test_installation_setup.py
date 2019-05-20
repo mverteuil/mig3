@@ -9,12 +9,8 @@ from wizard import models as wizard
 
 def test_faulty_requirement_name():
     """Should enforce naming convention for requirement checkers."""
-    with pytest.raises(ValueError):
-        # noinspection PyUnusedLocal
-        class BadCheckerName(wizard.RequirementChecker):
-            @staticmethod
-            def check() -> bool:
-                return False
+    with pytest.raises(ValueError, match="BadCheckerName.* must follow 'HasCondition' convention"):
+        type("BadCheckerName", (wizard.RequirementChecker,), {"check": staticmethod(lambda: False)})
 
 
 def get_requirement_index(requirement):
