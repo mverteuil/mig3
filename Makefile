@@ -1,13 +1,10 @@
-.PHONY = clean devserver* db install release run
+.PHONY = clean devserver* install release run run-dev
 SHELL := /bin/bash
 
-PROJECT_DIR := $(shell basename $$PWD)
+# ^^^^^^ Global Above ---------- Production Below VVVVVV
 
 ACTIVATE = source .venv/bin/activate
-DJANGO_CHECKS = docker-compose exec backend python mig3/manage.py check --fail-level WARNING
 SET_CONTEXT := ${ACTIVATE} && cd mig3 && DJANGO_SETTINGS_MODULE=mig3.settings
-UP_DETACHED = docker-compose up --build --detach
-UP_LIVE = docker-compose up --abort-on-container-exit
 
 .venv:
 	python3 -m venv .venv
@@ -24,6 +21,11 @@ run:
 	${SET_CONTEXT} gunicorn mig3.wsgi --log-file -
 
 # ^^^^^^ Production Above ----- Development Below VVVVVV
+
+PROJECT_DIR := $(shell basename $$PWD)
+DJANGO_CHECKS = docker-compose exec backend python mig3/manage.py check --fail-level WARNING
+UP_DETACHED = docker-compose up --build --detach
+UP_LIVE = docker-compose up --abort-on-container-exit
 
 clean:
 	docker-compose down --rmi all --remove-orphans
