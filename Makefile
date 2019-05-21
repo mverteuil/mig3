@@ -1,7 +1,10 @@
 .PHONY = clean devserver* db install release run
 SHELL := /bin/bash
 
+PROJECT_DIR := $(shell basename $$PWD)
+
 ACTIVATE = source .venv/bin/activate
+DJANGO_CHECKS = docker-compose exec backend python mig3/manage.py check --fail-level WARNING
 SET_CONTEXT := ${ACTIVATE} && cd mig3 && DJANGO_SETTINGS_MODULE=mig3.settings
 UP_DETACHED = docker-compose up --build --detach
 UP_LIVE = docker-compose up --abort-on-container-exit
@@ -24,19 +27,18 @@ run:
 
 clean:
 	docker-compose down --rmi all --remove-orphans
+	docker volume rm ${PROJECT_DIR}_postgres_data
 
-devserver: devserver-db devserver-frontend devserver-backend
-	@echo "Started development servers."
-	@echo "Django Dev Server: http://localhost:8000/"
-	@echo "Vue Dev Server: http://localhost:8080/"
+devserver:
+	@echo "Starting development servers..."
+	${UP_DETACHED}
 	@echo "PostgreSQL Server: postgresql://postgres:postgres@localhost:15432/postgres"
+	@echo "Vue Dev Server: http://localhost:8080/"
+	@echo "Django Dev Server: http://localhost:8000/"
+	${DJANGO_CHECKS}
 
 devserver-%:
 	${UP_DETACHED} $${$@}
 
-run-dev:
-	@echo "Starting development servers."
-	@echo "Django Dev Server: http://localhost:8000/"
-	@echo "Vue Dev Server: http://localhost:8080/"
-	@echo "PostgreSQL Server: postgresql://postgres:postgres@localhost:15432/postgres"
+run-dev: devserver
 	${UP_LIVE}
