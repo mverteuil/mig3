@@ -3,7 +3,7 @@
     <span class="normal">Which CI service do you use to run your tests?</span>
     <v-form>
       <v-combobox v-model="builderName" :items="ciServices" label="CI Service"></v-combobox>
-      <v-btn @click="createBuilder()">Create</v-btn>
+      <v-btn @click="createBuilder()">Create Builder</v-btn>
     </v-form>
   </v-stepper-content>
 </template>

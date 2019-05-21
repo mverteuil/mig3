@@ -1,12 +1,12 @@
 <template>
-  <v-container fluid>
-    <v-layout column>
-      <v-flex wrap justify-left align-center>
-        <span class="display-4 font-weight-black text-capitalize">Installation Setup</span>
+  <v-container>
+    <v-layout row>
+      <v-flex xs12>
+        <span class="display-4 flex font-weight-black text-capitalize">Installation Setup</span>
       </v-flex>
     </v-layout>
-    <v-layout row wrap>
-      <v-flex d-flex xs5>
+    <v-layout row>
+      <v-flex xs12>
         <v-stepper v-model="currentStep" vertical>
           <template v-for="index in requirements.length">
             <v-stepper-step
@@ -54,7 +54,7 @@ export default {
     })
   },
   data: () => ({
-    currentStep: null
+    currentStep: 1
   }),
   watch: {
     currentRequirementIndex(val) {

@@ -4,9 +4,11 @@ import template from "lodash.template";
 const URLS = {
   BUILD_DETAIL: template("builds/${ buildId }/"),
   BUILDER_LIST: "builders/",
+  CURRENT_USER_DETAIL: "whoami/",
   INSTALLATION_SETUP_DETAIL: "installation-setup/",
   PROJECT_DETAIL: template("projects/${ projectId }/"),
   PROJECT_LIST: "projects/",
+  PROJECT_TARGET_LIST: template("projects/${ projectId }/targets/"),
   TARGET_DETAIL: template("targets/${ targetId }/"),
   TARGET_LIST: template("targets/"),
   USER_LIST: "users/"
@@ -19,8 +21,8 @@ export default {
   async getBuilders() {
     return client().get(URLS.BUILDER_LIST);
   },
-  async postBuilder({ name }) {
-    return client().post(URLS.BUILDER_LIST, { name });
+  async getCurrentUserDetails() {
+    return client().get(URLS.CURRENT_USER_DETAIL);
   },
   async getInstallationSetupDetails() {
     return client().get(URLS.INSTALLATION_SETUP_DETAIL);
@@ -29,12 +31,34 @@ export default {
     return client().get(URLS.PROJECT_LIST);
   },
   async getProjectDetails(projectId) {
-    return client().get(URLS.PROJECT_DETAIL({ projectId: projectId }));
+    return client().get(URLS.PROJECT_DETAIL({ projectId }));
   },
   async getTargetDetails(targetId) {
     return client().get(URLS.TARGET_DETAIL({ targetId }));
   },
   async getUsers() {
     return client().get(URLS.USER_LIST);
+  },
+  async postBuilder({ name }) {
+    return client().post(URLS.BUILDER_LIST, { name });
+  },
+  async postProject({ name, repoUrl }) {
+    return client().post(URLS.PROJECT_LIST, { name, repo_url: repoUrl });
+  },
+  async postTarget({
+    name,
+    projectId,
+    python_major_version,
+    python_minor_version,
+    python_patch_version,
+    additional_details
+  }) {
+    return client().post(URLS.PROJECT_TARGET_LIST({ projectId }), {
+      name,
+      python_major_version,
+      python_minor_version,
+      python_patch_version,
+      additional_details
+    });
   }
 };

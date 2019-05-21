@@ -21,4 +21,5 @@ urlpatterns = [
     path("swagger/", include(schema_patterns)),
     path("targets/<str:target_id>/", view=projects.TargetDetailView.as_view(), name="target_detail"),
     path("users/", view=accounts.UserAccountList.as_view(), name="user_account_list"),
+    path("whoami/", view=accounts.RequestUserAccountDetail.as_view(), name="request_user_detail"),
 ]

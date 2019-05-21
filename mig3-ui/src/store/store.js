@@ -5,6 +5,7 @@ import {
   RECEIVE_BUILDER,
   RECEIVE_BUILDERS,
   RECEIVE_BUILDS,
+  RECEIVE_CURRENT_USER,
   RECEIVE_INSTALLATION_SETUP_DETAILS,
   RECEIVE_PROJECT,
   RECEIVE_PROJECTS,
@@ -16,8 +17,11 @@ import {
 import {
   CLEAR_SELECTED_PROJECT,
   CREATE_BUILDER,
+  CREATE_PROJECT,
+  CREATE_TARGET,
   FETCH_BUILD,
   FETCH_BUILDERS,
+  FETCH_CURRENT_USER,
   FETCH_INSTALLATION_SETUP_DETAILS,
   FETCH_PROJECT,
   FETCH_PROJECTS,
@@ -31,6 +35,12 @@ export default new Vuex.Store({
   state: {
     builds: [],
     builders: [],
+    currentUser: {
+      name: null,
+      email: null,
+      builds: 0,
+      is_administrator: false
+    },
     projects: [],
     targets: [],
     users: [],
@@ -54,6 +64,23 @@ export default new Vuex.Store({
       let response = await apiClient.postBuilder({ name });
       commit(RECEIVE_BUILDER, response.data);
     },
+    async [CREATE_PROJECT]({ commit }, { name, repoUrl }) {
+      let response = await apiClient.postProject({ name, repoUrl });
+      const { ...project } = response.data;
+      commit(RECEIVE_PROJECT, project);
+      commit(SET_SELECTED, { project });
+    },
+    async [CREATE_TARGET]({ commit }, { name, python_major_version, python_minor_version, python_patch_version }) {
+      let response = await apiClient.postTarget({
+        projectId: this.selected.project.id,
+        name,
+        python_major_version,
+        python_minor_version,
+        python_patch_version
+      });
+      const { ...target } = response.data;
+      commit(RECEIVE_TARGET, target);
+    },
     async [FETCH_BUILD]({ commit }, { id }) {
       let response = await apiClient.getBuildDetails(id);
       const { project, target, ...build } = response.data;
@@ -62,6 +89,10 @@ export default new Vuex.Store({
     async [FETCH_BUILDERS]({ commit }) {
       let response = await apiClient.getBuilders();
       commit(RECEIVE_BUILDERS, response.data);
+    },
+    async [FETCH_CURRENT_USER]({ commit }) {
+      let response = await apiClient.getCurrentUserDetails();
+      commit(RECEIVE_CURRENT_USER, response.data);
     },
     async [FETCH_INSTALLATION_SETUP_DETAILS]({ commit }) {
       let response = await apiClient.getInstallationSetupDetails();
@@ -98,6 +129,9 @@ export default new Vuex.Store({
     },
     [RECEIVE_BUILDERS](state, payload) {
       state.builders = payload;
+    },
+    [RECEIVE_CURRENT_USER](state, payload) {
+      state.currentUser = payload;
     },
     [RECEIVE_INSTALLATION_SETUP_DETAILS](state, payload) {
       state.installationSetup = payload;

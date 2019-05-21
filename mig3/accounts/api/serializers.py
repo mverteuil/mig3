@@ -49,9 +49,10 @@ class UserAccountSerializer(serializers.ModelSerializer):
     """API representation of a user account."""
 
     id = hashid_field.HashidSerializerCharField(source_field="accounts.UserAccount.id", read_only=True)
+    is_administrator = serializers.BooleanField(source="is_superuser", read_only=True)
 
     class Meta:  # noqa: D106
         model = get_user_model()
-        fields = ("id", "email", "name", "build_count")
+        fields = ("id", "email", "name", "is_administrator", "build_count")
         read_only_fields = ("build_count",)
         ref_name = "UserAccount"

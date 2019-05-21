@@ -7,7 +7,7 @@ from projects import models as projects
 
 
 class VersionReadSerializer(serializers.ModelSerializer):
-    """API representation for repository versions."""
+    """API representation for repository majorAndMinorVersions."""
 
     author = accounts_serializers.UserAccountSerializer()
 
