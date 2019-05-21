@@ -56,6 +56,11 @@ export default new Vuex.Store({
       is_complete: false
     }
   },
+  getters: {
+    currentInstallationStep: state => {
+      return state.installationSetup.current_requirement_index + 1;
+    }
+  },
   actions: {
     [CLEAR_SELECTED_PROJECT]({ commit }) {
       commit(SET_SELECTED, {});
@@ -70,13 +75,17 @@ export default new Vuex.Store({
       commit(RECEIVE_PROJECT, project);
       commit(SET_SELECTED, { project });
     },
-    async [CREATE_TARGET]({ commit }, { name, python_major_version, python_minor_version, python_patch_version }) {
+    async [CREATE_TARGET](
+      { commit },
+      { name, python_major_version, python_minor_version, python_patch_version, additional_details, project }
+    ) {
       let response = await apiClient.postTarget({
-        projectId: this.selected.project.id,
         name,
         python_major_version,
         python_minor_version,
-        python_patch_version
+        python_patch_version,
+        additional_details,
+        projectId: project.id
       });
       const { ...target } = response.data;
       commit(RECEIVE_TARGET, target);
@@ -125,7 +134,7 @@ export default new Vuex.Store({
       state.builds = payload;
     },
     [RECEIVE_BUILDER](state, payload) {
-      state.builders.append(payload);
+      state.builders.push(payload);
     },
     [RECEIVE_BUILDERS](state, payload) {
       state.builders = payload;
@@ -137,13 +146,13 @@ export default new Vuex.Store({
       state.installationSetup = payload;
     },
     [RECEIVE_PROJECT](state, payload) {
-      state.projects.append(payload);
+      state.projects.push(payload);
     },
     [RECEIVE_PROJECTS](state, payload) {
       state.projects = payload;
     },
     [RECEIVE_TARGET](state, payload) {
-      state.targets.append(payload);
+      state.targets.push(payload);
     },
     [RECEIVE_TARGETS](state, payload) {
       state.targets = payload;

@@ -57,7 +57,7 @@ def test_object_immutability_with_user(session_authentication, view_name, view_m
 @pytest.mark.parametrize("view_name", ["api:user_account_list", "api:builder_account_list"])
 @pytest.mark.parametrize("view_method", MUTATING_HTTP_LIST_METHODS)
 def test_object_mutability_with_admin_session(admin_user, api_client, view_name, view_method):
-    """Should refuse to mutate object with session authentication."""
+    """Should allow administrator to mutate object."""
     api_client.login(username=admin_user.email, password="password")
     url = reverse(view_name)
     response = getattr(api_client, view_method)(url)

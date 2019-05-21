@@ -6,9 +6,6 @@ from rest_framework import status
 #: HTTP methods which operate on a detail endpoint
 MUTATING_HTTP_DETAIL_METHODS = ("delete", "patch", "put")
 
-#: HTTP methods which operate on a list endpoint
-MUTATING_HTTP_LIST_METHODS = ("post",)
-
 
 @pytest.mark.parametrize("view_method", MUTATING_HTTP_DETAIL_METHODS)
 def test_invalid_list_methods(admin_user, session_authentication, view_method):
@@ -28,8 +25,8 @@ def test_invalid_list_methods(admin_user, session_authentication, view_method):
     (("api:project_detail", {"project_id": "qL70nKe"}), ("api:target_detail", {"target_id": "qL70nKe"})),
 )
 @pytest.mark.parametrize("view_method", MUTATING_HTTP_DETAIL_METHODS)
-def test_object_immutability_with_user(
-    project, session_authentication, primary_target, view_name, view_kwargs, view_method
+def test_object_immutability_with_user_session(
+    primary_target, project, session_authentication, view_name, view_kwargs, view_method
 ):
     """Should refuse invalid object operations with session authentication."""
     api_client, _ = session_authentication
@@ -38,14 +35,30 @@ def test_object_immutability_with_user(
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
 
 
-@pytest.mark.parametrize("view_name", ["api:project_list"])
-@pytest.mark.parametrize("view_method", MUTATING_HTTP_LIST_METHODS)
-def test_object_mutability_with_admin_session(admin_user, api_client, view_name, view_method):
-    """Should refuse to mutate object with session authentication."""
+@pytest.mark.parametrize(
+    ("view_name", "view_kwargs"), (("api:project_list", {}), ("api:project_target_list", {"project_id": "qL70nKe"}))
+)
+def test_object_creation_with_admin_session(
+    admin_user, api_client, django_db_reset_sequences, project, view_name, view_kwargs
+):
+    """Should allow administrator to create objects."""
     api_client.login(username=admin_user.email, password="password")
-    url = reverse(view_name)
-    response = getattr(api_client, view_method)(url)
+    url = reverse(view_name, kwargs=view_kwargs)
+    response = api_client.post(url)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+
+@pytest.mark.parametrize(
+    ("view_name", "view_kwargs"), (("api:project_list", {}), ("api:project_target_list", {"project_id": "qL70nKe"}))
+)
+def test_object_creation_with_user_session(
+    django_db_reset_sequences, project, session_authentication, view_name, view_kwargs
+):
+    """Should allow administrator to create objects."""
+    api_client, _ = session_authentication
+    url = reverse(view_name, kwargs=view_kwargs)
+    response = api_client.post(url)
+    assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
 @pytest.mark.parametrize(
@@ -57,7 +70,7 @@ def test_object_mutability_with_admin_session(admin_user, api_client, view_name,
     ),
 )
 def test_view_with_session(
-    project, django_db_reset_sequences, session_authentication, primary_target, view_name, view_kwargs
+    django_db_reset_sequences, primary_target, project, session_authentication, view_name, view_kwargs
 ):
     """Should accept authenticated requests."""
     api_client, _ = session_authentication
@@ -74,7 +87,7 @@ def test_view_with_session(
         ("api:target_detail", {"target_id": "qL70nKe"}),
     ),
 )
-def test_view_without_session(client, django_db_reset_sequences, project, primary_target, view_name, view_kwargs):
+def test_view_without_session(client, django_db_reset_sequences, primary_target, project, view_name, view_kwargs):
     """Should refuse unauthenticated requests."""
     url = reverse(view_name, kwargs=view_kwargs)
     response = client.get(url)

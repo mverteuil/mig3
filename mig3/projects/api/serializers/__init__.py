@@ -1,11 +1,12 @@
 from builds.api.serializers import common as build_common_serializers
-from .common import ProjectSummarySerializer, TargetSummarySerializer, VersionReadSerializer
+from .common import ProjectSummarySerializer, TargetSummarySerializer, TargetWriteSerializer, VersionReadSerializer
 
 __all__ = (
     "ProjectSerializer",
     "ProjectSummarySerializer",
     "TargetSerializer",
     "TargetSummarySerializer",
+    "TargetWriteSerializer",
     "VersionReadSerializer",
 )
 

@@ -6,6 +6,18 @@ from api.serializers import ReadOnlySerializer
 from projects import models as projects
 
 
+class RequestURLProject(object):
+    """Use the Project value from the current request's URL kwargs."""
+
+    def set_context(self, serializer_field):
+        """Initialize value for callers."""
+        self._project_id = serializer_field.context["view"].kwargs.get("project_id")
+
+    def __call__(self):
+        """Produce value for callers."""
+        return projects.Project.objects.get(id=self._project_id)
+
+
 class VersionReadSerializer(serializers.ModelSerializer):
     """API representation for repository majorAndMinorVersions."""
 
@@ -39,7 +51,7 @@ class ProjectSummarySerializer(serializers.ModelSerializer):
 class TargetSummarySerializer(serializers.ModelSerializer):
     """Summary API representation for configuration targets."""
 
-    id = hashid_field.HashidSerializerCharField(source_field="projects.Target.id")
+    id = hashid_field.HashidSerializerCharField(source_field="projects.Target.id", read_only=True)
     url = serializers.HyperlinkedIdentityField(view_name="api:target_detail", lookup_url_kwarg="target_id")
 
     class Meta:  # noqa: D106
@@ -54,6 +66,24 @@ class TargetSummarySerializer(serializers.ModelSerializer):
             "additional_details",
             "full_version",
             "python_version",
+        )
+        read_only_fields = ("id",)
+
+
+class TargetWriteSerializer(serializers.ModelSerializer):
+    """Consume target details submitted through the API."""
+
+    project = serializers.HiddenField(default=RequestURLProject())
+
+    class Meta:  # noqa: D106
+        model = projects.Target
+        fields = (
+            "name",
+            "project",
+            "python_major_version",
+            "python_minor_version",
+            "python_patch_version",
+            "additional_details",
         )
 
 

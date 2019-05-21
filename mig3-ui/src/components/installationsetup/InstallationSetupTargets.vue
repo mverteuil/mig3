@@ -41,6 +41,7 @@
 </template>
 <script>
 import { CREATE_TARGET } from "@/store/action-types";
+import apiClient from "@/services/api";
 
 export default {
   name: "InstallationSetupTargets",
@@ -73,13 +74,19 @@ export default {
       2: [7],
       3: [4, 5, 6, 7, 8, 9]
     },
-    patchVersions: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+    patchVersions: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+    project: null
   }),
   methods: {
     async createTargets() {
-      await this.$store.dispatch(CREATE_TARGET, { ...this.source });
-      await this.$store.dispatch(CREATE_TARGET, { ...this.destination });
+      await this.$store.dispatch(CREATE_TARGET, { project: this.project, ...this.source });
+      await this.$store.dispatch(CREATE_TARGET, { project: this.project, ...this.destination });
     }
+  },
+  mounted() {
+    apiClient.getProjects().then(({ data }) => {
+      this.project = data[0];
+    });
   },
   watch: {
     "destination.python_major_version": function(newValue) {

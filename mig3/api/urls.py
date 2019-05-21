@@ -18,6 +18,9 @@ urlpatterns = [
     path("installation-setup/", view=wizard.InstallationSetupDetailView.as_view(), name="installation_setup_detail"),
     path("projects/", view=projects.ProjectListView.as_view(), name="project_list"),
     path("projects/<str:project_id>/", view=projects.ProjectDetailView.as_view(), name="project_detail"),
+    path(
+        "projects/<str:project_id>/targets/", view=projects.ProjectTargetListView.as_view(), name="project_target_list"
+    ),
     path("swagger/", include(schema_patterns)),
     path("targets/<str:target_id>/", view=projects.TargetDetailView.as_view(), name="target_detail"),
     path("users/", view=accounts.UserAccountList.as_view(), name="user_account_list"),

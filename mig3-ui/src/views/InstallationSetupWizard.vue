@@ -7,7 +7,7 @@
     </v-layout>
     <v-layout row>
       <v-flex xs12>
-        <v-stepper v-model="currentStep" vertical>
+        <v-stepper v-model="currentInstallationStep" vertical>
           <template v-for="index in requirements.length">
             <v-stepper-step
               :key="`${index}-step`"
@@ -46,25 +46,23 @@ export default {
     InstallationSetupTargets
   },
   computed: {
+    currentInstallationStep: {
+      get() {
+        return this.$store.getters.currentInstallationStep;
+      },
+      set() {}
+    },
     ...mapState({
       requirements: state => state.installationSetup.requirements,
-      currentRequirementIndex: state => state.installationSetup.current_requirement_index,
-      satisfiedRequirementsPercentage: state => state.installationSetup.satisfied_requirements_percentage,
       is_complete: state => state.installationSetup.is_complete
     })
-  },
-  data: () => ({
-    currentStep: 1
-  }),
-  watch: {
-    currentRequirementIndex(val) {
-      this.currentStep = val + 1;
-    }
   },
   methods: {
     getRequirement: (requirements, stepNumber) => requirements[stepNumber - 1]
   },
   mounted() {
+    // eslint-disable-next-line no-console
+    console.log("HERRO");
     this.$store.dispatch(FETCH_INSTALLATION_SETUP_DETAILS);
   }
 };

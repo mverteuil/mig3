@@ -4,6 +4,16 @@ from .. import models as projects
 from . import serializers
 
 
+class ProjectTargetListView(generics.CreateAPIView):
+    """Create Project Targets."""
+
+    authentication_classes = (authentication.SessionAuthentication,)
+    lookup_field = "project"
+    permission_classes = (permissions.DjangoModelPermissions, permissions.IsAuthenticated)
+    queryset = projects.Target.objects.all()
+    serializer_class = serializers.TargetWriteSerializer
+
+
 class ProjectListView(generics.ListCreateAPIView):
     """List Projects."""
 

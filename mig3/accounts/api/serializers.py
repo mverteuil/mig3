@@ -8,6 +8,18 @@ from api.serializers import ReadOnlySerializer
 from .. import models as accounts
 
 
+class CurrentBuilderAccount(object):
+    """Use the BuilderAccount value from the current request's details."""
+
+    def set_context(self, serializer_field):
+        """Initialize value for callers."""
+        self._builder_account = serializer_field.context["request"].auth
+
+    def __call__(self):
+        """Produce value for callers."""
+        return self._builder_account
+
+
 class BuilderStatisticsSerializer(ReadOnlySerializer):
     """Summary API representation for builder relationship counts."""
 
