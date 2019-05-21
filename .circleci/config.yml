@@ -22,7 +22,7 @@ jobs:
 
   test-dev-environment-build:
     docker:
-      - image: circleci/buildpack-deps:stretch-scm
+      - image: circleci/buildpack-deps:stretch
     steps:
       - checkout
       - run: make devserver && make clean
