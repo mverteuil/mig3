@@ -96,7 +96,7 @@ class InstallationSetup:
     """Determine how much progress has been made in setting up the mig3 installation."""
 
     #: Conditions which must be satisfied before installation setup is considered complete.
-    REQUIREMENTS: list = [HasAdministrator, HasBuilder, HasProject, HasTargets, HasBuilds]
+    REQUIREMENTS: list = [HasAdministrator, HasProject, HasTargets, HasBuilder, HasBuilds]
 
     @classmethod
     def is_complete(cls) -> bool:

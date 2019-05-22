@@ -24,7 +24,8 @@ run:
 
 EXEC_LIVE = docker-compose exec
 PROJECT_DIR = $(shell basename $(CURDIR))
-UP_DETACHED = docker-compose up --build --detach
+TEARDOWN = docker-compose down
+UP_DETACHED = docker-compose up --detach
 UP_LIVE = docker-compose up --abort-on-container-exit
 
 check-dev:
@@ -50,3 +51,6 @@ devserver-%:
 
 run-dev: | devserver check-dev
 	@$(UP_LIVE) backend
+
+stop-dev:
+	@$(TEARDOWN)

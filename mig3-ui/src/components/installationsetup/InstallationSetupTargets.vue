@@ -37,10 +37,12 @@
                 v-combobox(label="Patch" :items="patchVersions" v-model="destination.python_patch_version")
       v-layout(row)
         v-flex(xs12)
-          v-btn(@click="createTargets()") Create Targets
+          v-btn(@click="createTargets()" v-if="!progress") Create Targets
+          v-progress-circular(indeterminate v-else)
+
 </template>
 <script>
-import { CREATE_TARGET } from "@/store/action-types";
+import { CREATE_TARGET, FETCH_INSTALLATION_SETUP_DETAILS } from "@/store/action-types";
 import apiClient from "@/services/api";
 
 export default {
@@ -75,12 +77,24 @@ export default {
       3: [4, 5, 6, 7, 8, 9]
     },
     patchVersions: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
-    project: null
+    project: null,
+    progress: false
   }),
   methods: {
-    async createTargets() {
-      await this.$store.dispatch(CREATE_TARGET, { project: this.project, ...this.source });
-      await this.$store.dispatch(CREATE_TARGET, { project: this.project, ...this.destination });
+    createTargets() {
+      this.progress = true;
+      this.$store
+        .dispatch(CREATE_TARGET, { project: this.project, ...this.source })
+        .then(() => {
+          this.$store.dispatch(CREATE_TARGET, { project: this.project, ...this.destination }).then(() => {
+            this.$store.dispatch(FETCH_INSTALLATION_SETUP_DETAILS).finally(() => {
+              this.progress = false;
+            });
+          });
+        })
+        .finally(() => {
+          this.progress = false;
+        });
     }
   },
   mounted() {
