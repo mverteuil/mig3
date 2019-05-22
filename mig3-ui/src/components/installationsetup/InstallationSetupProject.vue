@@ -1,12 +1,16 @@
-<template>
-  <v-stepper-content :step="step">
-    <span class="normal">Let's create your first project.</span>
-    <v-form ref="form">
-      <v-text-field label="Project Name" v-model="projectName"></v-text-field>
-      <v-text-field label="Repository URL" v-model="repoUrl" clearable optional></v-text-field>
-      <v-btn @click="createProject()">Create Project</v-btn>
-    </v-form>
-  </v-stepper-content>
+<template lang="pug">
+  v-stepper-content(:step="step")
+    v-container(fluid)
+      v-layout
+        v-flex(xs12)
+          v-subheader Let's get started by creating a project.
+      v-layout(row)
+        v-flex(xs4)
+          v-container
+            v-layout row wrap
+              v-flex(xs12)
+                v-text-field(label="Project Name" v-model="projectName")
+                v-text-field(label="Repository URL" v-model="repoUrl" clearable optional)
 </template>
 <script>
 import { CREATE_PROJECT } from "@/store/action-types";

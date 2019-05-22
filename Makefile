@@ -1,4 +1,4 @@
-.PHONY = check-dev clean devserver* full-clean install migrate-dev release run run-dev
+.PHONY = check-dev clean devserver* full-clean install release run run-dev
 SHELL := /bin/bash
 
 # ^^^^^^ Global Above ---------- Production Below VVVVVV
@@ -27,8 +27,8 @@ PROJECT_DIR = $(shell basename $(CURDIR))
 UP_DETACHED = docker-compose up --build --detach
 UP_LIVE = docker-compose up --abort-on-container-exit
 
-check-dev: migrate-dev
-	@$(EXEC_LIVE) $(PROJECT_DIR)_backend_1 python mig3/manage.py check --fail-level WARNING
+check-dev:
+	@$(EXEC_LIVE) backend python mig3/manage.py check --fail-level WARNING
 
 clean:
 	@docker-compose down --rmi all --remove-orphans || true
@@ -48,8 +48,5 @@ devserver:
 devserver-%:
 	@$(UP_DETACHED) $${$@}
 
-migrate-dev:
-	@$(EXEC_LIVE) $(PROJECT_DIR)_backend_1 python mig3/manage.py migrate
-
 run-dev: | devserver check-dev
-	@$(UP_LIVE)
+	@$(UP_LIVE) backend
