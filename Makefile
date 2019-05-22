@@ -22,13 +22,13 @@ run:
 
 # ^^^^^^ Production Above ----- Development Below VVVVVV
 
-PROJECT_DIR := $(shell echo $${COMPOSE_PROJECT_NAME:-`basename $$PWD`})
 EXEC_LIVE = docker-compose exec
+PROJECT_DIR = $(shell basename $(CURDIR))
 UP_DETACHED = docker-compose up --build --detach
 UP_LIVE = docker-compose up --abort-on-container-exit
 
 check-dev: migrate-dev
-	@$(EXEC_LIVE) backend python mig3/manage.py check --fail-level WARNING
+	@$(EXEC_LIVE) $(PROJECT_DIR)_backend_1 python mig3/manage.py check --fail-level WARNING
 
 clean:
 	@docker-compose down --rmi all --remove-orphans || true
@@ -49,7 +49,7 @@ devserver-%:
 	@$(UP_DETACHED) $${$@}
 
 migrate-dev:
-	@$(EXEC_LIVE) backend python mig3/manage.py migrate
+	@$(EXEC_LIVE) $(PROJECT_DIR)_backend_1 python mig3/manage.py migrate
 
 run-dev: | devserver check-dev
 	@$(UP_LIVE)
