@@ -52,6 +52,17 @@ class HasBuilder(RequirementChecker):
         return accounts.BuilderAccount.objects.exists()
 
 
+class HasBuilds(RequirementChecker):
+    """Has a build for each target."""
+
+    condition_name = "One Build for Each Target"
+
+    @staticmethod
+    def check() -> bool:
+        """Check if this requirement is met."""
+        return builds.Build.objects.distinct("target").count() >= 2
+
+
 class HasProject(RequirementChecker):
     """Has at least one project."""
 
@@ -79,17 +90,6 @@ class HasTargets(RequirementChecker):
         """Check if this requirement is met."""
         projects_with_target_counts = projects.Project.objects.annotate(target_count=models.Count("target"))
         return projects_with_target_counts.filter(target_count__gte=2).exists()
-
-
-class HasBuilds(RequirementChecker):
-    """Has a build for each target."""
-
-    condition_name = "One Build for Each Target"
-
-    @staticmethod
-    def check() -> bool:
-        """Check if this requirement is met."""
-        return builds.Build.objects.distinct("target").count() >= 2
 
 
 class InstallationSetup:
