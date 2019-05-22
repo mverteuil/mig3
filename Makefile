@@ -10,7 +10,7 @@ SET_CONTEXT := ${ACTIVATE} && cd mig3 && DJANGO_SETTINGS_MODULE=mig3.settings
 	python3 -m venv .venv
 
 install: .venv
-	${ACTIVATE} && pip install pipenv==2018.11.26 && pipenv install --deploy
+	${ACTIVATE} && pip install --upgrade pip pipenv==2018.11.26 && pipenv install --deploy
 	${ACTIVATE} && barb -z
 
 release:
