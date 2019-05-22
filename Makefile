@@ -1,4 +1,4 @@
-.PHONY = clean devserver* install release run run-dev
+.PHONY = check-dev clean devserver* full-clean install migrate-dev release run run-dev
 SHELL := /bin/bash
 
 # ^^^^^^ Global Above ---------- Production Below VVVVVV
@@ -22,25 +22,34 @@ run:
 
 # ^^^^^^ Production Above ----- Development Below VVVVVV
 
-PROJECT_DIR := $(shell basename $$PWD)
-DJANGO_CHECKS = docker-compose exec backend python mig3/manage.py check --fail-level WARNING
+PROJECT_DIR := $(shell echo $${COMPOSE_PROJECT_NAME:-`basename $$PWD`})
+EXEC_LIVE = docker-compose exec
 UP_DETACHED = docker-compose up --build --detach
 UP_LIVE = docker-compose up --abort-on-container-exit
 
+check-dev: migrate-dev
+	@$(EXEC_LIVE) backend python mig3/manage.py check --fail-level WARNING
+
 clean:
-	docker-compose down --rmi all --remove-orphans
-	docker volume rm ${PROJECT_DIR}_postgres_data
+	@docker-compose down --rmi all --remove-orphans || true
+	@docker volume rm $(PROJECT_DIR)_postgres_data || true
+
+full-clean: clean
+	@docker container prune -f
+	@docker image prune -f
 
 devserver:
 	@echo "Starting development servers..."
-	${UP_DETACHED}
+	@$(UP_DETACHED)
 	@echo "PostgreSQL Server: postgresql://postgres:postgres@localhost:15432/postgres"
 	@echo "Vue Dev Server: http://localhost:8080/"
 	@echo "Django Dev Server: http://localhost:8000/"
-	${DJANGO_CHECKS}
 
 devserver-%:
-	${UP_DETACHED} $${$@}
+	@$(UP_DETACHED) $${$@}
 
-run-dev: devserver
-	${UP_LIVE}
+migrate-dev:
+	@$(EXEC_LIVE) backend python mig3/manage.py migrate
+
+run-dev: | devserver check-dev
+	@$(UP_LIVE)
