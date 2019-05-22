@@ -1,4 +1,8 @@
+from unittest import mock
+
 from django.contrib.auth import get_user_model
+
+import pytest
 
 from ..api import serializers
 
@@ -26,8 +30,36 @@ def test_user_account_field_write_existing(user_account):
 
 def test_builder_account_serializer(builder_account):
     """Should produce serialized BuilderAccount on the happy path."""
-    serializer = serializers.BuilderAccountSerializer(instance=builder_account)
+    mock_request = mock.Mock(user=mock.Mock(is_superuser=True))
+    serializer = serializers.BuilderAccountSerializer(instance=builder_account, context={"request": mock_request})
     assert serializer.data is not None
+    assert "token" in serializer.data
+
+
+def test_builder_account_serializer_without_admin(builder_account):
+    """Should explode if created with regular user request."""
+    mock_request = mock.Mock(user=mock.Mock(is_superuser=False))
+    with pytest.raises(ValueError):
+        serializers.BuilderAccountSerializer(instance=builder_account, context={"request": mock_request})
+
+
+def test_builder_account_serializer_without_context_request(builder_account):
+    """Should explode if created without context request."""
+    with pytest.raises(ValueError):
+        serializers.BuilderAccountSerializer(instance=builder_account, context={})
+
+
+def test_builder_account_serializer_without_context(builder_account):
+    """Should explode if created without context."""
+    with pytest.raises(ValueError):
+        serializers.BuilderAccountSerializer(instance=builder_account)
+
+
+def test_builder_account_summary_serializer(builder_account):
+    """Should produce serialized BuilderAccount on the happy path."""
+    serializer = serializers.BuilderAccountSummarySerializer(instance=builder_account)
+    assert serializer.data is not None
+    assert "token" not in serializer.data, "Token should never appear in summary serializer."
 
 
 def test_user_account_serializer(user_account):

@@ -7,16 +7,26 @@ from .. import models as accounts
 from . import serializers
 
 
-class BuilderAccountList(generics.ListCreateAPIView):
+class BuilderAccountDetailView(generics.RetrieveAPIView):
+    """Retrieve Builder Account Details."""
+
+    authentication_classes = (authentication.SessionAuthentication,)
+    lookup_url_kwarg = "builder_id"
+    permission_classes = (permissions.IsAdminUser,)
+    queryset = accounts.BuilderAccount.objects.all()
+    serializer_class = serializers.BuilderAccountSerializer
+
+
+class BuilderAccountListView(generics.ListCreateAPIView):
     """List Builder Accounts."""
 
     authentication_classes = (authentication.SessionAuthentication,)
     permission_classes = (permissions.DjangoModelPermissions, permissions.IsAuthenticated)
     queryset = accounts.BuilderAccount.objects.all()
-    serializer_class = serializers.BuilderAccountSerializer
+    serializer_class = serializers.BuilderAccountSummarySerializer
 
 
-class UserAccountList(generics.ListCreateAPIView):
+class UserAccountListView(generics.ListCreateAPIView):
     """List User Accounts."""
 
     authentication_classes = (authentication.SessionAuthentication,)
@@ -25,8 +35,8 @@ class UserAccountList(generics.ListCreateAPIView):
     serializer_class = serializers.UserAccountSerializer
 
 
-class RequestUserAccountDetail(generics.RetrieveAPIView):
-    """Retrieve User Account Detail for Request User."""
+class RequestUserAccountDetailView(generics.RetrieveAPIView):
+    """Retrieve User Account Details for Request User."""
 
     authentication_classes = (authentication.SessionAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)

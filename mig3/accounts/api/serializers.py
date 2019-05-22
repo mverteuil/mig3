@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 
 from hashid_field import rest as hashid_field
 from rest_framework import serializers
+from rest_framework.fields import empty
 
 from api.serializers import ReadOnlySerializer
 from .. import models as accounts
@@ -27,8 +28,8 @@ class BuilderStatisticsSerializer(ReadOnlySerializer):
     version_count = serializers.IntegerField()
 
 
-class BuilderAccountSerializer(serializers.ModelSerializer):
-    """API representation of a CI/build service."""
+class BuilderAccountSummarySerializer(serializers.ModelSerializer):
+    """Summary API representation of a CI/build service."""
 
     id = hashid_field.HashidSerializerCharField(source_field="accounts.BuilderAccount.id", read_only=True)
     statistics = BuilderStatisticsSerializer(read_only=True)
@@ -36,6 +37,27 @@ class BuilderAccountSerializer(serializers.ModelSerializer):
     class Meta:  # noqa: D106
         model = accounts.BuilderAccount
         fields = ("id", "name", "statistics")
+
+
+class BuilderAccountSerializer(BuilderAccountSummarySerializer):
+    """API representation of a Builder Account.
+
+    Warnings
+    --------
+    Contains API key in plaintext! For use with administrator views only!
+    """
+
+    def __init__(self, instance=None, data=empty, **kwargs):
+        try:
+            if kwargs["context"]["request"].user.is_superuser:
+                super().__init__(instance, data, **kwargs)
+            else:
+                raise ValueError("Not Administrator")
+        except (KeyError, ValueError):
+            raise ValueError("Context request with administrator required for viewing BuilderAccount token.")
+
+    class Meta(BuilderAccountSummarySerializer.Meta):  # noqa: D106
+        fields = BuilderAccountSummarySerializer.Meta.fields + ("token",)
 
 
 class UserAccountField(serializers.Field):

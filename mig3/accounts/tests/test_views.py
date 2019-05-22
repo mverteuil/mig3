@@ -64,6 +64,24 @@ def test_object_mutability_with_admin_session(admin_user, api_client, view_name,
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
+def test_builder_account_detail_with_admin_session(admin_user, api_client, builder_account):
+    """Should allow administrator to view Builder Account token in plain text."""
+    api_client.login(username=admin_user.email, password="password")
+    url = reverse("api:builder_account_detail", kwargs={"builder_id": builder_account.id})
+    response = api_client.get(url)
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data["token"] == builder_account.token
+
+
+def test_builder_account_detail_with_user_session(builder_account, session_authentication):
+    """Should refuse to view Builder Account token in plain text as standard user."""
+    api_client, _ = session_authentication
+    url = reverse("api:builder_account_detail", kwargs={"builder_id": builder_account.id})
+    response = api_client.get(url)
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert "token" not in response.data
+
+
 def test_login(client, user_account, webpack_safe):
     """Should create session for active users."""
     url = reverse("login")
