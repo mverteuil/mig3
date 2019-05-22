@@ -11,7 +11,7 @@
               v-flex(xs12)
                 v-text-field(label="Project Name" v-model="projectName")
                 v-text-field(label="Repository URL" v-model="repoUrl" clearable optional)
-                v-btn(@click="createProject()" class="ml-0" v-if="!loading") Create Project
+                v-btn(@click="createProject()" class="ml-0" v-if="!progress") Create Project
                 v-progress-circular(indeterminate v-else)
 </template>
 <script>

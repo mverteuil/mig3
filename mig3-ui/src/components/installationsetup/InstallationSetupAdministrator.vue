@@ -15,7 +15,7 @@
 import { mapState } from "vuex";
 
 export default {
-  name: "InstallationWizardAdministrator",
+  name: "InstallationSetupAdministrator",
   computed: {
     ...mapState(["currentUser"])
   },

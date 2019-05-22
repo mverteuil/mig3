@@ -2,17 +2,18 @@ import Vue from "vue";
 import Vuex from "vuex";
 import apiClient from "@/services/api";
 import {
-  RECEIVE_BUILDER,
+  SELECT_BUILDER,
   RECEIVE_BUILDERS,
   RECEIVE_BUILDS,
   RECEIVE_CURRENT_USER,
   RECEIVE_INSTALLATION_SETUP_DETAILS,
-  RECEIVE_PROJECT,
+  SELECT_PROJECT,
   RECEIVE_PROJECTS,
-  RECEIVE_TARGET,
+  SELECT_TARGET,
   RECEIVE_TARGETS,
   RECEIVE_USERS,
-  SET_SELECTED
+  SELECT_BUILD,
+  SELECT_NONE
 } from "@/store/mutation-types";
 import {
   CLEAR_SELECTED_PROJECT,
@@ -20,6 +21,7 @@ import {
   CREATE_PROJECT,
   CREATE_TARGET,
   FETCH_BUILD,
+  FETCH_BUILDER,
   FETCH_BUILDERS,
   FETCH_CURRENT_USER,
   FETCH_INSTALLATION_SETUP_DETAILS,
@@ -63,17 +65,17 @@ export default new Vuex.Store({
   },
   actions: {
     [CLEAR_SELECTED_PROJECT]({ commit }) {
-      commit(SET_SELECTED, {});
+      commit(SELECT_BUILD, {});
     },
     async [CREATE_BUILDER]({ commit }, { name }) {
       let response = await apiClient.postBuilder({ name });
-      commit(RECEIVE_BUILDER, response.data);
+      commit(SELECT_BUILDER, response.data);
     },
     async [CREATE_PROJECT]({ commit }, { name, repoUrl }) {
       let response = await apiClient.postProject({ name, repoUrl });
       const { ...project } = response.data;
-      commit(RECEIVE_PROJECT, project);
-      commit(SET_SELECTED, { project });
+      commit(SELECT_PROJECT, project);
+      commit(SELECT_BUILD, { project });
     },
     async [CREATE_TARGET](
       { commit },
@@ -88,12 +90,16 @@ export default new Vuex.Store({
         projectId: project.id
       });
       const { ...target } = response.data;
-      commit(RECEIVE_TARGET, target);
+      commit(SELECT_TARGET, target);
     },
     async [FETCH_BUILD]({ commit }, { id }) {
       let response = await apiClient.getBuildDetails(id);
       const { project, target, ...build } = response.data;
-      commit(SET_SELECTED, { project, target, build });
+      commit(SELECT_BUILD, { project, target, build });
+    },
+    async [FETCH_BUILDER]({ commit }, { id }) {
+      let response = await apiClient.getBuilderDetails(id);
+      commit(SELECT_BUILDER, response.data);
     },
     async [FETCH_BUILDERS]({ commit }) {
       let response = await apiClient.getBuilders();
@@ -110,19 +116,20 @@ export default new Vuex.Store({
     async [FETCH_PROJECT]({ commit }, { id }) {
       let response = await apiClient.getProjectDetails(id);
       const { targets, ...project } = response.data;
+      commit(SELECT_NONE);
       commit(RECEIVE_TARGETS, targets);
-      commit(SET_SELECTED, { project });
+      commit(SELECT_PROJECT, project);
     },
     async [FETCH_PROJECTS]({ commit }) {
       let response = await apiClient.getProjects();
-      commit(SET_SELECTED, {});
+      commit(SELECT_NONE);
       commit(RECEIVE_PROJECTS, response.data);
     },
     async [FETCH_TARGET]({ commit }, { id }) {
       let response = await apiClient.getTargetDetails(id);
       const { builds, project, ...target } = response.data;
       commit(RECEIVE_BUILDS, builds);
-      commit(SET_SELECTED, { project, target });
+      commit(SELECT_TARGET, target);
     },
     async [FETCH_USERS]({ commit }) {
       let response = await apiClient.getUsers();
@@ -133,9 +140,6 @@ export default new Vuex.Store({
     [RECEIVE_BUILDS](state, payload) {
       state.builds = payload;
     },
-    [RECEIVE_BUILDER](state, payload) {
-      state.builders.push(payload);
-    },
     [RECEIVE_BUILDERS](state, payload) {
       state.builders = payload;
     },
@@ -145,14 +149,8 @@ export default new Vuex.Store({
     [RECEIVE_INSTALLATION_SETUP_DETAILS](state, payload) {
       state.installationSetup = payload;
     },
-    [RECEIVE_PROJECT](state, payload) {
-      state.projects.push(payload);
-    },
     [RECEIVE_PROJECTS](state, payload) {
       state.projects = payload;
-    },
-    [RECEIVE_TARGET](state, payload) {
-      state.targets.push(payload);
     },
     [RECEIVE_TARGETS](state, payload) {
       state.targets = payload;
@@ -160,8 +158,23 @@ export default new Vuex.Store({
     [RECEIVE_USERS](state, payload) {
       state.users = payload;
     },
-    [SET_SELECTED](state, { project, target, build }) {
-      state.selected = { project: project, target: target, build: build };
+    [SELECT_BUILD](state, { build, project, target }) {
+      state.selected.project = project;
+      state.selected.target = target;
+      state.selected.build = build;
+    },
+    [SELECT_BUILDER](state, builder) {
+      state.selected.builder = builder;
+    },
+    [SELECT_NONE](state) {
+      state.selected = { builder: null, build: null, target: null, project: null };
+    },
+    [SELECT_PROJECT](state, project) {
+      state.selected.project = project;
+    },
+    [SELECT_TARGET](state, { project, target }) {
+      state.selected.project = project;
+      state.selected.target = target;
     }
   }
 });

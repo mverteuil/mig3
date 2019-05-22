@@ -61,8 +61,6 @@ export default {
     getRequirement: (requirements, stepNumber) => requirements[stepNumber - 1]
   },
   mounted() {
-    // eslint-disable-next-line no-console
-    console.log("HERRO");
     this.$store.dispatch(FETCH_INSTALLATION_SETUP_DETAILS);
   }
 };

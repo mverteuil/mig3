@@ -3,9 +3,10 @@ import template from "lodash.template";
 
 const URLS = {
   BUILD_DETAIL: template("builds/${ buildId }/"),
+  BUILDER_DETAIL: template("builders/${ builderId }"),
   BUILDER_LIST: "builders/",
-  CURRENT_USER_DETAIL: "whoami/",
-  INSTALLATION_SETUP_DETAIL: "installation-setup/",
+  CURRENT_USER_DETAIL: "users/whoami/",
+  INSTALLATION_SETUP_DETAIL: "wizard/installation-setup/",
   PROJECT_DETAIL: template("projects/${ projectId }/"),
   PROJECT_LIST: "projects/",
   PROJECT_TARGET_LIST: template("projects/${ projectId }/targets/"),
@@ -17,6 +18,9 @@ const URLS = {
 export default {
   async getBuildDetails(buildId) {
     return client().get(URLS.BUILD_DETAIL({ buildId }));
+  },
+  async getBuilderDetails(builderId) {
+    return client().get(URLS.BUILDER_DETAIL({ builderId }));
   },
   async getBuilders() {
     return client().get(URLS.BUILDER_LIST);
