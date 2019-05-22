@@ -11,7 +11,7 @@ install:
   - "pip install pipenv==2018.11.26"
   - "pipenv install"
   - "curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install.sh | sudo bash"
-  - "fossa analyze"
+  - "fossa analyze || true"
   - "pipenv install --dev"
 before_script:
   - "barb -z"
