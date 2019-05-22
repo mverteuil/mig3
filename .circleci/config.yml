@@ -26,7 +26,6 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
-      - run: set
       - run: make devserver && make clean
 
 workflows:
