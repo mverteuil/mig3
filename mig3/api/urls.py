@@ -15,7 +15,7 @@ urlpatterns = [
     path("builds/", view=builds.BuildListView.as_view(), name="build_list"),
     path("builds/<str:build_id>/", view=builds.BuildDetailView.as_view(), name="build_detail"),
     path("builders/", view=accounts.BuilderAccountListView.as_view(), name="builder_account_list"),
-    path("builders/<str:builder_id>", view=accounts.BuilderAccountDetailView.as_view(), name="builder_account_detail"),
+    path("builders/<str:builder_id>/", view=accounts.BuilderAccountDetailView.as_view(), name="builder_account_detail"),
     path("installation-setup/", view=wizard.InstallationSetupDetailView.as_view(), name="installation_setup_detail"),
     path("projects/", view=projects.ProjectListView.as_view(), name="project_list"),
     path("projects/<str:project_id>/", view=projects.ProjectDetailView.as_view(), name="project_detail"),
