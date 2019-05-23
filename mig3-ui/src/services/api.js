@@ -3,7 +3,7 @@ import template from "lodash.template";
 
 const URLS = {
   BUILD_DETAIL: template("builds/${ buildId }/"),
-  BUILDER_DETAIL: template("builders/${ builderId }"),
+  BUILDER_DETAIL: template("builders/${ builderId }/"),
   BUILDER_LIST: "builders/",
   CURRENT_USER_DETAIL: "users/whoami/",
   INSTALLATION_SETUP_DETAIL: "wizard/installation-setup/",

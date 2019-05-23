@@ -16,35 +16,48 @@
               v-flex Run py.test for the first configuration and generate the JSON report. It will now exist as .report.json. (TIP: Add this file to your <code>.gitignore</code> to prevent accidentally committing it.)
               v-flex To submit a report to the mig3 service, we'll need to tell the service which project and target we've tested and the builder's token will authenticate the submission.
                 | (TIP: Remember that the builder token is a <b>secret</b> and should not be displayed in plaintext to anyone but your administrators.)
-              v-flex
-
+              v-flex(v-for="target in targets" :key="target.name")
+                v-subheader Target: {{ target.name }}
+                kbd mig3 --target {{ target.id }} --build 0 --endpoint {{ locationProtocol }}//{{ locationHostname }}/api/builds/ --token {{ builder.token }}
 </template>
 <script>
 import { mapState } from "vuex";
-import { FETCH_BUILDER, FETCH_BUILDERS, FETCH_PROJECT, FETCH_PROJECTS } from "@/store/action-types";
+import apiClient from "@/services/api";
 
 export default {
   name: "InstallationSetupBuilds",
   computed: {
-    ...mapState(["selected"])
+    ...mapState(["selected"]),
+    locationProtocol() {
+      return window.location.protocol;
+    },
+    locationHostname() {
+      return window.location.hostname + (window.location.port ? ":" + window.location.port : "");
+    }
   },
   data: () => ({
-    progress: false
+    polling: null,
+    builder: { id: null, name: null, token: null },
+    targets: {}
   }),
   props: ["step"],
   mounted() {
-    this.$store
-      .dispatch(FETCH_BUILDERS)
-      .then(response => {
-        this.$store.dispatch(FETCH_BUILDER, response.data[0].id).finally(() => {
-          this.progress = false;
-        });
-      })
-      .finally(() => {
-        this.progress = false;
+    apiClient.getBuilders().then(response => {
+      apiClient.getBuilderDetails(response.data[0].id).then(response => {
+        this.builder = response.data;
       });
-    this.$store.dispatch(FETCH_PROJECTS).then(response => {
-      this.$store.dispatch(FETCH_PROJECT, response.data[0].id);
+    });
+    apiClient.getProjects().then(response => {
+      apiClient.getProjectDetails(response.data[0].id).then(response => {
+        this.targets = response.data.map(target => [target.id, target]);
+      });
+    });
+    this.polling = setInterval(() => {
+      this.targets.forEach(target => {
+        apiClient.getTargetDetails(target.id).then(response => {
+          this.targets[response.data.id] = response.data;
+        });
+      });
     });
   }
 };

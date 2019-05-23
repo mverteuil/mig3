@@ -129,7 +129,7 @@ export default new Vuex.Store({
       let response = await apiClient.getTargetDetails(id);
       const { builds, project, ...target } = response.data;
       commit(RECEIVE_BUILDS, builds);
-      commit(SELECT_TARGET, target);
+      commit(SELECT_TARGET, { project, target });
     },
     async [FETCH_USERS]({ commit }) {
       let response = await apiClient.getUsers();
