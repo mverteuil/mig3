@@ -24,7 +24,7 @@ def check_for_missing_administrator_account(app_configs, **kwargs):
     user_model = apps.get_model("accounts", model_name="UserAccount")
     try:
         if not user_model.objects.filter(is_superuser=True).count() > 0:
-            host = "http://localhost:8000" if settings.DEBUG else f"https://{settings.HEROKU_APP_NAME}.herokuapp.com"
+            host = "http://localhost:8000" if settings.DEBUG else "https://your-app-name.herokuapp.com"
             create_admin_url = reverse("create_admin", kwargs={"secret": URLSignature.generate_signature()})
             errors.append(
                 checks.Warning(
