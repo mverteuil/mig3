@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default () =>
   axios.create({
-    baseURL: "http://localhost:8000/api/",
+    baseURL: process.env.NODE_ENV === "development" ? "http://localhost:8000/api/" : "",
     headers: {
       Accepts: "application/json",
       "Access-Control-Allow-Origin": "*",
