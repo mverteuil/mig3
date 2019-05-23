@@ -30,7 +30,7 @@ COPY . /code/
 COPY --from=UI /code/dist /code/mig3-ui/dist
 
 # Install dependencies
-RUN pip install pipenv==2018.11.26
+RUN pip install pip==19.1.1 pipenv==2018.11.26
 RUN make install
 
 CMD make run

@@ -10,9 +10,18 @@ from projects import models as projects
 
 
 class RequirementChecker(abc.ABC):
-    """Discrete requirements stage of installation setup."""
+    """Discrete requirements stage of installation setup.
+
+    IMPORTANT: Concrete implementation names follow "HasConditionDetail" convention.
+    """
 
     condition_name: str = NotImplemented
+
+    def __init_subclass__(cls) -> None:
+        if cls.__name__.startswith("Has"):
+            super().__init_subclass__()
+        else:
+            raise ValueError(f"RequirementChecker implementation name ({cls}) must follow 'HasCondition' convention")
 
     @staticmethod
     @abc.abstractmethod
@@ -41,6 +50,17 @@ class HasBuilder(RequirementChecker):
     def check() -> bool:
         """Check if this requirement is met."""
         return accounts.BuilderAccount.objects.exists()
+
+
+class HasBuilds(RequirementChecker):
+    """Has a build for each target."""
+
+    condition_name = "One Build for Each Target"
+
+    @staticmethod
+    def check() -> bool:
+        """Check if this requirement is met."""
+        return builds.Build.objects.distinct("target").count() >= 2
 
 
 class HasProject(RequirementChecker):
@@ -72,22 +92,11 @@ class HasTargets(RequirementChecker):
         return projects_with_target_counts.filter(target_count__gte=2).exists()
 
 
-class HasBuilds(RequirementChecker):
-    """Has a build for each target."""
-
-    condition_name = "One Build for Each Target"
-
-    @staticmethod
-    def check() -> bool:
-        """Check if this requirement is met."""
-        return builds.Build.objects.distinct("target").count() >= 2
-
-
 class InstallationSetup:
     """Determine how much progress has been made in setting up the mig3 installation."""
 
     #: Conditions which must be satisfied before installation setup is considered complete.
-    REQUIREMENTS: list = [HasAdministrator, HasBuilder, HasProject, HasTargets, HasBuilds]
+    REQUIREMENTS: list = [HasAdministrator, HasProject, HasTargets, HasBuilder, HasBuilds]
 
     @classmethod
     def is_complete(cls) -> bool:

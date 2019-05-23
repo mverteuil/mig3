@@ -1,16 +1,16 @@
-.PHONY = clean devserver* db install release run
+.PHONY = check-dev clean devserver* full-clean install release run run-dev
 SHELL := /bin/bash
+
+# ^^^^^^ Global Above ---------- Production Below VVVVVV
 
 ACTIVATE = source .venv/bin/activate
 SET_CONTEXT := ${ACTIVATE} && cd mig3 && DJANGO_SETTINGS_MODULE=mig3.settings
-UP_DETACHED = docker-compose up --build --detach
-UP_LIVE = docker-compose up --abort-on-container-exit
 
 .venv:
 	python3 -m venv .venv
 
 install: .venv
-	${ACTIVATE} && pip install pipenv==2018.11.26 && pipenv install --deploy
+	${ACTIVATE} && pip install --upgrade pip pipenv==2018.11.26 && pipenv install --deploy
 	${ACTIVATE} && barb -z
 
 release:
@@ -22,21 +22,35 @@ run:
 
 # ^^^^^^ Production Above ----- Development Below VVVVVV
 
-clean:
-	docker-compose down --rmi all --remove-orphans
+EXEC_LIVE = docker-compose exec
+PROJECT_DIR = $(shell basename $(CURDIR))
+TEARDOWN = docker-compose down
+UP_DETACHED = docker-compose up --detach
+UP_LIVE = docker-compose up --abort-on-container-exit
 
-devserver: devserver-db devserver-frontend devserver-backend
-	@echo "Started development servers."
-	@echo "Django Dev Server: http://localhost:8000/"
-	@echo "Vue Dev Server: http://localhost:8080/"
+check-dev:
+	@$(EXEC_LIVE) backend python mig3/manage.py check --fail-level WARNING
+
+clean:
+	@docker-compose down --rmi all --remove-orphans || true
+	@docker volume rm $(PROJECT_DIR)_postgres_data || true
+
+full-clean: clean
+	@docker container prune -f
+	@docker image prune -f
+
+devserver:
+	@echo "Starting development servers..."
+	@$(UP_DETACHED)
 	@echo "PostgreSQL Server: postgresql://postgres:postgres@localhost:15432/postgres"
+	@echo "Vue Dev Server: http://localhost:8080/"
+	@echo "Django Dev Server: http://localhost:8000/"
 
 devserver-%:
-	${UP_DETACHED} $${$@}
+	@$(UP_DETACHED) $${$@}
 
-run-dev:
-	@echo "Starting development servers."
-	@echo "Django Dev Server: http://localhost:8000/"
-	@echo "Vue Dev Server: http://localhost:8080/"
-	@echo "PostgreSQL Server: postgresql://postgres:postgres@localhost:15432/postgres"
-	${UP_LIVE}
+run-dev: | devserver check-dev
+	@$(UP_LIVE) backend
+
+stop-dev:
+	@$(TEARDOWN)

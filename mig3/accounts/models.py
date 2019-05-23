@@ -83,7 +83,7 @@ class UserAccount(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
 
     @property
     def build_count(self) -> int:
-        """Sum of accepted builds for versions authored by this user account."""
+        """Sum of accepted builds for majorAndMinorVersions authored by this user account."""
         return self.version_set.aggregate(models.Count("build__id"))["build__id__count"]
 
     def clean(self):

@@ -4,11 +4,21 @@ from .. import models as projects
 from . import serializers
 
 
-class ProjectListView(generics.ListAPIView):
+class ProjectTargetListView(generics.CreateAPIView):
+    """Create Project Targets."""
+
+    authentication_classes = (authentication.SessionAuthentication,)
+    lookup_field = "project"
+    permission_classes = (permissions.DjangoModelPermissions, permissions.IsAuthenticated)
+    queryset = projects.Target.objects.all()
+    serializer_class = serializers.TargetWriteSerializer
+
+
+class ProjectListView(generics.ListCreateAPIView):
     """List Projects."""
 
     authentication_classes = (authentication.SessionAuthentication,)
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.DjangoModelPermissions, permissions.IsAuthenticated)
     queryset = projects.Project.objects.all()
     serializer_class = serializers.ProjectSummarySerializer
 

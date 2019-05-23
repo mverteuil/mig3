@@ -2,11 +2,26 @@ from hashid_field import rest as hashid_field
 from rest_framework import serializers, status
 from rest_framework.exceptions import APIException, MethodNotAllowed
 
+from accounts.api import serializers as accounts_serializers
 from api.serializers import ReadOnlySerializer
 from projects import models as projects
 from projects.api.serializers import common as project_common_serializers
 from ... import models as builds
-from .common import BuildSummarySerializer
+from .common import BuildSummarySerializer, OutcomeSummarySerializer
+
+__all__ = (
+    "BuildReadSerializer",
+    "BuildSummarySerializer",
+    "BuildWriteSerializer",
+    "Duplicate",
+    "ModuleSerializer",
+    "ModuleTestOutcomeListSerializer",
+    "OutcomeSummarySerializer",
+    "Regression",
+    "TestOutcomeReadSerializer",
+    "TestOutcomeWriteSerializer",
+    "TestResultField",
+)
 
 
 class Duplicate(APIException):
@@ -23,18 +38,6 @@ class Regression(APIException):
     status_code = status.HTTP_409_CONFLICT
     default_detail = "The build introduced a regression to your migration and is unacceptable."
     default_code = "regression"
-
-
-class CurrentBuilderAccount(object):
-    """Use the BuilderAccount value from the current request's details."""
-
-    def set_context(self, serializer_field):
-        """Initialize value for callers."""
-        self._builder_account = serializer_field.context["request"].auth
-
-    def __call__(self):
-        """Produce value for callers."""
-        return self._builder_account
 
 
 class ModuleTestOutcomeListSerializer(serializers.ListSerializer):
@@ -103,7 +106,7 @@ class BuildWriteSerializer(serializers.Serializer):
     )
     number = serializers.CharField()
     version = project_common_serializers.VersionWriteSerializer()
-    builder = serializers.HiddenField(default=CurrentBuilderAccount())
+    builder = serializers.HiddenField(default=accounts_serializers.CurrentBuilderAccount())
     results = TestOutcomeWriteSerializer(many=True, write_only=True)
 
     class Meta:  # noqa: D106

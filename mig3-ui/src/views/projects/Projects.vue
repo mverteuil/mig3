@@ -10,6 +10,7 @@
 <script>
 import { mapState } from "vuex";
 import ProjectCard from "@/components/ProjectCard";
+import { FETCH_PROJECTS } from "@/store/action-types";
 
 export default {
   name: "ProjectList",
@@ -19,7 +20,7 @@ export default {
   },
   methods: {
     fetchProjects() {
-      this.$store.dispatch("FETCH_PROJECTS");
+      this.$store.dispatch(FETCH_PROJECTS);
     }
   },
   mounted() {

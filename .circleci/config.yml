@@ -3,7 +3,7 @@ version: 2.1
 # Validate Vue.js build
 # ---------------------
 jobs:
-  build:
+  test-frontend-build:
     docker:
       - image: circleci/node:12.1-browsers
     working_directory: ~/code
@@ -19,3 +19,19 @@ jobs:
             - mig3-ui/node_modules
           key: v1-dependencies-{{ checksum "mig3-ui/package.json" }}
       - run: cd mig3-ui && yarn build
+
+  test-dev-environment-build:
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run: make devserver && make clean
+
+workflows:
+  frontend:
+    jobs:
+      - test-frontend-build
+  dev-environment:
+    jobs:
+      - test-dev-environment-build

@@ -1,11 +1,12 @@
 from builds.api.serializers import common as build_common_serializers
-from .common import ProjectSummarySerializer, TargetSummarySerializer, VersionReadSerializer
+from .common import ProjectSummarySerializer, TargetSummarySerializer, TargetWriteSerializer, VersionReadSerializer
 
 __all__ = (
     "ProjectSerializer",
     "ProjectSummarySerializer",
     "TargetSerializer",
     "TargetSummarySerializer",
+    "TargetWriteSerializer",
     "VersionReadSerializer",
 )
 
@@ -23,7 +24,7 @@ class TargetSerializer(TargetSummarySerializer):
 class ProjectSerializer(ProjectSummarySerializer):
     """API representation for Projects."""
 
-    targets = TargetSummarySerializer(many=True, source="target_set")
+    targets = TargetSummarySerializer(many=True, source="target_set", read_only=True)
 
     class Meta(ProjectSummarySerializer.Meta):  # noqa: D106
         fields = ProjectSummarySerializer.Meta.fields + ("targets",)

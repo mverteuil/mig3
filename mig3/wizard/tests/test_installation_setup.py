@@ -7,6 +7,12 @@ from model_mommy import mommy
 from wizard import models as wizard
 
 
+def test_faulty_requirement_name():
+    """Should enforce naming convention for requirement checkers."""
+    with pytest.raises(ValueError, match="BadCheckerName.* must follow 'HasCondition' convention"):
+        type("BadCheckerName", (wizard.RequirementChecker,), {"check": staticmethod(lambda: False)})
+
+
 def get_requirement_index(requirement):
     """Find the index in InstallationRequirements.REQUIREMENTS for a concrete RequirementChecker implementation."""
     return wizard.InstallationSetup.REQUIREMENTS.index(requirement)
@@ -26,28 +32,28 @@ def test_has_administrator(admin_user):
     assert wizard.InstallationSetup.get_current_requirement_index() == expected_index
 
 
-def test_has_builder(admin_user, builder_account):
+def test_has_builder(admin_user, builder_account, primary_target, project, secondary_target):
     """Should detect builder and next stage."""
     assert wizard.HasBuilder.check()
     expected_index = get_requirement_index(wizard.HasBuilder) + 1
     assert wizard.InstallationSetup.get_current_requirement_index() == expected_index
 
 
-def test_has_project(admin_user, builder_account, project):
+def test_has_project(admin_user, project):
     """Should detect builder and next stage."""
     assert wizard.HasProject.check()
     expected_index = get_requirement_index(wizard.HasProject) + 1
     assert wizard.InstallationSetup.get_current_requirement_index() == expected_index
 
 
-def test_has_targets_without_enough(admin_user, builder_account, primary_target, project):
+def test_has_targets_without_enough(admin_user, primary_target, project):
     """Should require two project targets."""
     assert not wizard.HasTargets.check()
     expected_index = get_requirement_index(wizard.HasTargets)
     assert wizard.InstallationSetup.get_current_requirement_index() == expected_index
 
 
-def test_has_targets_without_enough_for_same_project(admin_user, builder_account, primary_target, project):
+def test_has_targets_without_enough_for_same_project(admin_user, primary_target, project):
     """Should require two targets attached to the same project."""
     mommy.make("projects.Target")
     assert not wizard.HasTargets.check()
@@ -55,7 +61,7 @@ def test_has_targets_without_enough_for_same_project(admin_user, builder_account
     assert wizard.InstallationSetup.get_current_requirement_index() == expected_index
 
 
-def test_has_targets(admin_user, builder_account, primary_target, project, secondary_target):
+def test_has_targets(admin_user, primary_target, project, secondary_target):
     """Should detect two targets and next stage."""
     assert wizard.HasTargets.check()
     expected_index = get_requirement_index(wizard.HasTargets) + 1

@@ -11,7 +11,6 @@ services:
     build:
       context: .
       dockerfile: docker/backend.dev.Dockerfile
-    command: ./docker/runserver.sh
     environment:
       DATABASE_URL: "postgres://postgres:postgres@db:5432/postgres"
     volumes:
@@ -31,7 +30,6 @@ services:
       - ./mig3-ui/src:/code/src
     ports:
       - 8080:8080
-    command: yarn serve
 
 volumes:
   postgres_data:
