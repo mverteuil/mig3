@@ -9,6 +9,14 @@
       "description": "When present, activates Heroku Django settings overrides.",
       "value": 1
     },
+    "HEROKU_APP_NAME": {
+      "description": "Automatically populated by Heroku. Used to build a hostname.",
+      "required": true
+    },
+    "HEROKU_PARENT_APP_NAME": {
+      "description": "Automatically populated by Heroku. Used to build a hostname.",
+      "required": true
+    },
     "SECRET_KEY": {
       "description": "Django's secret key for cryptographic operations.",
       "generator": "secret"
