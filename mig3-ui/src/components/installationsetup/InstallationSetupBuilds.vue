@@ -49,16 +49,16 @@ export default {
     });
     apiClient.getProjects().then(response => {
       apiClient.getProjectDetails(response.data[0].id).then(response => {
-        this.targets = response.data.map(target => [target.id, target]);
+        this.targets = response.data.targets.map(target => [target.id, target]);
       });
     });
     this.polling = setInterval(() => {
-      this.targets.forEach(target => {
-        apiClient.getTargetDetails(target.id).then(response => {
+      this.targets.forEach(([id]) => {
+        apiClient.getTargetDetails(id).then(response => {
           this.targets[response.data.id] = response.data;
         });
       });
-    });
+    }, 3000);
   }
 };
 </script>
