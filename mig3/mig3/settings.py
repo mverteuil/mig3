@@ -323,6 +323,5 @@ SWAGGER_SETTINGS: dict = {
 # Activate Django-Heroku in production
 # https://devcenter.heroku.com/articles/django-app-configuration
 
-HEROKU_APP_NAME = getenv("HEROKU_APP_NAME", None)
-if HEROKU_APP_NAME is not None:
+if getenv_boolean("HEROKU_APP_NAME", None):
     django_heroku.settings(locals())

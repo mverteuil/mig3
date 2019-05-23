@@ -5,6 +5,30 @@
   "repository": "https://github.com/mverteuil/mig3/",
   "addons": [{ "plan": "heroku-postgresql", "options": { "version": "11" } }],
   "env": {
+    "HEROKU": {
+      "description": "When present, activates Heroku Django settings overrides.",
+      "generator": "secret"
+    },
+    "HASHID_SALT_ACCOUNTS_BUILDER_ACCOUNT": {
+      "description": "Salt for ID hashing.",
+      "generator": "secret"
+    },
+    "HASHID_SALT_ACCOUNTS_USER_ACCOUNT": {
+      "description": "Salt for ID hashing.",
+      "generator": "secret"
+    },
+    "HASHID_SALT_BUILDS_BUILD": {
+      "description": "Salt for ID hashing.",
+      "generator": "secret"
+    },
+    "HASHID_SALT_PROJECTS_PROJECT": {
+      "description": "Salt for ID hashing.",
+      "generator": "secret"
+    },
+    "HASHID_SALT_PROJECTS_TARGET": {
+      "description": "Salt for ID hashing.",
+      "generator": "secret"
+    },
     "SECRET_KEY": {
       "description": "Django's secret key for cryptographic operations.",
       "generator": "secret"
