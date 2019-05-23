@@ -11,7 +11,7 @@
     },
     "DEBUG": {
       "description": "Disable the Django debugging flag.",
-      "default": 0
+      "value": 0
     },
     "HASHID_SALT_ACCOUNTS_BUILDER_ACCOUNT": {
       "description": "Salt for ID hashing.",
