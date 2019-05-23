@@ -9,6 +9,8 @@ from projects import models as projects
 class RequestURLProject(object):
     """Use the Project value from the current request's URL kwargs."""
 
+    _project_id: str = None
+
     def set_context(self, serializer_field):
         """Initialize value for callers."""
         self._project_id = serializer_field.context["view"].kwargs.get("project_id")

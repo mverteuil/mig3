@@ -6,11 +6,14 @@ from rest_framework import serializers
 from rest_framework.fields import empty
 
 from api.serializers import ReadOnlySerializer
+from builds import models as builds
 from .. import models as accounts
 
 
 class CurrentBuilderAccount(object):
     """Use the BuilderAccount value from the current request's details."""
+
+    _builder_account: builds.BuilderAccount = None
 
     def set_context(self, serializer_field):
         """Initialize value for callers."""
