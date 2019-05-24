@@ -138,6 +138,6 @@ def test_administrator_create_view(patched_form, allow_stupid_passwords, assert_
         "password1": "password",
         "password2": "password",
     }
-    response = client.post(url, data=user_data)
+    response = client.post(url, data=user_data, follow=False)
     assert_redirects(response=response, expected_url=reverse("bridge"))
     assert get_user_model().objects.filter(is_superuser=True).count() == 1
