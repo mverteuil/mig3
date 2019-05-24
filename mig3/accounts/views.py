@@ -68,4 +68,4 @@ class SecretCodeView(generic.FormView):
 
     def form_valid(self, form: forms.SecretCodeForm) -> HttpResponseRedirect:
         """Redirect to CreateAdministratorView."""
-        return reverse("create_admin", kwargs={"secret": form.data["secret_key"]})
+        return reverse("create_admin", kwargs={"secret_code": form.data["secret_key"]})
