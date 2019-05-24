@@ -25,14 +25,13 @@ def check_for_missing_administrator_account(app_configs, **kwargs):
     try:
         if not user_model.objects.filter(is_superuser=True).count() > 0:
             secret_code = URLSignature.generate_signature()
-            if settings.DEBUG:
-                create_admin_url = reverse("create_admin", kwargs={"secret_code": secret_code})
-                warning_message = f"Please visit this URL and create your administrator account: http://localhost:8000{create_admin_url}"
-            else:
-                warning_message = (
-                    "Use this SECRET CODE in the next 10 minutes to create the Administrator account: {secret_code}"
-                )
-            errors.append(checks.Warning(warning_message, id="accounts.W001", obj=user_model))
+            admin_url = f"http://localhost:8000{reverse('create_admin', kwargs={'secret_code': secret_code})}"
+            message = (
+                f"Please visit this SECRET URL in the next 10 minutes and create your administrator account: {admin_url}"
+                if settings.DEBUG
+                else f"Use this SECRET CODE in the next 10 minutes to create your administrator account: {secret_code}"
+            )
+            errors.append(checks.Warning(message, id="accounts.W001", obj=user_model))
     except ProgrammingError:
         pass  # Migrations have not run yet.
     return errors
