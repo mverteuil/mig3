@@ -4,7 +4,11 @@ SHELL := /bin/bash
 # ^^^^^^ Global Above ---------- Production Below VVVVVV
 
 ACTIVATE = source .venv/bin/activate
-SET_CONTEXT := ${ACTIVATE} && cd mig3 && DJANGO_SETTINGS_MODULE=mig3.settings
+PORT = $(shell echo $${PORT:-8000})
+SET_CONTEXT := $(ACTIVATE) && cd mig3 && DJANGO_SETTINGS_MODULE=mig3.settings
+
+check:
+	echo $(PORT)
 
 .venv:
 	python3 -m venv .venv
@@ -19,7 +23,7 @@ release:
 
 run: release
 	${SET_CONTEXT} python manage.py check
-	${SET_CONTEXT} gunicorn mig3.wsgi --bind 0:8000 --workers 4 --log-file -
+	${SET_CONTEXT} gunicorn mig3.wsgi --bind 0:$(PORT) --workers 4 --log-file -
 
 # ^^^^^^ Production Above ----- Development Below VVVVVV
 
