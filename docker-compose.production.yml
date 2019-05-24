@@ -12,7 +12,9 @@ services:
     environment:
       DATABASE_URL: "postgres://postgres:postgres@db:5432/postgres"
       DEBUG: 0
-      HEROKU: 1
+      HEROKU: 1180189028109381209
+      HEROKU_DATABASE: 0
+      SECRET_KEY: "I AM A SECRET"
     ports:
       - 8000:8000
     depends_on:

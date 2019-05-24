@@ -331,4 +331,4 @@ SWAGGER_SETTINGS: dict = {
 # https://devcenter.heroku.com/articles/django-app-configuration
 
 if getenv("HEROKU", False):
-    django_heroku.settings(locals())
+    django_heroku.settings(locals(), databases=getenv_boolean("HEROKU_DATABASE", True))

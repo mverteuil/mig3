@@ -19,7 +19,7 @@ release:
 
 run: release
 	${SET_CONTEXT} python manage.py check
-	${SET_CONTEXT} gunicorn mig3.wsgi --log-file -
+	${SET_CONTEXT} gunicorn mig3.wsgi --bind 0:8000 --workers 4 --log-file -
 
 # ^^^^^^ Production Above ----- Development Below VVVVVV
 
