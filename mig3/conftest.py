@@ -21,6 +21,12 @@ def admin_user(db) -> settings.AUTH_USER_MODEL:
 
 
 @pytest.fixture
+def allow_stupid_passwords(settings):
+    """Temporarily remove password validation rules."""
+    settings.AUTH_PASSWORD_VALIDATORS = []
+
+
+@pytest.fixture
 def another_version(version) -> projects.Version:
     """Create a second Version from the original Version's author."""
     return version.author.version_set.create(hash="b2" * 20)

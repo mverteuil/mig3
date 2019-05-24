@@ -198,7 +198,8 @@ LOGIN_REDIRECT_URL: str = "bridge"
 
 # Post-logout redirect URL route name
 # https://docs.djangoproject.com/en/2.2/topics/auth/default/#django.contrib.auth.views.LogoutView
-LOGOUT_REDIRECT_URL: str = "login"
+
+LOGOUT_REDIRECT_URL: str = LOGIN_URL
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/

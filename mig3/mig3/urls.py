@@ -18,14 +18,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path, re_path
 
-from accounts import views as accounts
 from bridge import views as bridge
 
 urlpatterns = [
+    path("accounts/", include("accounts.urls")),
     path("admin/", admin.site.urls),
     path("api/", include(("api.urls", "api"))),
-    path("login/", accounts.LoginView.as_view(), name="login"),
-    path("logout/", accounts.LogoutView.as_view(), name="logout"),
-    re_path(r"^create-admin-(?P<secret>.*)/$", accounts.CreateAdministratorView.as_view(), name="create_admin"),
     re_path(".*", bridge.BridgeView.as_view(), name="bridge"),
 ]
