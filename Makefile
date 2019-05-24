@@ -15,7 +15,7 @@ install: .venv
 
 release:
 	${SET_CONTEXT} python manage.py migrate
-	${SET_CONTEXT} python manage.py collectstatic
+	${SET_CONTEXT} python manage.py collectstatic --no-input
 
 run:
 	${SET_CONTEXT} python manage.py check

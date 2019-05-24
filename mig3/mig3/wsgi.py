@@ -8,9 +8,13 @@ https://docs.djangoproject.com/en/2.2/howto/deployment/wsgi/
 """
 
 import os
+from pathlib import Path
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mig3.settings")
+from whitenoise import WhiteNoise
 
-application = get_wsgi_application()
+BASE_DIR: Path = Path(__file__).resolve().parent.parent.parent
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mig3.settings")
+application = WhiteNoise(get_wsgi_application(), root=os.getenv("STATIC_ROOT", BASE_DIR / "staticfiles"))
