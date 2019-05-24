@@ -12,7 +12,7 @@ SET_CONTEXT := ${ACTIVATE} && cd mig3 && DJANGO_SETTINGS_MODULE=mig3.settings
 install: .venv
 	${ACTIVATE} && pip install --upgrade pip pipenv==2018.11.26 && pipenv install --deploy
 	${ACTIVATE} && barb -z
-	mkdir -p logs/emails-sent
+	mkdir -p /code/logs/emails-sent
 
 release:
 	${SET_CONTEXT} python manage.py migrate
