@@ -132,7 +132,7 @@ TEMPLATES: list = [
 # Email Backend
 # https://docs.djangoproject.com/en/2.2/ref/settings/#email-backend
 
-EMAIL_BACKEND: str = getenv("EMAIL_BACKEND", "django.core.mail.backends.filebased.EmailBackend")
+EMAIL_BACKEND: str = getenv("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
 
 # Email File Path
 # https://docs.djangoproject.com/en/2.2/ref/settings/#email-file-path
