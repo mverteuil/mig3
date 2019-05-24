@@ -37,7 +37,9 @@ class CreateAdministratorView(generic.CreateView):
     def form_valid(self, form):
         """Create login session for the administrator."""
         response = super().form_valid(form)
-        administrator = auth.authenticate(self.request, username=form.data["email"], password=form.data["password1"])
+        administrator = auth.authenticate(
+            request=self.request, username=form.data["email"], password=form.data["password1"]
+        )
         # Usually, we now check login is allowed. This user is being created in this request, so it's safe to assume they're active.
         auth.login(self.request, administrator)
         return response
