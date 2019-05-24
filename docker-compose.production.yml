@@ -1,0 +1,22 @@
+version: "3.7"
+
+services:
+  db:
+    image: postgres:11.2
+    volumes:
+      - prod_data:/var/lib/postgresql/data/
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: "postgres://postgres:postgres@db:5432/postgres"
+      DEBUG: 0
+      HEROKU: 1
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+
+volumes:
+  prod_data:

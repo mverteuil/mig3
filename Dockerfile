@@ -33,4 +33,5 @@ COPY --from=UI /code/dist /code/mig3-ui/dist
 RUN pip install pip==19.1.1 pipenv==2018.11.26
 RUN make install
 
+# Execute release steps and run WSGI service.
 CMD make run

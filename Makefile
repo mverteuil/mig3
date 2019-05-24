@@ -1,4 +1,4 @@
-.PHONY = check-dev clean devserver* full-clean install release run run-dev
+.PHONY = check-dev clean devserver* full-clean install release run run-dev stop-dev
 SHELL := /bin/bash
 
 # ^^^^^^ Global Above ---------- Production Below VVVVVV
@@ -11,13 +11,13 @@ SET_CONTEXT := ${ACTIVATE} && cd mig3 && DJANGO_SETTINGS_MODULE=mig3.settings
 
 install: .venv
 	${ACTIVATE} && pip install --upgrade pip pipenv==2018.11.26 && pipenv install --deploy
-	${ACTIVATE} && barb -z
+	${ACTIVATE} && barb -t .env.production.yml -z
 
 release:
 	${SET_CONTEXT} python manage.py migrate
 	${SET_CONTEXT} python manage.py collectstatic --no-input
 
-run:
+run: release
 	${SET_CONTEXT} python manage.py check
 	${SET_CONTEXT} gunicorn mig3.wsgi --log-file -
 
