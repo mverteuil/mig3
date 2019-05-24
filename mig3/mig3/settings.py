@@ -92,6 +92,7 @@ INSTALLED_APPS: list = [
 MIDDLEWARE: list = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -251,6 +252,11 @@ STATIC_URL: str = "/static/"
 # https://docs.djangoproject.com/en/2.2/ref/settings/#staticfiles-dirs
 
 STATICFILES_DIRS: list = [BASE_DIR / "assets", FRONTEND_DIST_DIR]
+
+# The absolute path to the directory where collectstatic will collect static files for deployment.
+# https://docs.djangoproject.com/en/2.2/ref/settings/#static-root
+
+STATIC_ROOT: str = BASE_DIR / "staticfiles"
 
 # --------------------------------------------------------------------------------------------------------------------
 # Third-party Settings
