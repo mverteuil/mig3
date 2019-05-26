@@ -31,7 +31,7 @@
           </v-list-tile-content>
         </v-list-tile>
       </template>
-      <v-list-tile href="/admin" v-if="currentUser.is_administrator">
+      <v-list-tile href="/admin/" v-if="currentUser.is_administrator">
         <v-list-tile-action>
           <v-icon color="red">mdi-chef-hat</v-icon>
         </v-list-tile-action>
