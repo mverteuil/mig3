@@ -22,14 +22,12 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import { FETCH_PROJECT } from "@/store/action-types";
 
 export default {
   name: "ProjectTargetList",
   computed: {
-    ...mapState({
-      project: state => state.selected.project,
-      targets: "targets"
+    ...mapState(["targets"], {
+      project: state => state.selected.project
     })
   },
   data() {
@@ -53,14 +51,6 @@ export default {
         }
       ]
     };
-  },
-  methods: {
-    fetchProject() {
-      this.$store.dispatch(FETCH_PROJECT, { id: this.$route.params.projectId });
-    }
-  },
-  mounted() {
-    this.fetchProject();
   }
 };
 </script>
