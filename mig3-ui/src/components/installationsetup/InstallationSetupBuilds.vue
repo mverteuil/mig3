@@ -39,13 +39,14 @@
 
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import apiClient from "@/services/api";
 
 export default {
   name: "InstallationSetupBuilds",
   computed: {
     ...mapGetters(["initialTargets"]),
+    ...mapState({ installationComplete: state => state.installationSetup.is_complete }),
     locationProtocol() {
       return window.location.protocol;
     },
@@ -70,6 +71,14 @@ export default {
           this.$set(this.targets, response.data.id, response.data);
         });
       });
+    }
+  },
+  watch: {
+    initialTargets: () => {
+      if (this.polling === null) this.polling = setInterval(this.updateTargetDetails, 5000);
+    },
+    installationComplete: newValue => {
+      if (newValue && this.polling) clearInterval(this.polling);
     }
   }
 };

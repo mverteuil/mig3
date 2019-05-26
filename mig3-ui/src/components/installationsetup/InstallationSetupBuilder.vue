@@ -8,7 +8,7 @@
   </v-stepper-content>
 </template>
 <script>
-import { CREATE_BUILDER } from "@/store/action-types";
+import { CREATE_BUILDER, FETCH_INSTALLATION_SETUP_DETAILS } from "@/store/action-types";
 
 export default {
   name: "InstallationSetupBuilder",
@@ -18,10 +18,10 @@ export default {
     ciServices: ["CircleCI", "Gitlab", "Go.CD", "Jenkins", "TeamCity", "Travis"]
   }),
   methods: {
-    createBuilder() {
-      this.$store.dispatch(CREATE_BUILDER, { name: this.builderName });
+    async createBuilder() {
+      await this.$store.dispatch(CREATE_BUILDER, { name: this.builderName });
+      await this.$store.dispatch(FETCH_INSTALLATION_SETUP_DETAILS);
     }
   }
 };
 </script>
-<style scoped></style>

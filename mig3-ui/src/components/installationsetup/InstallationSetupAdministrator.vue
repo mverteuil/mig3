@@ -22,4 +22,3 @@ export default {
   props: ["step"]
 };
 </script>
-<style scoped></style>
