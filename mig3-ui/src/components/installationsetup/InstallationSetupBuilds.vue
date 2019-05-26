@@ -33,7 +33,7 @@
               kbd mig3 --target {{ target.id }} \<br>
                 |       --build 0 \
                 |       --endpoint {{ locationProtocol }}//{{ locationHostname }}/api/builds/ \
-                |       --token {{ builder.token }}
+                |       --token {{ initialBuilder.token }}
           v-card-actions (TIP: Remember that the builder token is a <strong>secret</strong> and should not be displayed in plaintext to anyone but your administrators.)
 
 
@@ -45,7 +45,7 @@ import apiClient from "@/services/api";
 export default {
   name: "InstallationSetupBuilds",
   computed: {
-    ...mapGetters(["initialTargets"]),
+    ...mapGetters(["initialBuilder", "initialTargets"]),
     ...mapState({ installationComplete: state => state.installationSetup.is_complete }),
     locationProtocol() {
       return window.location.protocol;
