@@ -56,7 +56,7 @@ clean:                                                               ## Destroy 
 	@$(TEARDOWN) --rmi all --remove-orphans || true
 
 full-clean: clean                                                    ## Destroy ALL containers and images / destroy db volume
-	@docker container prune -a -f
+	@docker container prune -f
 	@docker image prune -a -f
 	@docker volume rm $(PROJECT_DIR)_postgres_data || true
 
