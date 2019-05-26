@@ -16,6 +16,8 @@ import dj_database_url
 import django_heroku
 import dotenv
 
+from .utils import get_version
+
 # Environment variable utilities
 # ------------------------------
 
@@ -35,6 +37,8 @@ BACKEND_DIR: Path = BASE_DIR / "mig3"
 FRONTEND_DIR: Path = BASE_DIR / "mig3-ui"
 FRONTEND_DIST_DIR: Path = FRONTEND_DIR / "dist"
 TEMPLATES_DIR: Path = BACKEND_DIR / "templates"
+
+VERSION = get_version()
 
 # Secret Key
 # https://docs.djangoproject.com/en/2.2/ref/settings/#secret-key

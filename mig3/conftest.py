@@ -1,4 +1,5 @@
 from typing import Callable, Tuple
+from unittest import mock
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -12,6 +13,12 @@ from webpack_loader.loader import WebpackLoader
 from accounts import models as accounts
 from builds import models as builds
 from projects import models as projects
+
+
+@pytest.fixture
+def admin_request() -> mock.Mock:
+    """Mock a request by a superuser."""
+    return mock.Mock(user=mock.Mock(is_superuser=True), GET={})
 
 
 @pytest.fixture
@@ -52,9 +59,15 @@ def bearer_authentication(api_client, builder_account) -> Tuple[APIClient, accou
 
 
 @pytest.fixture
-def webpack_safe(monkeypatch):
-    """Patch webpack for views that interact with it."""
-    monkeypatch.setattr(WebpackLoader, "get_bundle", lambda loader, bundle_name: [])
+def builder_account(db) -> accounts.BuilderAccount:
+    """Create a BuilderAccount."""
+    return mommy.make("accounts.BuilderAccount", name="Test CI Service")
+
+
+@pytest.fixture
+def non_admin_request() -> mock.Mock:
+    """Mock a request by a non-superuser."""
+    return mock.Mock(user=mock.Mock(is_superuser=False), GET={})
 
 
 @pytest.fixture
@@ -64,12 +77,6 @@ def primary_build(db, primary_target, version, builder_account, test_results) ->
     Includes: Project, Target, BuilderAccount, Modules, Tests, TestOutcomes
     """
     return builds.Build.objects.create_build("1", primary_target, version, builder_account, test_results)
-
-
-@pytest.fixture
-def builder_account(db) -> accounts.BuilderAccount:
-    """Create a BuilderAccount."""
-    return mommy.make("accounts.BuilderAccount", name="Test CI Service")
 
 
 @pytest.fixture
@@ -125,3 +132,9 @@ def version(db) -> projects.Version:
     """Create a UserAccount and Version."""
     version_user = accounts.UserAccount.objects.create_user(email="author@example.com")
     return version_user.version_set.create(hash="a1" * 20)
+
+
+@pytest.fixture
+def webpack_safe(monkeypatch):
+    """Patch webpack for views that interact with it."""
+    monkeypatch.setattr(WebpackLoader, "get_bundle", lambda loader, bundle_name: [])

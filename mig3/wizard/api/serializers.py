@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
+from accounts.api import serializers as account_serializers
 from api.serializers import ReadOnlySerializer
+from projects.api import serializers as project_serializers
 from wizard import models as wizard
 
 
@@ -27,4 +29,6 @@ class InstallationSetupSerializer(ReadOnlySerializer):
     requirements = RequirementSerializer(source="REQUIREMENTS", many=True)
     current_requirement_index = serializers.IntegerField(source="get_current_requirement_index", allow_null=True)
     satisfied_requirements_percentage = serializers.IntegerField(source="calculate_satisfied_requirements_percentage")
+    initial_builder = account_serializers.BuilderAccountSerializer(source="find_initial_builder", read_only=True)
+    initial_project = project_serializers.ExtendedProjectSerializer(source="find_initial_project", read_only=True)
     is_complete = serializers.BooleanField()

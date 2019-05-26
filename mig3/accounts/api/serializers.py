@@ -3,7 +3,6 @@ from django.contrib.auth import get_user_model
 
 from hashid_field import rest as hashid_field
 from rest_framework import serializers
-from rest_framework.fields import empty
 
 from api.serializers import ReadOnlySerializer
 from builds import models as builds
@@ -50,17 +49,19 @@ class BuilderAccountSerializer(BuilderAccountSummarySerializer):
     Contains API key in plaintext! For use with administrator views only!
     """
 
-    def __init__(self, instance=None, data=empty, **kwargs):
+    class Meta(BuilderAccountSummarySerializer.Meta):  # noqa: D106
+        fields = BuilderAccountSummarySerializer.Meta.fields + ("token",)
+
+    def to_representation(self, instance):
+        """Apply administrator permissions gate before serializing data."""
         try:
-            if kwargs["context"]["request"].user.is_superuser:
-                super().__init__(instance, data, **kwargs)
+            is_administrator_read = instance and self.context["request"].user.is_superuser
+            if is_administrator_read:
+                return super(BuilderAccountSerializer, self).to_representation(instance)
             else:
                 raise ValueError("Not Administrator")
         except (KeyError, ValueError):
             raise ValueError("Context request with administrator required for viewing BuilderAccount token.")
-
-    class Meta(BuilderAccountSummarySerializer.Meta):  # noqa: D106
-        fields = BuilderAccountSummarySerializer.Meta.fields + ("token",)
 
 
 class UserAccountField(serializers.Field):

@@ -53,6 +53,8 @@ export default new Vuex.Store({
     },
     installationSetup: {
       requirements: [{ condition_name: "Active Administrator", is_satisfied: false, id: "Administrator" }],
+      initial_builder: null,
+      initial_project: null,
       current_requirement_index: 0,
       satisfied_requirements_percentage: 0,
       is_complete: false
@@ -61,21 +63,30 @@ export default new Vuex.Store({
   getters: {
     currentInstallationStep: state => {
       return state.installationSetup.current_requirement_index + 1;
+    },
+    initialBuilder: state => {
+      return state.installationSetup.initial_builder;
+    },
+    initialProject: state => {
+      return state.installationSetup.initial_project;
+    },
+    initialTargets: state => {
+      return state.installationSetup.initial_project.targets;
     }
   },
   actions: {
-    [CLEAR_SELECTED_PROJECT]({ commit }) {
+    async [CLEAR_SELECTED_PROJECT]({ commit }) {
       commit(SELECT_BUILD, {});
     },
     async [CREATE_BUILDER]({ commit }, { name }) {
       let response = await apiClient.postBuilder({ name });
-      commit(SELECT_BUILDER, response.data);
+      await commit(SELECT_BUILDER, response.data);
     },
     async [CREATE_PROJECT]({ commit }, { name, repoUrl }) {
       let response = await apiClient.postProject({ name, repoUrl });
       const { ...project } = response.data;
-      commit(SELECT_PROJECT, project);
-      commit(SELECT_BUILD, { project });
+      await commit(SELECT_PROJECT, project);
+      await commit(SELECT_BUILD, { project });
     },
     async [CREATE_TARGET](
       { commit },
@@ -90,50 +101,50 @@ export default new Vuex.Store({
         projectId: project.id
       });
       const { ...target } = response.data;
-      commit(SELECT_TARGET, target);
+      await commit(SELECT_TARGET, target, project);
     },
     async [FETCH_BUILD]({ commit }, { id }) {
       let response = await apiClient.getBuildDetails(id);
       const { project, target, ...build } = response.data;
-      commit(SELECT_BUILD, { project, target, build });
+      await commit(SELECT_BUILD, { project, target, build });
     },
     async [FETCH_BUILDER]({ commit }, { id }) {
       let response = await apiClient.getBuilderDetails(id);
-      commit(SELECT_BUILDER, response.data);
+      await commit(SELECT_BUILDER, response.data);
     },
     async [FETCH_BUILDERS]({ commit }) {
       let response = await apiClient.getBuilders();
-      commit(RECEIVE_BUILDERS, response.data);
+      await commit(RECEIVE_BUILDERS, response.data);
     },
     async [FETCH_CURRENT_USER]({ commit }) {
       let response = await apiClient.getCurrentUserDetails();
-      commit(RECEIVE_CURRENT_USER, response.data);
+      await commit(RECEIVE_CURRENT_USER, response.data);
     },
     async [FETCH_INSTALLATION_SETUP_DETAILS]({ commit }) {
       let response = await apiClient.getInstallationSetupDetails();
-      commit(RECEIVE_INSTALLATION_SETUP_DETAILS, response.data);
+      await commit(RECEIVE_INSTALLATION_SETUP_DETAILS, response.data);
+      return true;
     },
     async [FETCH_PROJECT]({ commit }, { id }) {
       let response = await apiClient.getProjectDetails(id);
       const { targets, ...project } = response.data;
-      commit(SELECT_NONE);
-      commit(RECEIVE_TARGETS, targets);
-      commit(SELECT_PROJECT, project);
+      await commit(RECEIVE_TARGETS, targets);
+      await commit(SELECT_PROJECT, project);
     },
     async [FETCH_PROJECTS]({ commit }) {
       let response = await apiClient.getProjects();
-      commit(SELECT_NONE);
-      commit(RECEIVE_PROJECTS, response.data);
+      await commit(SELECT_NONE);
+      await commit(RECEIVE_PROJECTS, response.data);
     },
     async [FETCH_TARGET]({ commit }, { id }) {
       let response = await apiClient.getTargetDetails(id);
       const { builds, project, ...target } = response.data;
-      commit(RECEIVE_BUILDS, builds);
-      commit(SELECT_TARGET, { project, target });
+      await commit(RECEIVE_BUILDS, builds);
+      await commit(SELECT_TARGET, { project, target });
     },
     async [FETCH_USERS]({ commit }) {
       let response = await apiClient.getUsers();
-      commit(RECEIVE_USERS, response.data);
+      await commit(RECEIVE_USERS, response.data);
     }
   },
   mutations: {

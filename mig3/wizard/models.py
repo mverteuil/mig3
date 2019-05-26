@@ -99,6 +99,22 @@ class InstallationSetup:
     REQUIREMENTS: list = [HasAdministrator, HasProject, HasTargets, HasBuilder, HasBuilds]
 
     @classmethod
+    def find_initial_builder(cls) -> accounts.BuilderAccount:
+        """Find and return initial builder account, if it exists."""
+        try:
+            return accounts.BuilderAccount.objects.earliest("pk")
+        except accounts.BuilderAccount.DoesNotExist:
+            return None
+
+    @classmethod
+    def find_initial_project(cls) -> projects.Project:
+        """Find and return initial project, if it exists."""
+        try:
+            return projects.Project.objects.earliest("pk")
+        except projects.Project.DoesNotExist:
+            return None
+
+    @classmethod
     def is_complete(cls) -> bool:
         """All installation setup requirements have been met."""
         return all(requirement.check() for requirement in cls.REQUIREMENTS)

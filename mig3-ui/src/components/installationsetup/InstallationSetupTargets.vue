@@ -43,12 +43,13 @@
 </template>
 <script>
 import { CREATE_TARGET, FETCH_INSTALLATION_SETUP_DETAILS } from "@/store/action-types";
-import apiClient from "@/services/api";
+import { mapGetters } from "vuex";
 
 export default {
   name: "InstallationSetupTargets",
   props: ["step"],
   computed: {
+    ...mapGetters(["initialProject"]),
     destinationMinorVersions() {
       return this.majorAndMinorVersions[this.destination.python_major_version];
     },
@@ -77,30 +78,18 @@ export default {
       3: [4, 5, 6, 7, 8, 9]
     },
     patchVersions: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
-    project: null,
     progress: false
   }),
   methods: {
-    createTargets() {
+    async createTargets() {
       this.progress = true;
-      this.$store
-        .dispatch(CREATE_TARGET, { project: this.project, ...this.source })
-        .then(() => {
-          this.$store.dispatch(CREATE_TARGET, { project: this.project, ...this.destination }).then(() => {
-            this.$store.dispatch(FETCH_INSTALLATION_SETUP_DETAILS).finally(() => {
-              this.progress = false;
-            });
-          });
-        })
-        .finally(() => {
-          this.progress = false;
-        });
+      await this.$store.dispatch(FETCH_INSTALLATION_SETUP_DETAILS);
+      if (this.$store.getters.initialProject.targets.length === 0) {
+        await this.$store.dispatch(CREATE_TARGET, { project: this.initialProject, ...this.source });
+      }
+      await this.$store.dispatch(CREATE_TARGET, { project: this.initialProject, ...this.destination });
+      this.progress = false;
     }
-  },
-  mounted() {
-    apiClient.getProjects().then(({ data }) => {
-      this.project = data[0];
-    });
   },
   watch: {
     "destination.python_major_version": function(newValue) {

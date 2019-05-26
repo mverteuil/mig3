@@ -28,7 +28,7 @@
           v-card-title 4. Submit your report to the mig3 service
           v-card-text
             p To submit a report to the mig3 service, we'll need to tell the service which project and target we've tested and the builder's token will authenticate the submission.
-            p(v-for="target in targets" :key="target.name")
+            p(v-for="target in initialTargets" :key="target.name")
               v-subheader Target: {{ target.name }} <v-spacer/><v-progress-circular v-if="target.builds.length === 0" indeterminate/>
               kbd mig3 --target {{ target.id }} \<br>
                 |       --build 0 \
@@ -39,13 +39,13 @@
 
 </template>
 <script>
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 import apiClient from "@/services/api";
 
 export default {
   name: "InstallationSetupBuilds",
   computed: {
-    ...mapState(["selected"]),
+    ...mapGetters(["initialTargets"]),
     locationProtocol() {
       return window.location.protocol;
     },
@@ -65,32 +65,12 @@ export default {
   props: ["step"],
   methods: {
     updateTargetDetails() {
-      Object.values(this.targets).forEach(({ id }) => {
+      Object.values(this.initialTargets).forEach(({ id }) => {
         apiClient.getTargetDetails(id).then(response => {
           this.$set(this.targets, response.data.id, response.data);
         });
       });
     }
-  },
-  watch: {
-    targets: newValue => {
-      this.targetValues = Object.values(newValue);
-    }
-  },
-  created() {
-    apiClient.getBuilders().then(response => {
-      apiClient.getBuilderDetails(response.data[0].id).then(response => {
-        this.builder = response.data;
-      });
-    });
-    apiClient.getProjects().then(response => {
-      apiClient.getProjectDetails(response.data[0].id).then(response => {
-        response.data.targets.forEach(target => {
-          this.$set(this.targets, target.id, target);
-        });
-      });
-    });
-    this.polling = setInterval(() => this.updateTargetDetails(), 1000);
   }
 };
 </script>
