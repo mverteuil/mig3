@@ -24,15 +24,14 @@ def check_for_missing_administrator_account(app_configs, **kwargs):
     user_model = apps.get_model("accounts", model_name="UserAccount")
     try:
         if not user_model.objects.filter(is_superuser=True).count() > 0:
-            host = "http://localhost:8000" if settings.DEBUG else "https://your-app-name.herokuapp.com"
-            create_admin_url = reverse("create_admin", kwargs={"secret": URLSignature.generate_signature()})
-            errors.append(
-                checks.Warning(
-                    f"Please visit this URL and create your administrator account: {host}{create_admin_url}",
-                    id="accounts.W001",
-                    obj=user_model,
-                )
+            secret_code = URLSignature.generate_signature()
+            admin_url = f"http://localhost:8000{reverse('create_admin', kwargs={'secret_code': secret_code})}"
+            message = (
+                f"Please visit this SECRET URL in the next 10 minutes and create your administrator account: {admin_url}"
+                if settings.DEBUG
+                else f"Use this SECRET CODE in the next 10 minutes to create your administrator account: {secret_code}"
             )
+            errors.append(checks.Warning(message, id="accounts.W001", obj=user_model))
     except ProgrammingError:
         pass  # Migrations have not run yet.
     return errors

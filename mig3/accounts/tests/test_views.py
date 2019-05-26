@@ -84,20 +84,20 @@ def test_builder_account_detail_with_user_session(builder_account, session_authe
 
 def test_login(client, user_account, webpack_safe):
     """Should create session for active users."""
-    url = reverse("login")
+    url = reverse("login", current_app="accounts")
     response = client.post(url, data={"username": user_account.email, "password": "password"}, follow=True)
     assert response.status_code == status.HTTP_200_OK
 
 
-def test_login_without_account(client, db):
+def test_login_without_account(client, db, admin_user):
     """Should require valid credentials to create login session."""
-    url = reverse("login")
+    url = reverse("login", current_app="accounts")
     response = client.post(url, data={"username": "user@example.com", "password": "password"})
     assert response.status_code == status.HTTP_200_OK
     assert "Please enter a correct Email Address" in str(response.content)
 
 
-def test_login_with_inactive_account(client, user_account):
+def test_login_with_inactive_account(admin_user, client, user_account):
     """Should require active account to create login session."""
     user_account.is_active = False
     user_account.save()
@@ -111,27 +111,33 @@ def test_login_with_inactive_account(client, user_account):
 @mock.patch("accounts.views.URLSignature")
 def test_administrator_view_guard_with_valid_signature(patched_signatures, client):
     """Should allow user to visit administrator form with valid signature."""
-    url = reverse("create_admin", kwargs={"secret": "valid signature"})
+    url = reverse("create_admin", kwargs={"secret_code": "valid signature"})
     patched_signatures.validate_signature.return_value = True
     response = client.get(url)
     assert response.status_code == status.HTTP_200_OK
 
 
-@mock.patch("accounts.views.URLSignature")
-def test_administrator_view_guard_with_invalid_signature(patched_signatures, client):
+@mock.patch("accounts.views.forms.SecretCodeForm")
+def test_administrator_view_guard_with_invalid_signature(patched_form, assert_redirects, client):
     """Should refuse to visit administrator form with invalid signature."""
-    url = reverse("create_admin", kwargs={"secret": "invalid signature"})
-    patched_signatures.validate_signature.return_value = False
+    url = reverse("create_admin", kwargs={"secret_code": "invalid signature"})
+    patched_form().is_valid.return_value = False
     response = client.get(url)
-    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.status_code == status.HTTP_302_FOUND
+    assert_redirects(response=response, expected_url=reverse("secret_code"))
 
 
-@mock.patch("accounts.views.URLSignature")
-def test_administrator_create_view(patched_signatures, client, db):
+@mock.patch("accounts.views.forms.SecretCodeForm")
+def test_administrator_create_view(patched_form, allow_stupid_passwords, assert_redirects, client, db):
     """Should allow user to create administrator with valid signature."""
-    url = reverse("create_admin", kwargs={"secret": ""})
-    response = client.post(
-        url, data={"email": "admin@example.com", "name": "Test Administrator", "password": "password"}
-    )
-    assert response.status_code == status.HTTP_200_OK
-    assert get_user_model()
+    url = reverse("create_admin", kwargs={"secret_code": ""})
+    patched_form().is_valid.return_value = True
+    user_data = {
+        "email": "admin@example.com",
+        "name": "Test Administrator",
+        "password1": "password",
+        "password2": "password",
+    }
+    response = client.post(url, data=user_data, follow=False)
+    assert_redirects(response=response, expected_url=reverse("bridge"))
+    assert get_user_model().objects.filter(is_superuser=True).count() == 1

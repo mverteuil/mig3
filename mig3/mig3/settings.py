@@ -16,6 +16,8 @@ import dj_database_url
 import django_heroku
 import dotenv
 
+from .utils import get_version
+
 # Environment variable utilities
 # ------------------------------
 
@@ -35,6 +37,8 @@ BACKEND_DIR: Path = BASE_DIR / "mig3"
 FRONTEND_DIR: Path = BASE_DIR / "mig3-ui"
 FRONTEND_DIST_DIR: Path = FRONTEND_DIR / "dist"
 TEMPLATES_DIR: Path = BACKEND_DIR / "templates"
+
+VERSION = get_version()
 
 # Secret Key
 # https://docs.djangoproject.com/en/2.2/ref/settings/#secret-key
@@ -92,6 +96,7 @@ INSTALLED_APPS: list = [
 MIDDLEWARE: list = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -132,7 +137,7 @@ TEMPLATES: list = [
 # Email Backend
 # https://docs.djangoproject.com/en/2.2/ref/settings/#email-backend
 
-EMAIL_BACKEND: str = getenv("EMAIL_BACKEND", "django.core.mail.backends.filebased.EmailBackend")
+EMAIL_BACKEND: str = getenv("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
 
 # Email File Path
 # https://docs.djangoproject.com/en/2.2/ref/settings/#email-file-path
@@ -198,7 +203,8 @@ LOGIN_REDIRECT_URL: str = "bridge"
 
 # Post-logout redirect URL route name
 # https://docs.djangoproject.com/en/2.2/topics/auth/default/#django.contrib.auth.views.LogoutView
-LOGOUT_REDIRECT_URL: str = "login"
+
+LOGOUT_REDIRECT_URL: str = LOGIN_URL
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
@@ -250,6 +256,11 @@ STATIC_URL: str = "/static/"
 # https://docs.djangoproject.com/en/2.2/ref/settings/#staticfiles-dirs
 
 STATICFILES_DIRS: list = [BASE_DIR / "assets", FRONTEND_DIST_DIR]
+
+# The absolute path to the directory where collectstatic will collect static files for deployment.
+# https://docs.djangoproject.com/en/2.2/ref/settings/#static-root
+
+STATIC_ROOT: str = BASE_DIR / "staticfiles"
 
 # --------------------------------------------------------------------------------------------------------------------
 # Third-party Settings
@@ -324,4 +335,4 @@ SWAGGER_SETTINGS: dict = {
 # https://devcenter.heroku.com/articles/django-app-configuration
 
 if getenv("HEROKU", False):
-    django_heroku.settings(locals())
+    django_heroku.settings(locals(), databases=getenv_boolean("HEROKU_DATABASE", True))

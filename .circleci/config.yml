@@ -1,8 +1,8 @@
 version: 2.1
-# ---------------------
-# Validate Vue.js build
-# ---------------------
 jobs:
+  # ---------------------
+  # Validate Vue.js build
+  # ---------------------
   test-frontend-build:
     docker:
       - image: circleci/node:12.1-browsers
@@ -20,13 +20,32 @@ jobs:
           key: v1-dependencies-{{ checksum "mig3-ui/package.json" }}
       - run: cd mig3-ui && yarn build
 
+  # --------------------------------------------------
+  # Validate Dev Environment Setup and Simple Teardown
+  # --------------------------------------------------
   test-dev-environment-build:
     docker:
       - image: circleci/buildpack-deps:stretch
     steps:
       - checkout
       - setup_remote_docker
+      - run: make help
       - run: make devserver && make clean
+
+  # -------------------------------------------------
+  # Validate Dev Environement Setup and Full Teardown
+  # -------------------------------------------------
+  test-dev-environment-full-clean:
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    steps:
+      - checkout
+      - setup_remote_docker
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "mig3-ui/package.json" }}
+            - v1-dependencies-
+      - run: make devserver && make full-clean
 
 workflows:
   frontend:
@@ -35,3 +54,4 @@ workflows:
   dev-environment:
     jobs:
       - test-dev-environment-build
+      - test-dev-environment-full-clean

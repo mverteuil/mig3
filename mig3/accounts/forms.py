@@ -1,6 +1,11 @@
+from datetime import timedelta
+
+from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
+
+from accounts.utils import URLSignature
 
 
 class CreateAdministratorForm(UserCreationForm):
@@ -26,3 +31,15 @@ class CreateAdministratorForm(UserCreationForm):
                 "commit": commit,
             }
         )
+
+
+class SecretCodeForm(forms.Form):
+    """Validate secret code to bootstrap installation with initial administrator."""
+
+    secret_code = forms.CharField(max_length=128)
+
+    def clean_secret_code(self):
+        """Check for invalidation by time or value."""
+        secret_code = self.cleaned_data["secret_code"]
+        URLSignature.validate_signature(secret_code, max_age=timedelta(minutes=10))
+        return secret_code

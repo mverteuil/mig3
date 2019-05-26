@@ -28,3 +28,9 @@ class ProjectSerializer(ProjectSummarySerializer):
 
     class Meta(ProjectSummarySerializer.Meta):  # noqa: D106
         fields = ProjectSummarySerializer.Meta.fields + ("targets",)
+
+
+class ExtendedProjectSerializer(ProjectSerializer):
+    """API representation for Projects will full Target details."""
+
+    targets = TargetSerializer(many=True, source="target_set", read_only=True)

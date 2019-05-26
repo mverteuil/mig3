@@ -1,5 +1,3 @@
-from unittest import mock
-
 from django.contrib.auth import get_user_model
 
 import pytest
@@ -28,31 +26,32 @@ def test_user_account_field_write_existing(user_account):
     assert actual == user_account
 
 
-def test_builder_account_serializer(builder_account):
+def test_builder_account_serializer(admin_request, builder_account):
     """Should produce serialized BuilderAccount on the happy path."""
-    mock_request = mock.Mock(user=mock.Mock(is_superuser=True))
-    serializer = serializers.BuilderAccountSerializer(instance=builder_account, context={"request": mock_request})
+    serializer = serializers.BuilderAccountSerializer(instance=builder_account, context={"request": admin_request})
     assert serializer.data is not None
     assert "token" in serializer.data
 
 
-def test_builder_account_serializer_without_admin(builder_account):
+def test_builder_account_serializer_without_admin(non_admin_request, builder_account):
     """Should explode if created with regular user request."""
-    mock_request = mock.Mock(user=mock.Mock(is_superuser=False))
+    serializer = serializers.BuilderAccountSerializer(instance=builder_account, context={"request": non_admin_request})
     with pytest.raises(ValueError):
-        serializers.BuilderAccountSerializer(instance=builder_account, context={"request": mock_request})
+        assert serializer.data is None
 
 
 def test_builder_account_serializer_without_context_request(builder_account):
     """Should explode if created without context request."""
+    serializer = serializers.BuilderAccountSerializer(instance=builder_account, context={})
     with pytest.raises(ValueError):
-        serializers.BuilderAccountSerializer(instance=builder_account, context={})
+        assert serializer.data is None
 
 
 def test_builder_account_serializer_without_context(builder_account):
     """Should explode if created without context."""
+    serializer = serializers.BuilderAccountSerializer(instance=builder_account)
     with pytest.raises(ValueError):
-        serializers.BuilderAccountSerializer(instance=builder_account)
+        assert serializer.data
 
 
 def test_builder_account_summary_serializer(builder_account):

@@ -10,5 +10,20 @@ Vue.use(Router);
 
 export default new Router({
   mode: "history",
-  routes: [BuilderRoutes, ProjectRoutes, UserRoutes, WizardRoutes]
+  routes: [
+    {
+      path: "/",
+      name: "root",
+      redirect: { name: "InstallationSetupWizard" }
+    },
+    BuilderRoutes,
+    ProjectRoutes,
+    UserRoutes,
+    WizardRoutes,
+    {
+      path: "*",
+      name: "catch-all",
+      redirect: { name: "root" }
+    }
+  ]
 });
