@@ -71,7 +71,7 @@ export default new Vuex.Store({
       return state.installationSetup.initial_project;
     },
     initialTargets: state => {
-      return state.installationSetup.initial_project.targets;
+      return state.installationSetup.initial_project ? state.installationSetup.initial_project.targets : [];
     }
   },
   actions: {

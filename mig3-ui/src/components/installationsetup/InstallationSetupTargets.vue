@@ -88,6 +88,7 @@ export default {
         await this.$store.dispatch(CREATE_TARGET, { project: this.initialProject, ...this.source });
       }
       await this.$store.dispatch(CREATE_TARGET, { project: this.initialProject, ...this.destination });
+      await this.$store.dispatch(FETCH_INSTALLATION_SETUP_DETAILS);
       this.progress = false;
     }
   },
