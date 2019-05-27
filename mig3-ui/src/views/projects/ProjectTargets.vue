@@ -1,12 +1,7 @@
 <template>
   <v-data-table :headers="headers" :items="targets" class="elevation-1" item-key="name">
     <template v-slot:items="props">
-      <router-link
-        :style="{ cursor: 'pointer' }"
-        :to="{ name: 'Project.Target.Builds', params: { projectId: project.id, targetId: props.item.id } }"
-        tag="tr"
-        v-if="project"
-      >
+      <tr :style="{ cursor: 'pointer' }" @click="navigateToTarget(props.item.id)">
         <td align="center">
           <v-icon>mdi-bullseye-arrow</v-icon>
         </td>
@@ -16,7 +11,7 @@
         </td>
         <td>{{ props.item.python_version }}</td>
         <td>{{ props.item.full_version }}</td>
-      </router-link>
+      </tr>
     </template>
   </v-data-table>
 </template>
@@ -26,7 +21,8 @@ import { mapState } from "vuex";
 export default {
   name: "ProjectTargetList",
   computed: {
-    ...mapState(["targets"], {
+    ...mapState(["targets"]),
+    ...mapState({
       project: state => state.selected.project
     })
   },
@@ -51,6 +47,11 @@ export default {
         }
       ]
     };
+  },
+  methods: {
+    navigateToTarget(targetId) {
+      this.$router.push({ name: "Project.Target.Builds", params: { projectId: this.project.id, targetId: targetId } });
+    }
   }
 };
 </script>

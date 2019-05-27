@@ -1,16 +1,9 @@
 <template>
   <v-layout fluid row>
     <v-flex xs12>
-      <v-data-table :headers="headers" :items="builds" class="elevation-1" header-key="text" item-key="id" hide-actions>
+      <v-data-table :headers="headers" :items="builds" class="elevation-1" header-key="text" hide-actions item-key="id">
         <template v-slot:items="props">
-          <router-link
-            :to="{
-              name: 'Project.Target.Build',
-              params: { projectId: project.id, targetId: target.id, buildId: props.item.id }
-            }"
-            style="cursor:pointer"
-            tag="tr"
-          >
+          <tr @click="navigateToBuild(props.item.id)" style="cursor:pointer">
             <td align="center">
               <v-icon color="green">mdi-shield-check</v-icon>
             </td>
@@ -27,7 +20,7 @@
             <td>{{ props.item.outcome_summary.failed }}</td>
             <td>{{ props.item.outcome_summary.error }}</td>
             <td>{{ props.item.outcome_summary.skipped }}</td>
-          </router-link>
+          </tr>
         </template>
       </v-data-table>
     </v-flex>
@@ -39,7 +32,8 @@ import { mapState } from "vuex";
 export default {
   name: "ProjectTargetBuilds",
   computed: {
-    ...mapState(["builds"], {
+    ...mapState(["builds"]),
+    ...mapState({
       project: state => state.selected.project,
       target: state => state.selected.target
     })
@@ -61,6 +55,12 @@ export default {
     };
   },
   methods: {
+    navigateToBuild(buildId) {
+      this.$router.push({
+        name: "Project.Target.Build",
+        params: { projectId: this.project.id, targetId: this.target.id, buildId: buildId }
+      });
+    },
     shortHash: hash => hash.substr(0, 8)
   }
 };
