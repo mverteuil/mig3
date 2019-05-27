@@ -39,7 +39,6 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import { FETCH_USERS } from "@/store/action-types";
 
 export default {
   name: "Users",
@@ -49,18 +48,12 @@ export default {
     })
   },
   methods: {
-    fetchUsers() {
-      return this.$store.dispatch(FETCH_USERS);
-    },
     getUserAvatar(user) {
       return this.getNameOrEmailUsername(user).substr(0, 1);
     },
     getNameOrEmailUsername(user) {
       return user.name ? user.name : user.email.split("@")[0];
     }
-  },
-  mounted() {
-    this.fetchUsers();
   }
 };
 </script>

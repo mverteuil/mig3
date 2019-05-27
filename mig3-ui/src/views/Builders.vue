@@ -39,7 +39,6 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import { FETCH_BUILDERS } from "@/store/action-types";
 
 export default {
   name: "Builders",
@@ -47,14 +46,6 @@ export default {
     ...mapState({
       builders: "builders"
     })
-  },
-  methods: {
-    fetchBuilders() {
-      return this.$store.dispatch(FETCH_BUILDERS);
-    }
-  },
-  mounted() {
-    this.fetchBuilders();
   }
 };
 </script>

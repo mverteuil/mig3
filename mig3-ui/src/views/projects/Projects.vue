@@ -10,21 +10,12 @@
 <script>
 import { mapState } from "vuex";
 import ProjectCard from "@/components/ProjectCard";
-import { FETCH_PROJECTS } from "@/store/action-types";
 
 export default {
   name: "ProjectList",
   components: { ProjectCard },
   computed: {
     ...mapState({ projects: "projects" })
-  },
-  methods: {
-    fetchProjects() {
-      this.$store.dispatch(FETCH_PROJECTS);
-    }
-  },
-  mounted() {
-    this.fetchProjects();
   }
 };
 </script>
