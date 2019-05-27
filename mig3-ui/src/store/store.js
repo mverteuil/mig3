@@ -2,26 +2,24 @@ import Vue from "vue";
 import Vuex from "vuex";
 import apiClient from "@/services/api";
 import {
-  SELECT_BUILDER,
   RECEIVE_BUILDERS,
   RECEIVE_BUILDS,
   RECEIVE_CURRENT_USER,
   RECEIVE_INSTALLATION_SETUP_DETAILS,
-  SELECT_PROJECT,
   RECEIVE_PROJECTS,
-  SELECT_TARGET,
   RECEIVE_TARGETS,
   RECEIVE_USERS,
   SELECT_BUILD,
-  SELECT_NONE
+  SELECT_NONE,
+  SELECT_PROJECT,
+  SELECT_TARGET
 } from "@/store/mutation-types";
 import {
-  CLEAR_SELECTED_PROJECT,
+  CLEAR_SELECTED,
   CREATE_BUILDER,
   CREATE_PROJECT,
   CREATE_TARGET,
   FETCH_BUILD,
-  FETCH_BUILDER,
   FETCH_BUILDERS,
   FETCH_CURRENT_USER,
   FETCH_INSTALLATION_SETUP_DETAILS,
@@ -75,12 +73,11 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    async [CLEAR_SELECTED_PROJECT]({ commit }) {
-      commit(SELECT_BUILD, {});
+    async [CLEAR_SELECTED]({ commit }) {
+      await commit(SELECT_NONE);
     },
     async [CREATE_BUILDER]({ commit }, { name }) {
-      let response = await apiClient.postBuilder({ name });
-      await commit(SELECT_BUILDER, response.data);
+      await apiClient.postBuilder({ name });
     },
     async [CREATE_PROJECT]({ commit }, { name, repoUrl }) {
       let response = await apiClient.postProject({ name, repoUrl });
@@ -107,10 +104,6 @@ export default new Vuex.Store({
       let response = await apiClient.getBuildDetails(id);
       const { project, target, ...build } = response.data;
       await commit(SELECT_BUILD, { project, target, build });
-    },
-    async [FETCH_BUILDER]({ commit }, { id }) {
-      let response = await apiClient.getBuilderDetails(id);
-      await commit(SELECT_BUILDER, response.data);
     },
     async [FETCH_BUILDERS]({ commit }) {
       let response = await apiClient.getBuilders();
@@ -170,22 +163,16 @@ export default new Vuex.Store({
       state.users = payload;
     },
     [SELECT_BUILD](state, { build, project, target }) {
-      state.selected.project = project;
-      state.selected.target = target;
-      state.selected.build = build;
-    },
-    [SELECT_BUILDER](state, builder) {
-      state.selected.builder = builder;
+      state.selected = { build, project, target };
     },
     [SELECT_NONE](state) {
-      state.selected = { builder: null, build: null, target: null, project: null };
+      state.selected = {};
     },
     [SELECT_PROJECT](state, project) {
-      state.selected.project = project;
+      state.selected = { project };
     },
     [SELECT_TARGET](state, { project, target }) {
-      state.selected.project = project;
-      state.selected.target = target;
+      state.selected = { project, target };
     }
   }
 });
