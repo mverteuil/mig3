@@ -1,4 +1,6 @@
 import Index from "@/views/projects/Index";
+import store from "@/store/store";
+import { FETCH_PROJECTS, FETCH_USERS } from "@/store/action-types";
 
 export default {
   path: "/projects/",
@@ -7,7 +9,11 @@ export default {
     {
       path: "",
       name: "Projects",
-      component: () => import(/* webpackChunkName: "projects" */ "@/views/projects/Projects.vue")
+      component: () => import(/* webpackChunkName: "projects" */ "@/views/projects/Projects.vue"),
+      beforeEnter: async (to, from, next) => {
+        await store.dispatch(FETCH_PROJECTS);
+        next();
+      }
     },
     {
       path: ":projectId/targets/",
