@@ -60,7 +60,7 @@ was designed to be supported by:
 
 [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
- *PROTIP*: You need to watch the logs in order to see the _SECRET CODE_ (and enter it within 10 minutes) in order to create your initial administrator account. Once you click "Create App", open a new tab to your projects view and click on the new app. Look on the top right for "More" and choose "View Logs".
+ *PROTIP*: You need to watch the logs in order to see the *SECRET CODE* (and enter it within 10 minutes) in order to create your initial administrator account. Once you click "Create App", open a new tab to your projects view and click on the new app. Look on the top right for "More" and choose "View Logs".
 
 ### Skeleton Installation
 
