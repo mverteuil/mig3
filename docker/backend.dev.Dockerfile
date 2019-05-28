@@ -11,7 +11,7 @@ WORKDIR /code
 # Install dependencies
 RUN pip install pip==19.1.1 pipenv==2018.11.26
 COPY Pipfile Pipfile.lock /code/
-RUN pipenv install --system --dev --sequential
+RUN pipenv install --system --dev
 
 # Copy project root
 COPY . docker/runserver.sh /code/

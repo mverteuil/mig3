@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-layout row>
       <v-flex xs12>
         <span class="display-4 flex font-weight-black text-capitalize">Installation Setup</span>
@@ -10,11 +10,11 @@
         <v-stepper v-model="currentInstallationStep" vertical>
           <template v-for="index in requirements.length">
             <v-stepper-step
-              :key="`${index}-step`"
               :complete="getRequirement(requirements, index).is_satisfied"
+              :key="`${index}-step`"
               :step="index"
             >
-              {{ getRequirement(requirements, index).condition_name }}
+              <span class="title">{{ getRequirement(requirements, index).condition_name }}</span>
             </v-stepper-step>
             <component
               :is="`InstallationSetup${getRequirement(requirements, index).id}`"
@@ -34,7 +34,6 @@ import InstallationSetupBuilder from "@/components/installationsetup/Installatio
 import InstallationSetupBuilds from "@/components/installationsetup/InstallationSetupBuilds";
 import InstallationSetupProject from "@/components/installationsetup/InstallationSetupProject";
 import InstallationSetupTargets from "@/components/installationsetup/InstallationSetupTargets";
-import { FETCH_INSTALLATION_SETUP_DETAILS } from "@/store/action-types";
 
 export default {
   name: "InstallationSetupWizard",
@@ -59,9 +58,6 @@ export default {
   },
   methods: {
     getRequirement: (requirements, stepNumber) => requirements[stepNumber - 1]
-  },
-  mounted() {
-    this.$store.dispatch(FETCH_INSTALLATION_SETUP_DETAILS);
   }
 };
 </script>
