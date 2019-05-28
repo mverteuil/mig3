@@ -16,8 +16,6 @@ export default {
   name: "build-module-tests",
   computed: {
     tests: function() {
-      // eslint-disable-next-line no-console
-      console.log("sorry");
       const sortByName = (a, b) => alphaSort(a.name, b.name);
       return [...this.module.tests].sort(sortByName);
     }
