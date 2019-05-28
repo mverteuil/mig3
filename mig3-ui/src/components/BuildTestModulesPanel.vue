@@ -66,3 +66,8 @@ export default {
   }
 };
 </script>
+<style lang="stylus" scoped>
+code
+  background-color inherit
+  color inherit
+</style>
