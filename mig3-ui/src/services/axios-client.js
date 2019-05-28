@@ -9,7 +9,7 @@ export default () =>
       "Access-Control-Allow-Credentials": "true",
       "Content-Type": "application/json"
     },
-    timeout: 1000,
+    timeout: 5000,
     withCredentials: true,
     xsrfCookieName: "csrftoken",
     xsrfHeaderName: "X-CSRFTOKEN"

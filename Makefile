@@ -23,8 +23,6 @@ ACTIVATE = source .venv/bin/activate
 PORT = $(shell echo $${PORT:-8000})
 SET_CONTEXT := $(ACTIVATE) && cd mig3 && DJANGO_SETTINGS_MODULE=mig3.settings
 
-
-
 .venv:
 	python3 -m venv .venv
 
