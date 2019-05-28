@@ -1,6 +1,6 @@
 <template>
   <v-expansion-panel v-if="modules">
-    <v-expansion-panel-content v-bind:key="module.path" v-for="module in modules">
+    <v-expansion-panel-content v-bind:key="module.path" v-for="module in sortedModules">
       <template v-slot:actions>
         <v-layout align-center>
           <v-flex mr-1>
@@ -25,17 +25,7 @@
       <v-card>
         <v-card-text class="grey darken-2">
           <v-list>
-            <template v-for="(test, index) in module.tests">
-              <v-list-tile :key="test.name">
-                <v-list-tile-content>
-                  <code>{{ test.name }}</code>
-                </v-list-tile-content>
-                <v-list-tile-action>
-                  <v-icon>{{ getResultIcon(test.result) }}</v-icon>
-                </v-list-tile-action>
-              </v-list-tile>
-              <v-divider v-if="index + 1 < module.tests.length" :key="index"></v-divider>
-            </template>
+            <build-module-tests :module="module" />
           </v-list>
         </v-card-text>
       </v-card>
@@ -43,8 +33,18 @@
   </v-expansion-panel>
 </template>
 <script>
+import BuildModuleTests from "@/components/BuildModuleTests";
+import { alphaSort } from "@/utils/sorting";
+
 export default {
   name: "BuildTestModulesPanel",
+  components: { BuildModuleTests },
+  computed: {
+    sortedModules: function() {
+      const sortByPath = (a, b) => alphaSort(a.path, b.path);
+      return [...this.modules].sort(sortByPath);
+    }
+  },
   props: {
     modules: {
       type: Array,
@@ -57,11 +57,6 @@ export default {
     },
     getPassedTestResultCount(module) {
       return module.tests.filter(t => t.result === "PASSED").length;
-    },
-    getResultIcon(result) {
-      if (result === "PASSED") {
-        return "mdi-checkbox-marked-circle";
-      }
     }
   }
 };
