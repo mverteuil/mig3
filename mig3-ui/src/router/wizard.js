@@ -6,15 +6,14 @@ export default {
   name: "InstallationSetupWizard",
   component: () => import(/* webpackChunkName: "installationsetup" */ "@/views/InstallationSetupWizard.vue"),
   beforeEnter: async (to, from, next) => {
-    let redirectTo = null;
     try {
       await store.dispatch(FETCH_INSTALLATION_SETUP_DETAILS);
       if (store.state.installationSetup.is_complete) {
-        redirectTo = { name: "Projects" };
+        next({ name: "Projects" });
       }
     } catch (err) {
-      redirectTo = { name: "Projects" };
+      next({ name: "Projects" });
     }
-    next(redirectTo);
+    next();
   }
 };

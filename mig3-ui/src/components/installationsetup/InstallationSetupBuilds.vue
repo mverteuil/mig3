@@ -41,6 +41,7 @@
 <script>
 import { mapGetters, mapState } from "vuex";
 import apiClient from "@/services/api";
+import { FETCH_INSTALLATION_SETUP_DETAILS } from "@/store/action-types";
 
 export default {
   name: "InstallationSetupBuilds",
@@ -66,6 +67,7 @@ export default {
   props: ["step"],
   methods: {
     updateTargetDetails() {
+      this.$store.dispatch(FETCH_INSTALLATION_SETUP_DETAILS);
       Object.values(this.initialTargets).forEach(({ id }) => {
         apiClient.getTargetDetails(id).then(response => {
           this.$set(this.targets, response.data.id, response.data);
@@ -74,8 +76,8 @@ export default {
     }
   },
   watch: {
-    initialTargets: () => {
-      if (this.polling === null) this.polling = setInterval(this.updateTargetDetails, 5000);
+    initialTargets: function() {
+      this.polling = setInterval(() => this.updateTargetDetails(), 5000);
     },
     installationComplete: newValue => {
       if (newValue && this.polling) clearInterval(this.polling);
