@@ -76,7 +76,7 @@ export default new Vuex.Store({
     async [CLEAR_SELECTED]({ commit }) {
       await commit(SELECT_NONE);
     },
-    async [CREATE_BUILDER]({ name }) {
+    async [CREATE_BUILDER](context, { name }) {
       await apiClient.postBuilder({ name });
     },
     async [CREATE_PROJECT]({ commit }, { name, repoUrl }) {
