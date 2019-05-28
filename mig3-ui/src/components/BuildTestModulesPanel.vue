@@ -56,7 +56,7 @@ export default {
       return module.tests.length - this.getPassedTestResultCount(module);
     },
     getPassedTestResultCount(module) {
-      return module.tests.filter(t => t.result === "passed").length;
+      return module.tests.filter(t => t.result === "PASSED").length;
     },
     getResultIcon(result) {
       if (result === "PASSED") {
