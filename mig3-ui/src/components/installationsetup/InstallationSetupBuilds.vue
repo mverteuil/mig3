@@ -80,9 +80,7 @@ export default {
   },
   watch: {
     initialTargets: function() {
-      if (this.polling === 0) {
-        this.polling = setInterval(() => this.updateTargetDetails(), 5000);
-      }
+      if (this.polling === 0) this.polling = setInterval(() => this.updateTargetDetails(), 5000);
     },
     installationComplete: newValue => {
       if (newValue && this.polling) clearInterval(this.polling);
