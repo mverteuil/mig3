@@ -876,10 +876,10 @@
     "@vue/babel-plugin-transform-vue-jsx" "^1.0.0"
     camelcase "^5.0.0"
 
-"@vue/cli-overlay@^3.7.0":
-  version "3.7.0"
-  resolved "https://registry.yarnpkg.com/@vue/cli-overlay/-/cli-overlay-3.7.0.tgz#0f520c98e1be7618b7a68b768666fffa1f589f94"
-  integrity sha512-QO1rsBVKPZrt+5rHSZXc5UEPVwVgiayOk/cDl+GwSJoR36gnWs1wy1oUX1Awd7QpGiMBK/1+A7aAGhfzKR23Cg==
+"@vue/cli-overlay@^3.8.0":
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/@vue/cli-overlay/-/cli-overlay-3.8.0.tgz#e4e8e2fa92b06fc282916df9c924f1dba50eeabb"
+  integrity sha512-4hY/+r9OwpMb7BPFnQGKftMC8CrfbV00REEFOij52+L4swQw+m879+5zX3Z0xHfPftw6JyaqJB0rmQ0ILI6Ovw==
 
 "@vue/cli-plugin-babel@^3.8.0":
   version "3.8.0"
@@ -920,15 +920,15 @@
     jest-watch-typeahead "0.2.1"
     vue-jest "^3.0.4"
 
-"@vue/cli-service@^3.7.0":
-  version "3.7.0"
-  resolved "https://registry.yarnpkg.com/@vue/cli-service/-/cli-service-3.7.0.tgz#af56526cea64042b48c50a15a9d33c84a71abd31"
-  integrity sha512-RMVwpCE3EB9cL9VAgu1Dy/tGxz5zrVG4UMPk5t4KDu8jJhHxvcAzgIEIfS6KRp0AKfA6iDW4J0NU0fopnpyL+g==
+"@vue/cli-service@^3.8.0":
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/@vue/cli-service/-/cli-service-3.8.0.tgz#47eaa169a7bd96522c1a0df89214f1afee843cd6"
+  integrity sha512-ipJF4RHjyLyLC4oLx+JM1Jk6tiIG0KjCFAqfOscQ44K4CdyS03oFMAUR+SZYy/UXKccMnoeY6Ld4YrGXSytQsg==
   dependencies:
     "@intervolga/optimize-cssnano-plugin" "^1.0.5"
     "@soda/friendly-errors-webpack-plugin" "^1.7.1"
-    "@vue/cli-overlay" "^3.7.0"
-    "@vue/cli-shared-utils" "^3.7.0"
+    "@vue/cli-overlay" "^3.8.0"
+    "@vue/cli-shared-utils" "^3.8.0"
     "@vue/component-compiler-utils" "^2.6.0"
     "@vue/preload-webpack-plugin" "^1.1.0"
     "@vue/web-component-wrapper" "^1.2.0"
@@ -978,7 +978,7 @@
     webpack ">=4 < 4.29"
     webpack-bundle-analyzer "^3.3.0"
     webpack-chain "^4.11.0"
-    webpack-dev-server "^3.3.1"
+    webpack-dev-server "^3.4.1"
     webpack-merge "^4.2.1"
     yorkie "^2.0.0"
 
@@ -9891,7 +9891,7 @@ webpack-dev-middleware@^3.7.0:
     range-parser "^1.2.1"
     webpack-log "^2.0.0"
 
-webpack-dev-server@^3.3.1:
+webpack-dev-server@^3.4.1:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/webpack-dev-server/-/webpack-dev-server-3.4.1.tgz#a5fd8dec95dec410098e7d9a037ff9405395d51a"
   integrity sha512-CRqZQX2ryMtrg0r3TXQPpNh76eM1HD3Wmu6zDBxIKi/d2y+4aa28Ia8weNT0bfgWpY6Vs3Oq/K8+DjfbR+tWYw==
