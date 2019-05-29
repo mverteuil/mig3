@@ -2,6 +2,7 @@
 title: Installation instructions
 layout: home
 ---
+
 # Recommended Installation Instructions
 
 ## Deploying to Heroku
