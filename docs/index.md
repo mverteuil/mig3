@@ -8,7 +8,7 @@ title: Heroku Deployment Instructions
 
 ## Deploying your mig3 service
 
-### 1. Select the "Deploy to Heroku" button below to get started.<br>
+### 1. Select the "Deploy to Heroku" below as a new tab to get started.<br>
 
 [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://dashboard.heroku.com/new?button-url=https%3A%2F%2Fgithub.com%2Fmverteuil%2Fmig3&template=https%3A%2F%2Fgithub.com%2Fmverteuil%2Fmig3)
 
@@ -20,11 +20,11 @@ title: Heroku Deployment Instructions
 
 ![Figure 0-1: Circle indicating that user should select "Deploy App"](figure-0-1.png)
 
-### 4. Now that the deploy has begun, open a new tab to your Heroku projects page.<br>
+### 4. Now that the deploy has begun, note the app name, and open a new tab to your Heroku projects page.<br>
 
 ![Figure 0-2: Underline indicating that user should select "Heroku" logo](figure-0-2.png)
 
-### 5. Select on your new app on the projects page.<br>
+### 5. Select the new app on the projects page.<br>
 
 ![Figure 1-0: Circle indicating that user should select on their project name](figure-1-0.png)
 
