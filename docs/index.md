@@ -1,4 +1,6 @@
 ---
+title: Installation instructions
+layout: post
 ---
 # Recommended Installation Instructions
 
