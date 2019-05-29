@@ -1,6 +1,6 @@
 ---
 title: Installation instructions
-layout: post
+layout: home
 ---
 # Recommended Installation Instructions
 
