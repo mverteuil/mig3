@@ -18,11 +18,11 @@
     "default": {
         "barbara": {
             "hashes": [
-                "sha256:1dcfcdc543201af7dac9773a2ef23a0e8dea3b44af4412fa0805187370ea11d7",
-                "sha256:b2a92ef6f15c306cc8a785dfa39ddb9d35baefc9eedf7fddbc1a6a0f4064f232"
+                "sha256:849bc0f94d9463198df23d2726c6b0d490370a0f65c928f61262848cdc8b13bd",
+                "sha256:dc37d8002dd12226db2c79b6dee746c7794216d3cb5b29dbbf58818e7d2fd9b4"
             ],
             "index": "pypi",
-            "version": "==1.1.4"
+            "version": "==1.1.5"
         },
         "certifi": {
             "hashes": [
