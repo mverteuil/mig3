@@ -1,4 +1,4 @@
-FROM node:12.4-stretch AS UI
+FROM node:12.5-stretch AS UI
 # Set work directory
 WORKDIR /code
 
