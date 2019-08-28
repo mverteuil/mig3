@@ -81,7 +81,6 @@ INSTALLED_APPS: list = [
     "corsheaders",
     "django_extensions",
     "django_fsm",
-    "drf_yasg",
     "rest_framework.apps.RestFrameworkConfig",
     "webpack_loader.apps.WebpackLoaderConfig",
     "accounts.apps.AccountsConfig",
@@ -320,15 +319,6 @@ WEBPACK_LOADER = {
         # https://github.com/owais/django-webpack-loader#stats_file
         "STATS_FILE": FRONTEND_DIST_DIR / "webpack-stats.json",
     }
-}
-
-# DRF-YASG
-# https://drf-yasg.readthedocs.io/en/stable/
-
-SWAGGER_SETTINGS: dict = {
-    # Bearer token only
-    # https://drf-yasg.readthedocs.io/en/stable/security.html?highlight=Bearer#security-definitions
-    "SECURITY_DEFINITIONS": {"Bearer": {"type": "apiKey", "name": "Authorization", "in": "header"}}
 }
 
 # Activate Django-Heroku in production

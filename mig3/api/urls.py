@@ -1,15 +1,9 @@
-from django.urls import include, path, re_path
+from django.urls import path
 
 from accounts.api import views as accounts
 from builds.api import views as builds
 from projects.api import views as projects
 from wizard.api import views as wizard
-from . import views as api
-
-schema_patterns = [
-    path(route="", view=api.schema_view.with_ui("swagger", cache_timeout=0), name="schema_swagger_ui"),
-    re_path(route=r"schema.json", view=api.schema_view.without_ui(cache_timeout=0), name="schema_json"),
-]
 
 # fmt: off
 urlpatterns = [
@@ -20,7 +14,6 @@ urlpatterns = [
     path("projects/", view=projects.ProjectListView.as_view(), name="project_list"),
     path("projects/<str:project_id>/", view=projects.ProjectDetailView.as_view(), name="project_detail"),
     path("projects/<str:project_id>/targets/", view=projects.ProjectTargetListView.as_view(), name="project_target_list"),
-    path("swagger/", include(schema_patterns)),
     path("targets/<str:target_id>/", view=projects.TargetDetailView.as_view(), name="target_detail"),
     path("users/", view=accounts.UserAccountListView.as_view(), name="user_account_list"),
     path("users/whoami/", view=accounts.RequestUserAccountDetailView.as_view(), name="request_user_detail"),
