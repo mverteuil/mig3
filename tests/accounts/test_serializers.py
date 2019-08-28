@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 
 import pytest
 
-from ..api import serializers
+from accounts.api import serializers
 
 
 def test_user_account_field_read():

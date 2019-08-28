@@ -1,4 +1,2 @@
 exclude_dirs:
-  - /tests/
-  - conftest.py
-  - tests.py
+  - tests/

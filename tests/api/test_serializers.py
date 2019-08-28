@@ -2,7 +2,7 @@ from unittest import mock
 
 import pytest
 
-from .. import serializers
+from api import serializers
 
 
 def test_read_only_serializer_create():

@@ -1,4 +1,4 @@
-from .. import forms
+from accounts import forms
 
 
 def test_create_administrator(db):

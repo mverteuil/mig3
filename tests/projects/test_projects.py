@@ -1,4 +1,4 @@
-from .. import models as projects
+from projects import models as projects
 
 
 def test_project_statistics(project_with_tests):

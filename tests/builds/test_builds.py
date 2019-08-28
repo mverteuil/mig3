@@ -2,7 +2,7 @@ from django.db import IntegrityError
 
 import pytest
 
-from .. import models as builds
+from builds import models as builds
 
 
 def test_manager_create(primary_target, version, builder_account, test_results):

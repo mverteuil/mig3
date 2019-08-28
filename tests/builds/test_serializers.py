@@ -4,7 +4,7 @@ import pytest
 from rest_framework.exceptions import MethodNotAllowed
 
 import accounts.api.serializers
-from ..api import serializers
+from builds.api import serializers
 
 
 def test_current_builder_account(db):

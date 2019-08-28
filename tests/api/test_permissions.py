@@ -3,7 +3,7 @@ from unittest import mock
 from django.contrib.auth.models import AnonymousUser
 
 from accounts import models as accounts
-from ..permissions import IsBuilder
+from api.permissions import IsBuilder
 
 
 def test_builder_account():

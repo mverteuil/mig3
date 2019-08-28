@@ -63,7 +63,7 @@ repos:
           (?x)^(
               .*/migrations/.*\.py$|
               .*/admin.*\.py$|
-              .*/tests.*\.py$|
+              tests.*\.py$|
               .*/conftest\.py$
           )$
   - repo: https://github.com/PyCQA/pydocstyle

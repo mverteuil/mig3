@@ -1,7 +1,7 @@
 import pytest
 
-from .. import models as wizard
-from ..api import serializers
+from wizard import models as wizard
+from wizard.api import serializers
 
 
 class HasAlwaysFalse(wizard.RequirementChecker):
