@@ -1,6 +1,6 @@
 dist: xenial
 language: python
-python: "3.7"
+python: 3.7
 sudo: false
 
 stages:
@@ -11,19 +11,20 @@ stages:
 cache:
   pip: true
   directories:
-    - "$HOME/.cache/pre-commit"
+    - $HOME/.cache/pre-commit
 
 env:
-  - "DATABASE_URL=postgres://postgres:postgres@localhost:5432/postgres"
+  - DATABASE_URL=postgres://postgres:postgres@localhost:5432/postgres
 
 jobs:
   include:
     - stage: fossa
+      install:
+        - pip install pip==19.1.1 poetry==0.12.17
       script:
-        - "pip install pip==19.1.1 poetry==0.12.17"
-        - "poetry install --no-dev"
+        - poetry install --no-dev
         - "curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install.sh | sudo bash"
-        - "fossa analyze || true"
+        - fossa analyze || true
     - stage: lint
       install:
         - pip install pre-commit
@@ -34,12 +35,13 @@ jobs:
       services:
         - postgresql
       install:
-        - "poetry install"
+        - pip install pip==19.1.1 poetry==0.12.17
+        - poetry install
       before_script:
-        - "barb -z"
+        - barb -z
       script:
-        - "python -m pytest"
+        - python -m pytest
       after_success:
-        - "pip install codacy-coverage==1.3.11"
-        - "coverage xml"
-        - "python-codacy-coverage -r coverage.xml"
+        - pip install codacy-coverage==1.3.11
+        - coverage xml
+        - python-codacy-coverage -r coverage.xml
