@@ -13,6 +13,7 @@ services:
       dockerfile: docker/backend.dev.Dockerfile
     environment:
       DATABASE_URL: "postgres://postgres:postgres@db:5432/postgres"
+    command: docker/runserver.sh
     volumes:
       - .:/code
     ports:
