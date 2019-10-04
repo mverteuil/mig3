@@ -1,5 +1,5 @@
 # Pull base image
-FROM node:12.2-stretch
+FROM node:12.10.0-stretch
 
 # Set work directory
 WORKDIR /code
