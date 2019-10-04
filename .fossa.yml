@@ -9,4 +9,4 @@ analyze:
       target: .
       path: .
       options:
-        strategy: pipenv
+        strategy: poetry
