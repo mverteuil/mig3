@@ -24,6 +24,7 @@ jobs:
       script:
         - poetry install --no-dev
         - "curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install.sh | sudo bash"
+        - pip freeze > requirements.txt
         - fossa analyze || true
     - stage: lint
       install:
