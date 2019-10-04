@@ -45,10 +45,10 @@ EXEC_LIVE = docker-compose exec
 PROJECT_DIR = $(shell basename $(CURDIR))
 TEARDOWN = docker-compose down
 UP_DETACHED = docker-compose up --detach
-UP_LIVE = docker-compose up --abort-on-container-exit
+RUN_LIVE = docker-compose run
 
 check-dev:                                                           ## Execute checks
-	@$(EXEC_LIVE) backend python mig3/manage.py check --fail-level WARNING
+	@$(EXEC_LIVE) backend .venv/bin/python3 mig3/manage.py check --fail-level WARNING
 
 clean:                                                               ## Destroy containers and images
 	@$(TEARDOWN) --rmi all --remove-orphans || true
@@ -69,7 +69,7 @@ devserver-%:                                                          ## Start c
 	@$(UP_DETACHED) $${$@}
 
 run-dev: | devserver check-dev                                        ## Start all containers, then tail backend.
-	@$(UP_LIVE) backend
+	@$(RUN_LIVE) --entrypoint docker/runserver.sh backend
 
 stop-dev:                                                             ## Gracefully stop containers.
 	@$(TEARDOWN)

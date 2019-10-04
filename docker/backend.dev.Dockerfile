@@ -16,4 +16,5 @@ RUN source .venv/bin/activate && poetry install
 
 # Copy project root
 COPY . /code/
-CMD /code/docker/runserver.sh
+
+ENTRYPOINT ["/bin/bash"]
