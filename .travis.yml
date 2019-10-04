@@ -3,11 +3,6 @@ language: python
 python: 3.7
 sudo: false
 
-stages:
-  - fossa
-  - lint
-  - test
-
 cache:
   pip: true
   directories:
@@ -18,7 +13,8 @@ env:
 
 jobs:
   include:
-    - stage: fossa
+    - stage: check
+      name: fossa
       install:
         - pip install pip==19.1.1 poetry==0.12.17
       script:
@@ -26,15 +22,15 @@ jobs:
         - "curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install.sh | sudo bash"
         - pip freeze > requirements.txt
         - fossa analyze
-    - stage: lint
-      install:
+    - install:
         - pip install pre-commit==1.18.0
         - pre-commit install
+      name: lint
       script:
         - pre-commit run --all-files
-    - stage: test
-      services:
+    - services:
         - postgresql
+      name: test
       install:
         - pip install pip==19.1.1 poetry==0.12.17
         - poetry install
