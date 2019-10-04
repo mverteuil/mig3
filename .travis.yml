@@ -7,14 +7,14 @@ cache:
   pip: true
   directories:
     - $HOME/.cache/pre-commit
+    - $HOME/virtualenv/python3.7
 
 env:
   - DATABASE_URL=postgres://postgres:postgres@localhost:5432/postgres
 
 jobs:
   include:
-    - stage: check
-      name: fossa
+    - name: fossa
       install:
         - pip install pip==19.1.1 poetry==0.12.17
       script:
@@ -22,21 +22,17 @@ jobs:
         - "curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install.sh | sudo bash"
         - pip freeze > requirements.txt
         - fossa analyze
-    - install:
-        - pip install pre-commit==1.18.0
-        - pre-commit install
-      name: lint
-      script:
-        - pre-commit run --all-files
-    - services:
+    - name: lint and test
+      services:
         - postgresql
-      name: test
       install:
-        - pip install pip==19.1.1 poetry==0.12.17
+        - pip install poetry==0.12.17 pre-commit==1.18.0
         - poetry install
+        - pre-commit install
       before_script:
         - barb -z
       script:
+        - SKIP=isort pre-commit run --all-files
         - python -m pytest
       after_success:
         - pip install codacy-coverage==1.3.11
