@@ -28,8 +28,8 @@ jobs:
         - fossa analyze
     - stage: lint
       install:
-        - pip install pre-commit
-        - pre-commit install-hooks
+        - pip install pre-commit==1.18.0
+        - pre-commit install
       script:
         - pre-commit run --all-files
     - stage: test
