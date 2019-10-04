@@ -2,6 +2,7 @@
 set -euo pipefail
 export IFS=$"\n\t"
 
+source /code/.venv/bin/activate
 
 # Generate environment variables if they don't already exist
 barb -z

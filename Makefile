@@ -27,11 +27,11 @@ SET_CONTEXT := $(ACTIVATE) && cd mig3 && DJANGO_SETTINGS_MODULE=mig3.settings
 	python3 -m venv .venv
 
 install: .venv
-	$(ACTIVATE) && pip install --upgrade pip pipenv==2018.11.26 && pipenv install --deploy
+	$(ACTIVATE) && pip install --upgrade pip poetry==0.12.17 && poetry install
 	$(ACTIVATE) && barb -t .env.production.yml -z
 
 release:
-	$(ACTIVATE) pipenv install --deploy --ignore-pipfile
+	$(ACTIVATE) poetry install
 	$(SET_CONTEXT) python manage.py migrate
 	$(SET_CONTEXT) python manage.py collectstatic --no-input
 

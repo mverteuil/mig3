@@ -1,3 +1,38 @@
+[tool.poetry]
+name = "mig3"
+version = "1.2.0"
+description = "Detect regressions in your python3 migration!"
+authors = ["Matthew de Verteuil <mverteuil@users.noreply.github.com>"]
+license = "GPL-3.0"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+barbara = "*"
+dj-database-url = "*"
+django = "*"
+django-choices-enum = {git = "https://github.com/NewVadim/django-choices-enum.git",ref = "0.3"}
+django-extensions = "*"
+django-fsm = "*"
+django-hashid-field = "*"
+django-model-utils = "*"
+django-webpack-loader = "*"
+djangorestframework = "*"
+gitpython = "*"
+psycopg2-binary = "*"
+python-dotenv = "*"
+django-cors-headers = "*"
+gunicorn = "*"
+django-heroku = "*"
+
+[tool.poetry.dev-dependencies]
+graphviz = "*"
+isort = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-datadir = "*"
+pytest-django = "*"
+model-mommy = "*"
+
 [tool.black]
 line-length = 120
 target-version = ['py37']
@@ -30,3 +65,15 @@ no_lines_before = "LOCALFOLDER"
 sections = "FUTURE,STDLIB,DJANGO,THIRDPARTY,PANDAS,FIRSTPARTY,LOCALFOLDER"
 use_parentheses = true
 verbose = true
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[requires]
+python_version = "3.7"

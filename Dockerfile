@@ -30,7 +30,7 @@ COPY . /code/
 COPY --from=UI /code/dist /code/mig3-ui/dist
 
 # Install dependencies
-RUN pip install pip==19.1.1 pipenv==2018.11.26
+RUN pip install poetry==0.12.17
 RUN make install
 
 # Execute release steps and run WSGI service.
