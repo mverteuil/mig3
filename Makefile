@@ -1,5 +1,7 @@
 .PHONY = check-dev clean devserver* full-clean install release run run-dev stop-dev
-SHELL := /bin/bash
+
+SHELL    := /bin/bash
+PROGRESS ?= tty
 
 help: 																 ## Display help for developer targets
 	@IFS=$$'\n' ; \
@@ -19,8 +21,8 @@ help: 																 ## Display help for developer targets
 
 # ^^^^^^ Global Above ---------- Production Below VVVVVV
 
-ACTIVATE = source .venv/bin/activate
-PORT = $(shell echo $${PORT:-8000})
+ACTIVATE     = source /data/venv/bin/activate
+PORT         = $(shell echo $${PORT:-8000})
 SET_CONTEXT := $(ACTIVATE) && cd mig3 && DJANGO_SETTINGS_MODULE=mig3.settings
 
 .venv:
@@ -41,35 +43,40 @@ run: release
 
 # ^^^^^^ Deploy Above --------- Development Below VVVVVV
 
-EXEC_LIVE = docker-compose exec
+BUILD       = DOCKER_BUILDKIT=1 docker build . --progress ${PROGRESS} --build-arg
+EXEC_LIVE   = docker-compose exec
 PROJECT_DIR = $(shell basename $(CURDIR))
-TEARDOWN = docker-compose down
+TEARDOWN    = docker-compose down
 UP_DETACHED = docker-compose up --detach
-RUN_LIVE = docker-compose run
+RUN_LIVE    = docker-compose run
 
 check-dev:                                                           ## Execute checks
-	@$(EXEC_LIVE) backend .venv/bin/python3 mig3/manage.py check --fail-level WARNING
+	@$(EXEC_LIVE) backend /data/venv/bin/python3 mig3/manage.py check --fail-level WARNING
 
 clean:                                                               ## Destroy containers and images
 	@$(TEARDOWN) --rmi all --remove-orphans || true
 
-full-clean: clean                                                    ## Destroy ALL containers and images / destroy db volume
+nuclear-option: clean                                                ## Destroy ALL containers and images / destroy db volume. You probably never want to do this.
 	@docker container prune -f
 	@docker image prune -a -f
 	@docker volume rm $(PROJECT_DIR)_postgres_data || true
 
+devserver-%:
+	@${BUILD} BUILD_TARGET=$${$@}-dev -t mig3-$${$@}-dev
+	@$(UP_DETACHED) $${$@}
+
 devserver:                                                           ## Start all containers
+	@echo "Building development servers..."
+	@${BUILD} BUILD_TARGET=backend-dev -t mig3-backend-dev
+	@${BUILD} BUILD_TARGET=frontend-dev -t mig3-frontend-dev
 	@echo "Starting development servers..."
 	@$(UP_DETACHED)
 	@echo "PostgreSQL Server: postgresql://postgres:postgres@localhost:15432/postgres"
 	@echo "Vue Dev Server: http://localhost:8080/"
 	@echo "Django Dev Server: http://localhost:8000/"
 
-devserver-%:                                                          ## Start container "%"
-	@$(UP_DETACHED) $${$@}
-
 run-dev: | devserver check-dev                                        ## Start all containers, then tail backend.
-	@$(RUN_LIVE) --entrypoint docker/runserver.sh backend
+	@$(RUN_LIVE) backend
 
 stop-dev:                                                             ## Gracefully stop containers.
 	@$(TEARDOWN)
