@@ -1,12 +1,20 @@
 version: 2.1
-jobs:
-  # ---------------------
-  # Validate Vue.js build
-  # ---------------------
-  test-frontend-build:
+
+executors:
+  docker:
     docker:
-      - image: circleci/node:12.1-browsers
+      - image: circleci/docker:latest
     working_directory: ~/code
+    environment:
+      PROGRESS: plain
+  nodejs:
+    docker:
+      - image: circleci/node:12.10-browsers
+    working_directory: ~/code
+
+jobs:
+  test-frontend-build:
+    executor: nodejs
     steps:
       - checkout
       - restore_cache:
@@ -20,32 +28,26 @@ jobs:
           key: v1-dependencies-{{ checksum "mig3-ui/package.json" }}
       - run: cd mig3-ui && yarn build
 
-  # --------------------------------------------------
-  # Validate Dev Environment Setup and Simple Teardown
-  # --------------------------------------------------
   test-dev-environment-build:
-    docker:
-      - image: circleci/buildpack-deps:stretch
+    executor: docker
     steps:
       - checkout
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: 18.09.3
       - run: make help
       - run: make devserver && make clean
 
-  # -------------------------------------------------
-  # Validate Dev Environement Setup and Full Teardown
-  # -------------------------------------------------
-  test-dev-environment-full-clean:
-    docker:
-      - image: circleci/buildpack-deps:stretch
+  test-dev-environment-nuclear-option:
+    executor: docker
     steps:
       - checkout
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: 18.09.3
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "mig3-ui/package.json" }}
             - v1-dependencies-
-      - run: make devserver && make full-clean
+      - run: make devserver && make nuclear-option
 
 workflows:
   frontend:
@@ -54,4 +56,4 @@ workflows:
   dev-environment:
     jobs:
       - test-dev-environment-build
-      - test-dev-environment-full-clean
+      - test-dev-environment-nuclear-option
