@@ -3,14 +3,14 @@ version: 2.1
 executors:
   docker:
     docker:
-      - image: circleci/docker:latest
-    working_directory: ~/code
+      - image: circleci/buildpack-deps:stretch
+    working_directory: ~/mig3
     environment:
       PROGRESS: plain
   nodejs:
     docker:
       - image: circleci/node:12.10-browsers
-    working_directory: ~/code
+    working_directory: ~/mig3
 
 jobs:
   test-frontend-build:

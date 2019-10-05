@@ -61,14 +61,16 @@ nuclear-option: clean                                                ## Destroy 
 	@docker image prune -a -f
 	@docker volume rm $(PROJECT_DIR)_postgres_data || true
 
-devserver-%:
+build-%:
 	@${BUILD} BUILD_TARGET=$${$@}-dev -t mig3-$${$@}-dev
+
+devserver-%: build-%
 	@$(UP_DETACHED) $${$@}
 
-devserver:                                                           ## Start all containers
+devserver:                                                            ## Start all containers
 	@echo "Building development servers..."
-	@${BUILD} BUILD_TARGET=backend-dev -t mig3-backend-dev
-	@${BUILD} BUILD_TARGET=frontend-dev -t mig3-frontend-dev
+	@make build-backend
+	@make build-frontend
 	@echo "Starting development servers..."
 	@$(UP_DETACHED)
 	@echo "PostgreSQL Server: postgresql://postgres:postgres@localhost:15432/postgres"

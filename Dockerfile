@@ -15,22 +15,21 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 ENV VIRTUAL_ENV="/data/venv"
 WORKDIR /data
-RUN pip install poetry==0.12.17
-RUN pip install poetry && python3 -m venv $VIRTUAL_ENV
+RUN pip install poetry==0.12.17 && python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-COPY pyproject.toml poetry.lock /data
+COPY pyproject.toml poetry.lock ./
 RUN poetry install
 WORKDIR /data/mig3
+COPY . /data/mig3
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 FROM node:12.10-stretch AS frontend-base
 ########################################
-WORKDIR /data
-COPY mig3-ui/package.json mig3-ui/yarn.lock /data/mig3-ui/
-RUN cd mig3-ui && yarn install
-COPY mig3-ui .
 WORKDIR /data/mig3-ui
+COPY mig3-ui/package.json mig3-ui/yarn.lock /data/
+RUN yarn install
+COPY mig3-ui /data/
 
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -39,13 +38,13 @@ WORKDIR /data/mig3-ui
 
 FROM backend-base as backend-dev
 ################################
-CMD ["./backend_dev_entrypoint.sh"]
+CMD ["/data/mig3/backend_dev_entrypoint.sh"]
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 FROM frontend-base AS frontend-dev
 ##################################
-CMD yarn serve
+CMD ["yarn", "serve"]
 
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -60,9 +59,8 @@ RUN yarn build
 
 FROM backend-base as dist
 #########################
-COPY . .
 COPY --from=frontend-build /data/mig3-ui/dist /data/mig3-ui/dist
-CMD make run
+CMD ["make", "run"]
 
 # ----------------------------------------------------------------------------------------------------------------------
 
