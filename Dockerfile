@@ -1,37 +1,76 @@
-FROM node:12.10-stretch AS UI
-# Set work directory
-WORKDIR /code
+# Environment
+# ----------------------------------------------------------------------------------------------------------------------
+# Target to use for final image
+# Valid choices: backend-dev, frontend-dev, checks, dist
+ARG BUILD_TARGET=dist
+# ----------------------------------------------------------------------------------------------------------------------
 
-# Install dependencies
-COPY mig3-ui/package.json mig3-ui/yarn.lock /code/
-RUN yarn install
-# Copy project root
-COPY mig3-ui /code/
-# Build frontend
-RUN yarn build
+# Base images
+# ----------------------------------------------------------------------------------------------------------------------
 
-# ---
-
-FROM python:3.7
-
-# Use bash for `source` in makefile
+FROM python:3.7 AS backend-base
+###############################
 SHELL ["/bin/bash", "-c"]
-# Set environment varibles
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
+ENV VIRTUAL_ENV="/data/venv"
+WORKDIR /data
+RUN pip install poetry==0.12.17 && python3 -m venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+COPY pyproject.toml poetry.lock ./
+RUN poetry install
+WORKDIR /data/mig3
+COPY . /data/mig3
 
-# Set work directory
-WORKDIR /code
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-# Install Backend
-COPY . /code/
+FROM node:12.10-stretch AS frontend-base
+########################################
+WORKDIR /data/mig3-ui
+COPY mig3-ui/package.json mig3-ui/yarn.lock /data/
+RUN yarn install
+COPY mig3-ui /data/
 
-# Install UI
-COPY --from=UI /code/dist /code/mig3-ui/dist
+# ----------------------------------------------------------------------------------------------------------------------
 
-# Install dependencies
-RUN pip install poetry==0.12.17
-RUN make install
+# Development images
+# ----------------------------------------------------------------------------------------------------------------------
 
-# Execute release steps and run WSGI service.
-CMD make run
+FROM backend-base as backend-dev
+################################
+CMD ["/data/mig3/backend_dev_entrypoint.sh"]
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+FROM frontend-base AS frontend-dev
+##################################
+CMD ["yarn", "serve"]
+
+# ----------------------------------------------------------------------------------------------------------------------
+
+# Distribution image
+# ----------------------------------------------------------------------------------------------------------------------
+
+FROM frontend-base AS frontend-build
+####################################
+RUN yarn build
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+FROM backend-base as dist
+#########################
+COPY --from=frontend-build /data/mig3-ui/dist /data/mig3-ui/dist
+CMD ["make", "run"]
+
+# ----------------------------------------------------------------------------------------------------------------------
+
+# Finalized image
+# ----------------------------------------------------------------------------------------------------------------------
+
+FROM ${BUILD_TARGET} AS final
+#############################
+ARG BUILD_TARGET
+LABEL com.github.mverteuil.mig3.build-target="${BUILD_TARGET}"
+RUN echo "Finalized: ${BUILD_TARGET}"
+
+# ----------------------------------------------------------------------------------------------------------------------
