@@ -1,7 +1,7 @@
 # Environment
 # ----------------------------------------------------------------------------------------------------------------------
 # Target to use for final image
-# Valid choices: backend-dev, frontend-dev, checks, dist
+# Valid choices: backend-dev, frontend-dev, dist
 ARG BUILD_TARGET=dist
 # ----------------------------------------------------------------------------------------------------------------------
 
