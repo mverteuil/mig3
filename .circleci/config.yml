@@ -7,6 +7,7 @@ executors:
     working_directory: ~/mig3
     environment:
       PROGRESS: plain
+      DOCKER_BUILDKIT: 1
   nodejs:
     docker:
       - image: circleci/node:12.10-browsers
