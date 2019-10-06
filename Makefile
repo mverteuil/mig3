@@ -77,6 +77,12 @@ devserver:                                                            ## Start a
 	@echo "Vue Dev Server: http://localhost:8080/"
 	@echo "Django Dev Server: http://localhost:8000/"
 
+mountless-devserver:
+	@pip install yq
+	@mv docker-compose.yml docker-compose.yml.bak
+	@cat docker-compose.yml.bak | yq "del(.services.backend.volumes)" > docker-compose.yml
+	@make devserver; rm docker-compose.yml.bak; git checkout docker-compose.yml
+
 run-dev: | devserver check-dev                                        ## Start all containers, then tail backend.
 	@$(RUN_LIVE) backend
 

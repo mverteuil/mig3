@@ -35,7 +35,7 @@ jobs:
       - setup_remote_docker:
           version: 18.09.3
       - run: make help
-      - run: make devserver && make clean
+      - run: make mountless-devserver && make clean
 
   test-dev-environment-nuclear-option:
     executor: docker
@@ -47,7 +47,7 @@ jobs:
           keys:
             - v1-dependencies-{{ checksum "mig3-ui/package.json" }}
             - v1-dependencies-
-      - run: make devserver && make nuclear-option
+      - run: make mountless-devserver && make nuclear-option
 
 workflows:
   frontend:
