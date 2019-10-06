@@ -46,23 +46,19 @@ run: release
 BUILD       = DOCKER_BUILDKIT=1 docker build . --progress ${PROGRESS} --build-arg
 EXEC_LIVE   = docker-compose exec
 PROJECT_DIR = $(shell basename $(CURDIR))
+RUN_LIVE    = docker-compose run
 TEARDOWN    = docker-compose down
 UP_DETACHED = docker-compose up --detach
-RUN_LIVE    = docker-compose run
+YQ          = docker run -i mikefarah/yq yq
+
+build-%:
+	@${BUILD} BUILD_TARGET=$${$@}-dev -t mig3-$${$@}-dev
 
 check-dev:                                                           ## Execute checks
 	@$(EXEC_LIVE) backend /data/venv/bin/python3 mig3/manage.py check --fail-level WARNING
 
 clean:                                                               ## Destroy containers and images
 	@$(TEARDOWN) --rmi all --remove-orphans || true
-
-nuclear-option: clean                                                ## Destroy ALL containers and images / destroy db volume. You probably never want to do this.
-	@docker container prune -f
-	@docker image prune -a -f
-	@docker volume rm $(PROJECT_DIR)_postgres_data || true
-
-build-%:
-	@${BUILD} BUILD_TARGET=$${$@}-dev -t mig3-$${$@}-dev
 
 devserver-%: build-%
 	@$(UP_DETACHED) $${$@}
@@ -79,16 +75,21 @@ devserver:                                                            ## Start a
 
 mountless-devserver:
 	@mv docker-compose.yml docker-compose.yml.bak
-	@docker run -i mikefarah/yq yq d - services.backend.volumes < docker-compose.yml.bak > docker-compose.yml
+	@$(YQ) d - services.backend.volumes < docker-compose.yml.bak > docker-compose.yml
 	@make devserver || true && rm docker-compose.yml.bak && git checkout docker-compose.yml
 
-test:
-	@echo "Running tests..."
-	@docker-compose up -d || make devserver
-	@docker-compose exec backend py.test
+nuclear-option: clean                                                ## Destroy ALL containers and images / destroy db volume. You probably never want to do this.
+	@docker container prune -f
+	@docker image prune -a -f
+	@docker volume rm $(PROJECT_DIR)_postgres_data || true
 
 run-dev: | devserver check-dev                                        ## Start all containers, then tail backend.
 	@$(RUN_LIVE) backend
 
 stop-dev:                                                             ## Gracefully stop containers.
 	@$(TEARDOWN)
+
+test:
+	@echo "Running tests..."
+	@$(UP_DETACHED) || make devserver
+	@$(EXEC_LIVE) backend py.test
