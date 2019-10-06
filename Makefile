@@ -1,4 +1,4 @@
-.PHONY = build* check-dev clean devserver* full-clean install mountless-devserver release run run-dev stop-dev test
+.PHONY = build* check-dev clean devserver* full-clean install mountless-devserver virtualenv release run run-dev stop-dev test
 
 SHELL    := /bin/bash
 PROGRESS ?= tty
@@ -21,19 +21,13 @@ help: 																 ## Display help for developer targets
 
 # ^^^^^^ Global Above ---------- Production Below VVVVVV
 
-ACTIVATE     = source /data/venv/bin/activate
+VIRTUAL_ENV  = /data/venv
+ACTIVATE     = source $(VIRTUAL_ENV)/bin/activate
 PORT         = $(shell echo $${PORT:-8000})
-SET_CONTEXT := $(ACTIVATE) && cd mig3 && DJANGO_SETTINGS_MODULE=mig3.settings
-
-.venv:
-	python3 -m venv .venv
-
-install: .venv
-	$(ACTIVATE) && pip install --upgrade pip poetry==0.12.17 && poetry install
-	$(ACTIVATE) && barb -t .env.production.yml -z
+SET_CONTEXT := $(ACTIVATE) && cd /data/mig3/mig3 && DJANGO_SETTINGS_MODULE=mig3.settings
 
 release:
-	$(ACTIVATE) poetry install
+	$(ACTIVATE) && barb -t .env.production.yml -z
 	$(SET_CONTEXT) python manage.py migrate
 	$(SET_CONTEXT) python manage.py collectstatic --no-input
 
@@ -52,7 +46,7 @@ UP_DETACHED = docker-compose up --detach
 YQ          = docker run -i mikefarah/yq yq
 
 build-%:
-	@${BUILD} BUILD_TARGET=$${$@}-dev -t mig3-$${$@}-dev
+	@${BUILD} BUILD_TARGET=$${$@} -t mig3-$${$@}
 
 check-dev:                                                           ## Execute checks
 	@$(EXEC_LIVE) backend /data/venv/bin/python3 mig3/manage.py check --fail-level WARNING
@@ -65,8 +59,8 @@ devserver-%: build-%
 
 devserver:                                                            ## Start all containers
 	@echo "Building development servers..."
-	@make build-backend
-	@make build-frontend
+	@make build-backend-dev
+	@make build-frontend-dev
 	@echo "Starting development servers..."
 	@$(UP_DETACHED)
 	@echo "PostgreSQL Server: postgresql://postgres:postgres@localhost:15432/postgres"

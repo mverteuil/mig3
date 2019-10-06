@@ -59,7 +59,7 @@ RUN yarn build
 
 FROM backend-base as dist
 #########################
-COPY --from=frontend-build /data/mig3-ui/dist /data/mig3-ui/dist
+COPY --from=frontend-build /data/mig3-ui/dist /data/mig3/mig3-ui/dist
 CMD ["make", "run"]
 
 # ----------------------------------------------------------------------------------------------------------------------
