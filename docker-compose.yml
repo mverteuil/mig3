@@ -2,14 +2,14 @@ version: "3.7"
 
 services:
   db:
-    container_name: mig3_db
+    container_name: mig3-db
     image: postgres:11.2
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     ports:
       - 15432:5432
   backend:
-    container_name: mig3_backend
+    container_name: mig3-backend
     image: mig3-backend-dev
     environment:
       DATABASE_URL: "postgres://postgres:postgres@db:5432/postgres"
@@ -21,7 +21,7 @@ services:
       - db
       - frontend
   frontend:
-    container_name: mig3_frontend
+    container_name: mig3-frontend
     image: mig3-frontend-dev
     volumes:
       - ./mig3-ui/dist:/data/mig3/mig3-ui/dist
