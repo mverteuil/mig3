@@ -66,8 +66,7 @@ was designed to be supported by:
 
 ```zsh
 git clone https://github.com/mverteuil/mig3.git .
-pipenv install --deploy
-pipenv run pip install gunicorn
+poetry install --no-dev
 ```
 
 ---
@@ -92,26 +91,25 @@ What follows are the instructions for getting started with actual mig3 developme
 ```zsh
 git clone https://github.com/mverteuil/mig3.git .
 pre-commit install
-pipenv install
+poetry install
 cd mig3-ui
 yarn install
 ```
 then,
 ```zsh
-make devserver  # build and start detatched containers
+make devserver  # Build and start detatched containers
 ```
 or
 ```zsh
-make run-dev  # build and start containers in console
+make run-dev  # Build and start containers in console
 ```
 or
 ```zsh
 make devserver-db  # Start only the database
 ```
-It's recommended that you validate your installation at this point by confirming that linters and tests are passing as expected:
-
+or
 ```zsh
-py.test && pre-commit run --all-files && echo "VALIDATED\!" || echo "CHECK YOUR INSTALLATION"
+make test  # (Start containers and) run test suite
 ```
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmverteuil%2Fmig3.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmverteuil%2Fmig3?ref=badge_large)
