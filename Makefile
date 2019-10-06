@@ -1,4 +1,4 @@
-.PHONY = check-dev clean devserver* full-clean install release run run-dev stop-dev
+.PHONY = build* check-dev clean devserver* full-clean install mountless-devserver release run run-dev stop-dev test
 
 SHELL    := /bin/bash
 PROGRESS ?= tty
@@ -81,6 +81,11 @@ mountless-devserver:
 	@mv docker-compose.yml docker-compose.yml.bak
 	@docker run -i mikefarah/yq yq d - services.backend.volumes < docker-compose.yml.bak > docker-compose.yml
 	@make devserver || true && rm docker-compose.yml.bak && git checkout docker-compose.yml
+
+test:
+	@echo "Running tests..."
+	@docker-compose up -d || make devserver
+	@docker-compose exec backend py.test
 
 run-dev: | devserver check-dev                                        ## Start all containers, then tail backend.
 	@$(RUN_LIVE) backend
