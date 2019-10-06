@@ -20,16 +20,16 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 COPY pyproject.toml poetry.lock ./
 RUN poetry install
 WORKDIR /data/mig3
-COPY . /data/mig3
+COPY . ./
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 FROM node:12.10-stretch AS frontend-base
 ########################################
 WORKDIR /data/mig3-ui
-COPY mig3-ui/package.json mig3-ui/yarn.lock /data/
+COPY mig3-ui/package.json mig3-ui/yarn.lock ./
 RUN yarn install
-COPY mig3-ui /data/
+COPY mig3-ui ./
 
 # ----------------------------------------------------------------------------------------------------------------------
 
