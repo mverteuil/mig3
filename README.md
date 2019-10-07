@@ -49,7 +49,7 @@ was designed to be supported by:
 
 -   Python 3.7+
 -   Pip 19+
--   Pipenv 2018.11.26+
+-   Poetry 0.12.17+
 -   PostgreSQL 11+
 
 ---
