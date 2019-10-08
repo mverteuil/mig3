@@ -24,7 +24,7 @@ COPY . ./
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-FROM node:12.11.0-stretch AS frontend-base
+FROM node:12.11.1-stretch AS frontend-base
 ##########################################
 WORKDIR /data/mig3-ui
 COPY mig3-ui/package.json mig3-ui/yarn.lock ./
