@@ -1,4 +1,4 @@
-from model_mommy import mommy
+from model_bakery import baker
 
 from builds import models as builds
 from projects import models as projects
@@ -10,7 +10,7 @@ def test_builder_statistics(another_version, builder_account, project, primary_b
     assert statistics.build_count == builds.Build.objects.filter(builder=builder_account).count()
     assert statistics.version_count == projects.Version.objects.filter(build__builder=builder_account).count()
 
-    mommy.make("builds.Build", number="2", target__project=project)
+    baker.make("builds.Build", number="2", target__project=project)
 
     statistics = builder_account.statistics
     assert statistics.build_count == builds.Build.objects.filter(builder=builder_account).count()
