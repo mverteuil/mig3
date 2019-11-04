@@ -9824,11 +9824,12 @@ void-elements@^2.0.1:
   resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-2.0.1.tgz#c066afb582bb1cb4128d60ea92392e94d5e9dbec"
   integrity sha1-wGavtYK7HLQSjWDqkjkulNXp2+w=
 
-vue-cli-plugin-vuetify@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/vue-cli-plugin-vuetify/-/vue-cli-plugin-vuetify-1.0.1.tgz#bef77be1d04d2c0f03f1771ebdcbb99f172dfe8a"
-  integrity sha512-Due6vvETiNY0MaRxa8aZnxLIQmPBU+l1hKmed3i/Ly6+kiUcSnNO3OdWt7LVL6nZ/SY71SxVk3at95ipnDe++Q==
+vue-cli-plugin-vuetify@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/vue-cli-plugin-vuetify/-/vue-cli-plugin-vuetify-2.0.1.tgz#4e8cf2b3e1bb279458c2834f78f452a93202c87b"
+  integrity sha512-vNCSuG1mI3Ik6gAr19Gf8Iju+P+qGYj4yGBhpBtWItH0ejMZcPSo/sMBnys7sgGyaTNY43IBi6VTye7DVzDAFQ==
   dependencies:
+    semver "^6.0.0"
     shelljs "^0.8.3"
 
 vue-eslint-parser@^2.0.3:
