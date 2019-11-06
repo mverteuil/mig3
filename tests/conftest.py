@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from django.test import SimpleTestCase
 
 import pytest
-from model_mommy import mommy
+from model_bakery import baker
 from rest_framework.test import APIClient
 from webpack_loader.loader import WebpackLoader
 
@@ -61,7 +61,7 @@ def bearer_authentication(api_client, builder_account) -> Tuple[APIClient, accou
 @pytest.fixture
 def builder_account(db) -> accounts.BuilderAccount:
     """Create a BuilderAccount."""
-    return mommy.make("accounts.BuilderAccount", name="Test CI Service")
+    return baker.make("accounts.BuilderAccount", name="Test CI Service")
 
 
 @pytest.fixture
@@ -88,7 +88,7 @@ def primary_target(project) -> projects.Target:
 @pytest.fixture
 def project(db) -> projects.Project:
     """Create a Project."""
-    return mommy.make("projects.Project", name="Test Project")
+    return baker.make("projects.Project", name="Test Project")
 
 
 @pytest.fixture

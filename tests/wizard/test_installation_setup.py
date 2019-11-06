@@ -2,7 +2,7 @@ import inspect
 from unittest import mock
 
 import pytest
-from model_mommy import mommy
+from model_bakery import baker
 
 from wizard import models as wizard
 
@@ -55,7 +55,7 @@ def test_has_targets_without_enough(admin_user, primary_target, project):
 
 def test_has_targets_without_enough_for_same_project(admin_user, primary_target, project):
     """Should require two targets attached to the same project."""
-    mommy.make("projects.Target")
+    baker.make("projects.Target")
     assert not wizard.HasTargets.check()
     expected_index = get_requirement_index(wizard.HasTargets)
     assert wizard.InstallationSetup.get_current_requirement_index() == expected_index
@@ -81,7 +81,7 @@ def test_has_builds_without_enough_targets(
     admin_user, builder_account, primary_build, primary_target, project, secondary_target
 ):
     """Should require at least two builds from different targets."""
-    mommy.make("builds.Build", target=primary_target)
+    baker.make("builds.Build", target=primary_target)
     assert not wizard.HasBuilds.check()
     expected_index = get_requirement_index(wizard.HasBuilds)
     assert wizard.InstallationSetup.get_current_requirement_index() == expected_index
@@ -89,7 +89,7 @@ def test_has_builds_without_enough_targets(
 
 def test_has_builds(admin_user, builder_account, primary_build, primary_target, project, secondary_target):
     """Should require at least two builds from different targets."""
-    mommy.make("builds.Build", target=secondary_target)
+    baker.make("builds.Build", target=secondary_target)
     assert wizard.HasBuilds.check()
     expected_index = None  # Because this is the last requirement
     assert wizard.InstallationSetup.get_current_requirement_index() == expected_index

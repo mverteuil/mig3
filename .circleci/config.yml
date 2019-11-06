@@ -7,6 +7,7 @@ executors:
     working_directory: ~/mig3
     environment:
       PROGRESS: plain
+      DOCKER_BUILDKIT: 1
   nodejs:
     docker:
       - image: circleci/node:12.10-browsers
@@ -57,7 +58,7 @@ jobs:
           version: 18.09.3
       - run:
           name: Build distribution image
-          command: DOCKER_BUILDKIT=1 docker build . --progress=plain
+          command: docker build . --progress=plain
 
 workflows:
   frontend:
