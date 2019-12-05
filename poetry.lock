@@ -115,7 +115,7 @@ description = "Django friendly finite state machine support."
 name = "django-fsm"
 optional = false
 python-versions = "*"
-version = "2.6.1"
+version = "2.7.0"
 
 [[package]]
 category = "main"
@@ -482,7 +482,7 @@ django = ["16040e1288c6c9f68c6da2fe75ebde83c0a158f6f5d54f4c5177b0c1478c5b86", "8
 django-choices-enum = []
 django-cors-headers = ["84933651fbbde8f2bc084bef2f077b79db1ec1389432f21dd661eaae6b3d6a95", "a8b2772582e8025412f4d4b54b617d8b707076ffd53a2b961bd24f10ec207a7c"]
 django-extensions = ["a9db7c56a556d244184f589f2437b4228de86ee45e5ebb837fb20c6d54e95ea5", "b58320d3fe3d6ae7d1d8e38959713fa92272f4921e662d689058d942a5b444f7"]
-django-fsm = ["96f776736042b8cde03483cb4b27c3a62580da40fc9b942845349718afdf5d0f", "cacd5485c726b411c6728c9ae3120303c9badf8aa0edff2db3aecdbe3a906945"]
+django-fsm = ["9f42111814a273cdfd79cdf839f3596bc48b9cfe5fe5102293f07ade5b0048d5", "d5b0ca13965261f4fffad350fadd388dcfd9b6712399a84021073a40b161fbd7"]
 django-hashid-field = ["6b82365da20d06eee062ee5823fc972e61d670f016dd99cedbe1dcf6cc0dc73a", "9aceb2db2800be1efa03d0559a91dba62d458ff4fc9dfee59c7a0719a503f307"]
 django-heroku = ["2bc690aab89eedbe01311752320a9a12e7548e3b0ed102681acc5736a41a4762", "6af4bc3ae4a9b55eaad6dbe5164918982d2762661aebc9f83d9fa49f6009514e"]
 django-model-utils = ["3f130a262e45d73e0950d2be76af4bf4ee86804dd60e5f90afc5cd948fcfe760", "682f58c1de330cedcda58cc85d5232c5b47a9e2cb67bef4541fb43fdaeb18e96"]
