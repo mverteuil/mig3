@@ -9824,10 +9824,10 @@ void-elements@^2.0.1:
   resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-2.0.1.tgz#c066afb582bb1cb4128d60ea92392e94d5e9dbec"
   integrity sha1-wGavtYK7HLQSjWDqkjkulNXp2+w=
 
-vue-cli-plugin-vuetify@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/vue-cli-plugin-vuetify/-/vue-cli-plugin-vuetify-1.0.1.tgz#bef77be1d04d2c0f03f1771ebdcbb99f172dfe8a"
-  integrity sha512-Due6vvETiNY0MaRxa8aZnxLIQmPBU+l1hKmed3i/Ly6+kiUcSnNO3OdWt7LVL6nZ/SY71SxVk3at95ipnDe++Q==
+vue-cli-plugin-vuetify@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/vue-cli-plugin-vuetify/-/vue-cli-plugin-vuetify-2.0.3.tgz#a4bd1e7b92abadbd9cb64629fef8b139c9d3337b"
+  integrity sha512-bBQYE5lT5+gbR3Hvyy3/wMLHm+2yxKz+czgz3YK6T5Ykfva4ecK6OQZs0/XebT+YOPoy60qVEk9HYUvG8UFsTQ==
   dependencies:
     shelljs "^0.8.3"
 
