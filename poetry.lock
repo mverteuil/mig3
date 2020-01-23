@@ -257,7 +257,7 @@ description = "Smart object creation facility for Django."
 name = "model-bakery"
 optional = false
 python-versions = "*"
-version = "1.0.2"
+version = "1.1.0"
 
 [package.dependencies]
 django = ">=1.11.0"
@@ -508,7 +508,7 @@ gunicorn = ["1904bb2b8a43658807108d59c3f3d56c2b6121a701161de0ddf9ad140073c626", 
 hashids = ["6539b892a426e75747a9c0ad69409e9566f9c21b79310fc3424b5b6726f28da6"]
 importlib-metadata = ["aa18d7378b00b40847790e7c27e11673d7fed219354109d0e7b9e5b25dc3ad26", "d5f18a79777f3aa179c145737780282e27b508fc8fd688cb17c7a813e8bd39af"]
 isort = ["54da7e92468955c4fceacd0c86bd0ec997b0e1ee80d97f67c35a78b719dccab1", "6e811fcb295968434526407adb8796944f1988c5b65e8139058f2014cbe100fd"]
-model-bakery = ["c05901b60d0e9f1a2823af1cdcbce5d1c67dcc1d0e4b8da3d5b6f9ea5706597d", "f0b94fde361abcabaf321c6bb62538aed3909c346ece35c628cb004ff1da6cdc"]
+model-bakery = ["44321cded0e130c31e3cdd7589f8c3d551e12e9ebcc8425aff800dfeaf91539a", "aea339f47aa3b044d1a6d62f54c04686285fa0397a05de29ec6809a2a6f9bdc5"]
 more-itertools = ["409cd48d4db7052af495b09dec721011634af3753ae1ef92d2b32f73a745f832", "92b8c4b06dac4f0611c0729b2f2ede52b2e1bac1ab48f089c7ddc12e26bb60c4"]
 packaging = ["28b924174df7a2fa32c1953825ff29c61e2f5e082343165438812f00d3a7fc47", "d9551545c6d761f3def1677baf08ab2a3ca17c56879e70fecba2fc4dde4ed108"]
 pluggy = ["0db4b7601aae1d35b4a033282da476845aa19185c1e6964b25cf324b5e4ec3e6", "fa5fa1622fa6dd5c030e9cad086fa19ef6a0cf6d7a2d12318e10cb49d6d68f34"]
