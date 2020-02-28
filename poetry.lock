@@ -102,7 +102,7 @@ description = "django-cors-headers is a Django application for handling the serv
 name = "django-cors-headers"
 optional = false
 python-versions = ">=3.5"
-version = "3.2.0"
+version = "3.2.1"
 
 [package.dependencies]
 Django = ">=1.11"
@@ -493,7 +493,7 @@ coverage = ["08907593569fe59baca0bf152c43f3863201efb6113ecb38ce7e97ce339805a6", 
 dj-database-url = ["4aeaeb1f573c74835b0686a2b46b85990571159ffc21aa57ecd4d1e1cb334163", "851785365761ebe4994a921b433062309eb882fedd318e1b0fcecc607ed02da9"]
 django = ["2f1ba1db8648484dd5c238fb62504777b7ad090c81c5f1fd8d5eb5ec21b5f283", "c91c91a7ad6ef67a874a4f76f58ba534f9208412692a840e1d125eb5c279cb0a"]
 django-choices-enum = []
-django-cors-headers = ["84933651fbbde8f2bc084bef2f077b79db1ec1389432f21dd661eaae6b3d6a95", "a8b2772582e8025412f4d4b54b617d8b707076ffd53a2b961bd24f10ec207a7c"]
+django-cors-headers = ["a5960addecc04527ab26617e51b8ed42f0adab4594b24bb0f3c33e2bd3857c3f", "a785b5f446f6635810776d9f5f5d23e6a2a2f728ea982648370afaf0dfdf2627"]
 django-extensions = ["4524eca892d23fa6e93b0620901983b287ff5dc806f1b978d6a98541f06b9471", "936e8e3962024d3c75ea54f4e0248002404ca7ca7fb698430e60b06b5555b4e7"]
 django-fsm = ["9f42111814a273cdfd79cdf839f3596bc48b9cfe5fe5102293f07ade5b0048d5", "d5b0ca13965261f4fffad350fadd388dcfd9b6712399a84021073a40b161fbd7"]
 django-hashid-field = ["98096dc25ee558cd26628b33149da2d74722c925aa484c12347d75e6df2a1d19", "a28b99fc779c62cbd42e910809db063841f055db37424b644127134d17631339"]
