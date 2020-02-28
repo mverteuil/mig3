@@ -113,7 +113,7 @@ description = "Extensions for Django"
 name = "django-extensions"
 optional = false
 python-versions = "*"
-version = "2.2.6"
+version = "2.2.8"
 
 [package.dependencies]
 six = ">=1.2"
@@ -494,7 +494,7 @@ dj-database-url = ["4aeaeb1f573c74835b0686a2b46b85990571159ffc21aa57ecd4d1e1cb33
 django = ["2f1ba1db8648484dd5c238fb62504777b7ad090c81c5f1fd8d5eb5ec21b5f283", "c91c91a7ad6ef67a874a4f76f58ba534f9208412692a840e1d125eb5c279cb0a"]
 django-choices-enum = []
 django-cors-headers = ["84933651fbbde8f2bc084bef2f077b79db1ec1389432f21dd661eaae6b3d6a95", "a8b2772582e8025412f4d4b54b617d8b707076ffd53a2b961bd24f10ec207a7c"]
-django-extensions = ["4524eca892d23fa6e93b0620901983b287ff5dc806f1b978d6a98541f06b9471", "936e8e3962024d3c75ea54f4e0248002404ca7ca7fb698430e60b06b5555b4e7"]
+django-extensions = ["1a03c4e8bade575f8c2be6c76456f8a2be3f9b02ab9f47d3535afa9562dc0493", "2699cc1d6fb4bd393c0b5832fea4bc685f2ace5800b3c9ff222b2080f161ac04"]
 django-fsm = ["9f42111814a273cdfd79cdf839f3596bc48b9cfe5fe5102293f07ade5b0048d5", "d5b0ca13965261f4fffad350fadd388dcfd9b6712399a84021073a40b161fbd7"]
 django-hashid-field = ["98096dc25ee558cd26628b33149da2d74722c925aa484c12347d75e6df2a1d19", "a28b99fc779c62cbd42e910809db063841f055db37424b644127134d17631339"]
 django-heroku = ["2bc690aab89eedbe01311752320a9a12e7548e3b0ed102681acc5736a41a4762", "6af4bc3ae4a9b55eaad6dbe5164918982d2762661aebc9f83d9fa49f6009514e"]
