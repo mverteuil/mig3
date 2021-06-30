@@ -8,7 +8,7 @@ ARG BUILD_TARGET=dist
 # Base images
 # ----------------------------------------------------------------------------------------------------------------------
 
-FROM python:3.8.2 AS backend-base
+FROM python:3.9.6 AS backend-base
 ###############################
 SHELL ["/bin/bash", "-c"]
 ENV PYTHONDONTWRITEBYTECODE 1
